@@ -1,0 +1,47 @@
+------------------------------------------------------------------------------
+--                                 Kontoplot                                --
+--                                                                          --
+--                     Copyright (C) 2014, Jesper Quorning                  --
+--                                                                          --
+--  This is free software;  you can redistribute it  and/or modify it       --
+--  under terms of the  GNU General Public License as published  by the     --
+--  Free Software  Foundation;  either version 3,  or (at your option) any  --
+--  later version.  This software is distributed in the hope  that it will  --
+--  be useful, but WITHOUT ANY WARRANTY;  without even the implied warranty --
+--  of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU     --
+--  General Public License for  more details.                               --
+--                                                                          --
+--  You should have  received  a copy of the GNU General  Public  License   --
+--  distributed  with  this  software;   see  file COPYING3.  If not, go    --
+--  to http://www.gnu.org/licenses for a complete copy of the license.      --
+------------------------------------------------------------------------------
+--
+--
+--
+
+--  with "aws";
+
+project Todo is
+   for Source_Dirs use (".");
+--   for Object_Dir use "../object";
+   for Main use ("todo.adb");
+
+   package Builder is
+      for Default_Switches ("Ada") use ("-gnat2012", "-gnaty", "-g");
+   end Builder;
+
+   package Compiler is
+      for Switches ("Ada") use ("-I../../ada-download/Pakker/dmitry-kazakow/components-4.15",
+                                "-gnaty", "-gnatwa", "-O2", "-gnatf",
+                                "-g");
+   end Compiler;
+
+   package Linker is
+      for Default_Switches ("Ada") use ("-L../../ada-download/Pakker/dmitry-kazakow/components-4.15", "-lsqlite3", "-g");
+   end Linker;
+
+   package Binder is
+      for Default_Switches ("Ada") use ("-I../../ada-download/Pakker/dmitry-kazakow/components-4.15");
+   end Binder;
+
+end Todo;
