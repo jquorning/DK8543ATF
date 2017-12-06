@@ -29,6 +29,11 @@ package body Parser is
                   "quit        - Quit program");
       Put_Line ("view        - Show current list         " &
                   "lists       - Show all list");
+      Put_Line ("set list <list>              - Set list to current");
+      Put_Line ("set job <job>                - Set job to current");
+      Put_Line ("show list                    " &
+                  "- Show all jobs in current list");
+      Put_Line ("show job                     - Show jobs details");
       Put_Line ("add job <title>              - Add job to current list");
       Put_Line ("add list <name>              - Add list to database");
       Put_Line ("split serial <job> <count>   " &
@@ -56,6 +61,43 @@ package body Parser is
       return not Run_Program;
    end Exit_Program;
 
+   procedure Set (Command : in String) is
+      Space_Pos : constant Natural := Ada.Strings.Fixed.Index (Command, " ");
+      First     : constant String
+        := (if Space_Pos = 0 then Command
+        else Command (Command'First .. Space_Pos - 1));
+      Rest     : constant String
+        := (if Space_Pos = 0 then ""
+        else Ada.Strings.Fixed.Trim (Command (Space_Pos .. Command'Last),
+                                     Ada.Strings.Both));
+   begin
+      if First = "list" then
+         Database.Lists.Current := Database.Lookup_List (Rest);
+      elsif First = "job" then
+         Database.Jobs.Current  := Database.Lookup_Job (Rest);
+      else
+         raise Constraint_Error;
+      end if;
+   end Set;
+
+   procedure Show (Command : in String) is
+      Space_Pos : constant Natural := Ada.Strings.Fixed.Index (Command, " ");
+      First     : constant String
+        := (if Space_Pos = 0 then Command
+        else Command (Command'First .. Space_Pos - 1));
+      Rest     : constant String
+        := (if Space_Pos = 0 then ""
+        else Command (Space_Pos .. Command'Last));
+   begin
+      if First = "list" then
+         Database.Show_List (Database.Lists.Current);
+      elsif First = "job" then
+         Database.Show_Job (Database.Jobs.Current);
+      else
+         raise Constraint_Error;
+      end if;
+   end Show;
+
    procedure Add (Command : in String) is
       Space_Pos : constant Natural := Ada.Strings.Fixed.Index (Command, " ");
       First     : constant String
@@ -68,7 +110,8 @@ package body Parser is
       if First = "job" then
          Database.Create_Job
            (Database.Get_Job_Id,
-            Ada.Strings.Fixed.Trim (Rest, Ada.Strings.Both));
+            Ada.Strings.Fixed.Trim (Rest, Ada.Strings.Both),
+            Database.Lists.Current);
       elsif First = "list" then
          Database.Create_List
            (Ada.Strings.Fixed.Trim (Rest, Ada.Strings.Both));
@@ -77,6 +120,13 @@ package body Parser is
       end if;
    end Add;
 
+   procedure Transfer (Command : in String) is
+      use Database;
+   begin
+      Transfer (Job     => Jobs.Current,
+                To_List => Lookup_List (Command));
+   end Transfer;
+   
    procedure Parse_Input (Input : in String) is
       Space_Pos : constant Natural := Ada.Strings.Fixed.Index (Input, " ");
       First     : constant String
@@ -93,15 +143,21 @@ package body Parser is
       elsif First = "help" then
          Put_Help;
       elsif First = "view" then
-         Database.Put_Jobs;
+         Database.Get_Jobs (Database.Jobs);
+         Database.Put_Jobs (Database.Jobs);
       elsif First = "lists" then
-         Database.Put_Lists;
+         Database.Get_Lists (Database.Lists);
+         Database.Put_Lists (Database.Lists);
+      elsif First = "set" then
+         Set (Ada.Strings.Fixed.Trim (Rest, Ada.Strings.Both));
+      elsif First = "show" then
+         Show (Ada.Strings.Fixed.Trim (Rest, Ada.Strings.Both));
       elsif First = "add" then
          Add (Ada.Strings.Fixed.Trim (Rest, Ada.Strings.Both));
       elsif First = "split" then
          raise Program_Error;
       elsif First = "trans" then
-         raise Program_Error;
+         Transfer (Ada.Strings.Fixed.Trim (Rest, Ada.Strings.Both));
       else
          Put_Error;
       end if;

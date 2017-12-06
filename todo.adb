@@ -6,23 +6,17 @@ with Database;
 with Parser;
 
 procedure Todo is
---   use Database;
 begin
    Database.Open;
---   Put_Jobs;
---   Put_Jobs;
 
---     declare
---        Id : constant Job_Id := Get_Job_Id;
---     begin
---        Create_Job (Id, "Købe julegaver");
---        null;
---     end;
+   Database.Get_Current (Database.Jobs.Current,
+                         Database.Lists.Current);
 
---   Put_Jobs;
-
+   Database.Get_Lists (Database.Lists);
+   Database.Get_Jobs (Database.Jobs);
 
    Parser.Put_Banner;
+   Database.Put_Lists (Database.Lists);
    loop
       Parser.Put_Prompt;
       Parser.Parse_Input (Parser.Get_Input);
