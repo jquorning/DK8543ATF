@@ -5,6 +5,7 @@
 with Ada.Strings.Unbounded;
 with Ada.Containers.Vectors;
 with Interfaces;
+with SQLite;
 
 package Database is
 
@@ -65,9 +66,14 @@ package Database is
    procedure Show_List (List : in List_Id);
    procedure Show_Job (Job : in Job_Id);
 
-   procedure Create_Job (Id    : in Job_Id;
-                         Title : in String;
-                         List  : in List_Id);
+   procedure Add_Job (Id    : in Job_Id;
+                      Title : in String;
+                      List  : in List_Id;
+                      Owner : in String);
+
+--     procedure Create_Job (Id    : in Job_Id;
+--                           Title : in String;
+--                           List  : in List_Id);
 
    procedure Create_List (Name : in String);
 
@@ -78,4 +84,9 @@ package Database is
 
    procedure Transfer (Job     : in Job_Id;
                        To_List : in List_Id);
+
+private
+
+   DB : SQLite.Data_Base;
+
 end Database;

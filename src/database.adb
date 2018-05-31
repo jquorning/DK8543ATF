@@ -2,19 +2,17 @@
 --
 --
 
-with SQLite;
+--  with SQLite;
 with Ada.Text_IO;
-with Ada.Calendar;
+--  with Ada.Calendar;
 with Ada.Strings.Fixed;
 --  with Integer_Text_IO;
 
-with GNAT.Calendar.Time_IO;
+--  with GNAT.Calendar.Time_IO;
 
 package body Database is
 
    Database_File_Name : constant String := "todo.db";
-
-   DB : SQLite.Data_Base;
 
    procedure Open is
    begin
@@ -216,38 +214,6 @@ package body Database is
       Command.Step;
    end Add_Job;
 
-   procedure Add_Event (Id        : in Job_Id;
-                        Event     : in String;
-                        Timestamp : in Ada.Calendar.Time)
-   is
-      use SQLite;
-      use GNAT.Calendar.Time_IO;
-      Command_1 : constant Statement :=
-        Prepare (Database.DB,
-                 "SELECT MAX(Id) + 1 FROM Event");
-      Command_2 : constant Statement :=
-        Prepare (Database.DB,
-                 "INSERT INTO Event (Id, Job, Stamp, Kind) " &
-                   "VALUES (?,?,?,?)");
-      Event_Id : Interfaces.Integer_64;
-   begin
-      Command_1.Step;
-      Event_Id := Interfaces.Integer_64 (Get_Id (Command_1));
-      Bind (Command_2, 1, Event_Id);
-      Bind (Command_2, 2, Interfaces.Integer_64 (Id));
-      Bind (Command_2, 4, Event);
-      Bind (Command_2, 3, Image (Timestamp, ISO_Date & " %H:%M:%S"));
-      Command_2.Step;
-   end Add_Event;
-
-   procedure Create_Job (Id    : in Job_Id;
-                         Title : in String;
-                         List  : in List_Id) is
-   begin
-      Add_Job   (Id, Title, List, "jquorning");
-      Add_Event (Id, "Created", Ada.Calendar.Clock);
-   end Create_Job;
-
    procedure Create_List (Name : in String)
    is
       use SQLite;
@@ -261,7 +227,7 @@ package body Database is
       Id : Interfaces.Integer_64;
    begin
       Command_1.Step;
-      Id := Interfaces.Integer_64 (Get_Id (Command_1));
+      Id := Get_Id (Command_1);
 
       Command_2.Bind (1, Id);
       Command_2.Bind (2, Name);

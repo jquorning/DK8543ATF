@@ -4,8 +4,10 @@
 
 with Ada.Text_IO;
 with Ada.Strings.Fixed;
+with Ada.Calendar;
 
-with Database;
+with Database.Events;
+with Commands;
 
 package body Parser is
 
@@ -40,7 +42,11 @@ package body Parser is
                   "- Split job into count serial jobs");
       Put_Line ("split parallel <job> <count> " &
                   "- Split job into count parallel jobs");
-      Put_Line ("trans <job> <list>           - Transfer job to other list");
+      Put_Line ("move <list>                  " &
+                  "- Move current job to other list");
+      Put_Line ("trans <list>                 " &
+                  "- transfer current job to other list");
+      Put_Line ("event <kind>                 - Add event to current job");
    end Put_Help;
 
    procedure Put_Banner is
@@ -85,9 +91,9 @@ package body Parser is
       First     : constant String
         := (if Space_Pos = 0 then Command
         else Command (Command'First .. Space_Pos - 1));
-      Rest     : constant String
-        := (if Space_Pos = 0 then ""
-        else Command (Space_Pos .. Command'Last));
+--        Rest     : constant String
+--          := (if Space_Pos = 0 then ""
+--          else Command (Space_Pos .. Command'Last));
    begin
       if First = "list" then
          Database.Show_List (Database.Lists.Current);
@@ -108,7 +114,7 @@ package body Parser is
         else Command (Space_Pos .. Command'Last));
    begin
       if First = "job" then
-         Database.Create_Job
+         Commands.Create_Job
            (Database.Get_Job_Id,
             Ada.Strings.Fixed.Trim (Rest, Ada.Strings.Both),
             Database.Lists.Current);
@@ -120,13 +126,32 @@ package body Parser is
       end if;
    end Add;
 
+   procedure Event (Command : in String) is
+      pragma Unreferenced (Command);
+      --        Space_Pos : constant Natural
+      --  := Ada.Strings.Fixed.Index (Command, " ");
+--        First     : constant String
+--          := (if Space_Pos = 0 then Command
+--          else Command (Command'First .. Space_Pos - 1));
+--        Rest     : constant String
+--          := (if Space_Pos = 0 then ""
+--          else Command (Space_Pos .. Command'Last));
+      Id : Database.Events.Event_Id;
+      pragma Unreferenced (Id);
+   begin
+      Database.Events.Add_Event (Database.Jobs.Current,
+                                 Ada.Calendar.Clock,
+                                 Database.Events.Deadline,
+                                 Id);
+   end Event;
+
    procedure Transfer (Command : in String) is
       use Database;
    begin
       Transfer (Job     => Jobs.Current,
                 To_List => Lookup_List (Command));
    end Transfer;
-   
+
    procedure Parse_Input (Input : in String) is
       Space_Pos : constant Natural := Ada.Strings.Fixed.Index (Input, " ");
       First     : constant String
@@ -134,7 +159,8 @@ package body Parser is
         else Input (Input'First .. Space_Pos - 1));
       Rest     : constant String
         := (if Space_Pos = 0 then ""
-        else Input (Space_Pos .. Input'Last));
+        else Ada.Strings.Fixed.Trim (Input (Space_Pos .. Input'Last),
+                                     Ada.Strings.Both));
    begin
       if First = "" then
          null;
@@ -149,15 +175,19 @@ package body Parser is
          Database.Get_Lists (Database.Lists);
          Database.Put_Lists (Database.Lists);
       elsif First = "set" then
-         Set (Ada.Strings.Fixed.Trim (Rest, Ada.Strings.Both));
+         Set (Rest);
       elsif First = "show" then
-         Show (Ada.Strings.Fixed.Trim (Rest, Ada.Strings.Both));
+         Show (Rest);
       elsif First = "add" then
-         Add (Ada.Strings.Fixed.Trim (Rest, Ada.Strings.Both));
+         Add (Rest);
       elsif First = "split" then
          raise Program_Error;
+      elsif First = "move" then
+         Transfer (Rest);
       elsif First = "trans" then
-         Transfer (Ada.Strings.Fixed.Trim (Rest, Ada.Strings.Both));
+         Transfer (Rest);
+      elsif First = "event" then
+         Event (Rest);
       else
          Put_Error;
       end if;
