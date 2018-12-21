@@ -4,9 +4,9 @@ SQLite3
 
 
 
-etc/todo.db
-   database
+todo.db
+   Database (backup). Den aktuelle ligger Work/etc/todo.db
 
 bin/todo
-   executable
+   Executable
 

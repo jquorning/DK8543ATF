@@ -26,12 +26,7 @@ project Todo is
    for Main use ("todo.adb");
 
    package Builder is
-      for Default_Switches ("Ada") use ("-O2", "-gnaty", "-g");
+      for Default_Switches ("Ada") use ("-gnatwa", "-gnaty"); -- , "-g", "-O2");
    end Builder;
-
-   package Compiler is
-      for Switches ("Ada") use ("-gnaty", "-gnatwa", "-O2", --  "-gnatf",
-                                "-g");
-   end Compiler;
 
 end Todo;
