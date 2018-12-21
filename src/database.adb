@@ -6,8 +6,6 @@ with Ada.Text_IO;
 with Ada.IO_Exceptions;
 with Ada.Environment_Variables;
 
-with Terminal_IO;
-
 package body Database is
 
    use Ada.Strings.Unbounded;
@@ -156,11 +154,6 @@ package body Database is
       end loop;
    end Get_Lists;
 
-   procedure Show_List (List : in List_Id) is
-   begin
-      Get_Jobs (Jobs, List => List);
-      Terminal_IO.Put_Jobs (Jobs);
-   end Show_List;
 
    procedure Show_Job (Job : in Job_Id) is
       use SQLite, Interfaces, Ada.Text_IO;

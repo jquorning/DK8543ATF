@@ -77,10 +77,11 @@ package body Web_Callbacks is
       Database.Get_Lists (Database.Lists);
       Database.Get_Jobs (Database.Jobs, List => Database.Lists.Current);
 
-      Associate ("CURRENT_LIST", Current_List_Name (Database.Lists));
-      Associate ("LISTS_TABLE",  Web_IO.Lists_Image (Database.Lists));
-      Associate ("JOBS_TABLE",   Web_IO.Jobs_Image (Database.Jobs));
-      Associate ("LAST_COMMAND", Parser.Get_Last_Command);
+      Associate ("CURRENT_LIST",    Current_List_Name (Database.Lists));
+      Associate ("LISTS_TABLE",     Web_IO.Lists_Image (Database.Lists));
+      Associate ("JOBS_TABLE",      Web_IO.Jobs_Image (Database.Jobs));
+      Associate ("JOB_INFORMATION", "ZZZZZ");
+      Associate ("LAST_COMMAND",    Parser.Get_Last_Command);
    end Serve_Main_Page;
 
    ----------

@@ -26,8 +26,12 @@
 <h2>Jobs i @_CURRENT_LIST_@</h2>
 @_JOBS_TABLE_@
 
+<h2>Job information</h2>
+@_JOB_INFORMATION_@
+
 <h2>Kommandoer</h2>
 @_COMMAND_TABLE_@
+
 
 </body>
 </html>

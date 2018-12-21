@@ -2,8 +2,10 @@
 --
 --
 
-with Database.Events;
 with Ada.Calendar;
+
+with Database.Events;
+with Terminal_IO;
 
 package body Commands is
 
@@ -17,5 +19,13 @@ package body Commands is
       Database.Events.Add_Event (Job,  Ada.Calendar.Clock,
                                  Database.Events.Created, Id);
    end Create_Job;
+
+
+   procedure Show_List (List : in Database.List_Id) is
+   begin
+      Database.Get_Jobs (Database.Jobs, List => List);
+      Terminal_IO.Put_Jobs (Database.Jobs);
+   end Show_List;
+
 
 end Commands;
