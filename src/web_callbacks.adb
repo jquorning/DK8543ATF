@@ -19,8 +19,8 @@
 with Ada.Text_IO;
 
 with AWS.MIME;
-with AWS.Services.Web_Block.Registry;
 with AWS.Templates;
+with AWS.Parameters;
 
 with GNAT.Traceback.Symbolic;
 
@@ -42,6 +42,32 @@ package body Web_Callbacks is
                               Parser.Web_Help));
    end Initialize;
 
+
+   procedure Serve_Main_Page (Request : in AWS.Status.Data);
+   --  Build main web page "/"
+
+   procedure Serve_Main_Page (Request : in AWS.Status.Data) is
+      List : constant AWS.Parameters.List := AWS.Status.Parameters (Request);
+      CMD  : constant String := AWS.Parameters.Get (List, "cmd");
+   begin
+      Parser.Parse_Input (CMD);
+      Database.Get_Jobs (Database.Jobs);
+      Database.Get_Lists (Database.Lists);
+
+      AWS.Templates.Insert
+        (Translations,
+         AWS.Templates.Assoc ("JOBS_TABLE",
+                              Web_IO.Jobs_Image (Database.Jobs)));
+      AWS.Templates.Insert
+        (Translations,
+         AWS.Templates.Assoc ("LISTS_TABLE",
+                              Web_IO.Lists_Image (Database.Lists)));
+      AWS.Templates.Insert
+        (Translations,
+         AWS.Templates.Assoc ("LAST_COMMAND",
+                              Parser.Get_Last_Command));
+   end Serve_Main_Page;
+
    ----------
    -- Main --
    ----------
@@ -49,29 +75,13 @@ package body Web_Callbacks is
    function Main (Request : in AWS.Status.Data)
                  return AWS.Response.Data
    is
-      use AWS.Services;
       use AWS;
 
       URI      : constant String          := Status.URI (Request);
       Filename : constant String          := URI (URI'First + 1 .. URI'Last);
-      Set      : Templates.Translate_Set;
    begin
-      if URI = "/add" then
-         Templates.Insert (Set, Templates.Assoc ("OP", "ADD"));
 
-         return Web_Block.Registry.Build
-           (Key          => "/",
-            Request      => Request,
-            Translations => Set);
-
---        elsif URI = "/sub" then
---           Templates.Insert (Set, Templates.Assoc ("OP", "SUB"));
---           return Web_Block.Registry.Build
---             (Key          => "/",
---              Request      => Request,
---              Translations => Set);
-
-      elsif
+      if
         URI = "/stylesheets/print.css" or
         URI = "/stylesheets/main.css" or
         URI = "/stylesheets/boilerplate.css" or
@@ -102,24 +112,13 @@ package body Web_Callbacks is
               => Templates.Parse (Web_Base & "favicon.ico"));
 
       elsif URI = "/" then
-         Database.Get_Jobs (Database.Jobs);
-         Database.Get_Lists (Database.Lists);
-
-         AWS.Templates.Insert
-           (Translations,
-            AWS.Templates.Assoc ("JOBS_TABLE",
-                                 Web_IO.Jobs_Image (Database.Jobs)));
-         AWS.Templates.Insert
-           (Translations,
-            AWS.Templates.Assoc ("LISTS_TABLE",
-                                 Web_IO.Lists_Image (Database.Lists)));
-            return AWS.Response.Build
-              (MIME.Text_HTML,
-               Message_Body => AWS.Templates.Parse (Web_Base & "main.thtml",
-                                                    Translations));
+         Serve_Main_Page (Request);
+         return AWS.Response.Build
+           (MIME.Text_HTML,
+            Message_Body => AWS.Templates.Parse (Web_Base & "main.thtml",
+                                                 Translations));
 
       elsif URI = "/test" then
-         --  Konti.Test;
          return AWS.Response.Build
            (MIME.Text_HTML,
             Message_Body => "<html><head><title>Test</title></head>" &

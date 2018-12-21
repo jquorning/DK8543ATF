@@ -12,18 +12,22 @@
 <h1>TODO</h1>
 <p>Visning og redigering af todo-lister.</p>
 
-<h2>Kommandoer</h2>
-@_COMMAND_TABLE_@
-
 <h2>Aktuelle liste</h2>
 @_LISTS_TABLE_@
 
-<h2>Jobs is aktuelle liste</h2>
+<h2>Jobs i aktuelle liste</h2>
 @_JOBS_TABLE_@
 
 <h2>Prompt</h2>
-<p>Indtast kommando og håb det bedste...</p>
-<p>XXXX</p>
+<form action="/" method="post">
+<fieldset>
+<legend>Indtast kommando og håb det bedste...</legend>
+CMD:<input type="text" name="cmd" value="@_LAST_COMMAND_@" size="200" autofocus="on">
+</fieldset>
+</form>
+
+<h2>Kommandoer</h2>
+@_COMMAND_TABLE_@
 
 </body>
 </html>

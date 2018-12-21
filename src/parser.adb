@@ -13,8 +13,9 @@ with Terminal_IO;
 
 package body Parser is
 
-   Prompt_Text : constant String := "TODO ";
-   Run_Program : Boolean         := True;
+   Prompt_Text  : constant String := "TODO ";
+   Run_Program  : Boolean         := True;
+   Last_Command : Ada.Strings.Unbounded.Unbounded_String;
 
    procedure Put_Prompt is
    begin
@@ -209,6 +210,7 @@ package body Parser is
         else Ada.Strings.Fixed.Trim (Input (Space_Pos .. Input'Last),
                                      Ada.Strings.Both));
    begin
+      Last_Command := Ada.Strings.Unbounded.To_Unbounded_String (Input);
       if First = "" then
          null;
       elsif First = "quit" then
@@ -244,5 +246,10 @@ package body Parser is
          Put_Error;
 
    end Parse_Input;
+
+   function Get_Last_Command return String is
+   begin
+      return Ada.Strings.Unbounded.To_String (Last_Command);
+   end Get_Last_Command;
 
 end Parser;
