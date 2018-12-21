@@ -60,8 +60,8 @@ package Database is
 
    procedure Get_Lists (Lists : out List_Set);
 
-   procedure Put_Jobs (Jobs : in Job_Set);
-   procedure Put_Lists (Lists : in List_Set);
+--   procedure Put_Jobs (Jobs : in Job_Set);
+--   procedure Put_Lists (Lists : in List_Set);
 
    procedure Show_List (List : in List_Id);
    procedure Show_Job (Job : in Job_Id);

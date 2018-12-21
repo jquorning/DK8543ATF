@@ -21,7 +21,6 @@ package body Web_Server is
       Config : constant AWS.Config.Object := AWS.Config.Get_Current;
 
    begin
---      Database.Open;
       Ada.Text_IO.Put_Line ("AWS " & AWS.Version);
       Ada.Text_IO.Put_Line
         ("Server port:" & Integer'Image (AWS.Config.Server_Port (Config)));

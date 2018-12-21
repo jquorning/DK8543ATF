@@ -25,6 +25,8 @@ with AWS.Templates;
 with GNAT.Traceback.Symbolic;
 
 with Parser;  --  Web_Help
+with Database;
+with Web_IO;
 
 package body Web_Callbacks is
 
@@ -33,6 +35,7 @@ package body Web_Callbacks is
 
    procedure Initialize is
    begin
+      --  Static translations
       AWS.Templates.Insert
         (Translations,
          AWS.Templates.Assoc ("COMMAND_TABLE",
@@ -61,15 +64,7 @@ package body Web_Callbacks is
             Request      => Request,
             Translations => Set);
 
-      elsif URI = "/sub" then
-         Templates.Insert (Set, Templates.Assoc ("OP", "SUB"));
-         return Web_Block.Registry.Build
-           (Key          => "/",
-            Request      => Request,
-            Translations => Set);
-
---        elsif URI = "/" then
---           Ada.Text_IO.Put_Line ("Serving main page " & URI);
+--        elsif URI = "/sub" then
 --           Templates.Insert (Set, Templates.Assoc ("OP", "SUB"));
 --           return Web_Block.Registry.Build
 --             (Key          => "/",
@@ -83,7 +78,6 @@ package body Web_Callbacks is
         URI = "/css/rg.css" or
         URI = "/css/royal_greenland.css"
       then
-         Ada.Text_IO.Put_Line ("Serving stylesheet " & URI);
          return AWS.Response.Build
            (MIME.Text_CSS,
             Message_Body => Templates.Parse (Web_Base & Filename));
@@ -109,9 +103,20 @@ package body Web_Callbacks is
 
       elsif URI = "/" then
          declare
-
+            Jobs : Database.Job_Set;
+            Lists : Database.List_Set;
          begin
-
+            Database.Get_Jobs (Jobs);
+            Database.Get_Lists (Lists);
+--         Terminal_IO.Put_Lists (Database.Lists);
+            AWS.Templates.Insert
+              (Translations,
+               AWS.Templates.Assoc ("JOBS_TABLE",
+                                    Web_IO.Jobs_Image (Jobs)));
+            AWS.Templates.Insert
+              (Translations,
+               AWS.Templates.Assoc ("LISTS_TABLE",
+                                    Web_IO.Lists_Image (Lists)));
             return AWS.Response.Build
               (MIME.Text_HTML,
                Message_Body => AWS.Templates.Parse (Web_Base & "main.thtml",

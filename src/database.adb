@@ -5,11 +5,12 @@
 --  with SQLite;
 with Ada.Text_IO;
 --  with Ada.Calendar;
-with Ada.Strings.Fixed;
+--  with Ada.Strings.Fixed;
 with Ada.IO_Exceptions;
 --  with Integer_Text_IO;
 with Ada.Environment_Variables;
 
+with Terminal_IO;
 --  with GNAT.Calendar.Time_IO;
 
 package body Database is
@@ -143,18 +144,6 @@ package body Database is
       end loop;
    end Get_Jobs;
 
-   procedure Put_Jobs (Jobs : in Job_Set) is
-      use Ada.Text_IO;
-   begin
-      for Job of Jobs.Vector loop
-         Put (Job.Ref);
-         Put ((if Job.Id = Jobs.Current then "*" else " "));
-         Put ("  ");
-         Put (US.To_String (Job.Title));
-         New_Line;
-      end loop;
-   end Put_Jobs;
-
    procedure Get_Lists (Lists : out List_Set) is
       use SQLite;
       Command : constant Statement :=
@@ -181,30 +170,10 @@ package body Database is
       end loop;
    end Get_Lists;
 
-   procedure Put_Lists (Lists : in List_Set) is
-      use Ada.Text_IO;
-   begin
-      for List of Lists.Vector loop
-         declare
-            Name_Image : String (1 .. Lists.Name_Width) := (others => ' ');
-            Name       : constant String := US.To_String (List.Name);
-         begin
-            Put (List.Ref);
-            Put ((if List.Id = Lists.Current then "*" else " "));
-            Put ("  ");
-            Name_Image (1 .. Name'Last) := Name;
-            Put (Name_Image);
-            Put ("  ");
-            Put (US.To_String (List.Desc));
-         end;
-         New_Line;
-      end loop;
-   end Put_Lists;
-
    procedure Show_List (List : in List_Id) is
    begin
       Get_Jobs (Jobs, List => List);
-      Put_Jobs (Jobs);
+      Terminal_IO.Put_Jobs (Jobs);
    end Show_List;
 
    procedure Show_Job (Job : in Job_Id) is
@@ -298,28 +267,28 @@ package body Database is
       return Id;
    end Get_Job_Id;
 
-   subtype S3 is String (1 .. 3);
-   function Same (Ref : in S3;
-                  S   : in String) return Boolean;
+--     subtype S3 is String (1 .. 3);
+--     function Same (Ref : in S3;
+--                    S   : in String) return Boolean;
 
-   function Same (Ref : in S3;
-                  S   : in String) return Boolean
-   is
-      package Integer_IO is new Ada.Text_IO.Integer_IO (Integer);
-      Trim : constant String  := Ada.Strings.Fixed.Trim (S, Ada.Strings.Both);
-      I_T  : Integer;
-      I_R  : Integer;
-      Last : Natural;
-   begin
-      --  Ada.Text_IO.Put_Line ("#"&Trim&"#"&Ref&"#"&I_T'Img&"#"&I_R'Img);
-      Integer_IO.Get (Trim (Trim'First + 1 .. Trim'Last), Last, I_T);
-      Integer_IO.Get (Ref  (Ref'First  + 1 .. Ref'Last),  Last, I_R);
-      if Ref (Ref'First) = Trim (Trim'First) and I_T = I_R then
-         return True;
-      else
-         return False;
-      end if;
-   end Same;
+--     function Same (Ref : in S3;
+--                    S   : in String) return Boolean
+--     is
+--        package Integer_IO is new Ada.Text_IO.Integer_IO (Integer);
+--  Trim : constant String  := Ada.Strings.Fixed.Trim (S, Ada.Strings.Both);
+--        I_T  : Integer;
+--        I_R  : Integer;
+--        Last : Natural;
+--     begin
+--        --  Ada.Text_IO.Put_Line ("#"&Trim&"#"&Ref&"#"&I_T'Img&"#"&I_R'Img);
+--        Integer_IO.Get (Trim (Trim'First + 1 .. Trim'Last), Last, I_T);
+--        Integer_IO.Get (Ref  (Ref'First  + 1 .. Ref'Last),  Last, I_R);
+--        if Ref (Ref'First) = Trim (Trim'First) and I_T = I_R then
+--           return True;
+--        else
+--           return False;
+--        end if;
+--     end Same;
 
    function Lookup_List (List : in String) return List_Id is
    begin

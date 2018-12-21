@@ -9,6 +9,7 @@ with Ada.Calendar;
 
 with Database.Events;
 with Commands;
+with Terminal_IO;
 
 package body Parser is
 
@@ -76,6 +77,7 @@ package body Parser is
       use Ada.Text_IO;
    begin
       for Line of Help_Lines loop
+         Set_Col (1);
          Put (To_String (Line.Command));
          Set_Col (33);
          Put_Line (To_String (Line.Comment));
@@ -215,10 +217,10 @@ package body Parser is
          Put_Help;
       elsif First = "view" then
          Database.Get_Jobs (Database.Jobs);
-         Database.Put_Jobs (Database.Jobs);
+         Terminal_IO.Put_Jobs (Database.Jobs);
       elsif First = "lists" then
          Database.Get_Lists (Database.Lists);
-         Database.Put_Lists (Database.Lists);
+         Terminal_IO.Put_Lists (Database.Lists);
       elsif First = "set" then
          Set (Rest);
       elsif First = "show" then

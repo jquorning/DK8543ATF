@@ -5,6 +5,7 @@
 with Database;
 with Parser;
 with Web_Server;
+with Terminal_IO;
 
 procedure Todo is
 begin
@@ -18,7 +19,7 @@ begin
    Database.Get_Jobs (Database.Jobs);
 
    Parser.Put_Banner;
-   Database.Put_Lists (Database.Lists);
+   Terminal_IO.Put_Lists (Database.Lists);
    loop
       Parser.Put_Prompt;
       Parser.Parse_Input (Parser.Get_Input);

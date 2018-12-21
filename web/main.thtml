@@ -16,16 +16,10 @@
 @_COMMAND_TABLE_@
 
 <h2>Aktuelle liste</h2>
-<p>Den aktuelle liste er: XXXX</p>
+@_LISTS_TABLE_@
 
 <h2>Jobs is aktuelle liste</h2>
-<p>XXXX</p>
-
-
-<h2>Menu</h2>
-<li><a href="import">Import CSV</a>
-<li><a href="saldo-plot">Plot Saldo</a>
-<li><a href="kontoer">Kontoer</a>
+@_JOBS_TABLE_@
 
 <h2>Prompt</h2>
 <p>Indtast kommando og håb det bedste...</p>
