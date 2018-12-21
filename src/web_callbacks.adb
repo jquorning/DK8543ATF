@@ -102,47 +102,21 @@ package body Web_Callbacks is
               => Templates.Parse (Web_Base & "favicon.ico"));
 
       elsif URI = "/" then
-         declare
-            Jobs : Database.Job_Set;
-            Lists : Database.List_Set;
-         begin
-            Database.Get_Jobs (Jobs);
-            Database.Get_Lists (Lists);
---         Terminal_IO.Put_Lists (Database.Lists);
-            AWS.Templates.Insert
-              (Translations,
-               AWS.Templates.Assoc ("JOBS_TABLE",
-                                    Web_IO.Jobs_Image (Jobs)));
-            AWS.Templates.Insert
-              (Translations,
-               AWS.Templates.Assoc ("LISTS_TABLE",
-                                    Web_IO.Lists_Image (Lists)));
+         Database.Get_Jobs (Database.Jobs);
+         Database.Get_Lists (Database.Lists);
+
+         AWS.Templates.Insert
+           (Translations,
+            AWS.Templates.Assoc ("JOBS_TABLE",
+                                 Web_IO.Jobs_Image (Database.Jobs)));
+         AWS.Templates.Insert
+           (Translations,
+            AWS.Templates.Assoc ("LISTS_TABLE",
+                                 Web_IO.Lists_Image (Database.Lists)));
             return AWS.Response.Build
               (MIME.Text_HTML,
                Message_Body => AWS.Templates.Parse (Web_Base & "main.thtml",
                                                     Translations));
-         end;
-
---        elsif URI = "/import" then
---           Ada.Text_IO.Put_Line ("Serving Import " & URI);
---           --  Saldo_Plot.Import_CSV ("../netbank/poster-2.csv");
---           Saldoer.Import_CSV (1, "../netbank/poster-grundkonto-2012.csv");
---           Saldoer.Import_CSV (1, "../netbank/poster-grundkonto-2013.csv");
---           Saldoer.Import_CSV (1, "../netbank/poster-grundkonto-2014.csv");
---           Saldoer.Lav_Serienummer (Konto => 1);
-
---           Saldoer.Import_CSV (2, "../netbank/poster-boliglaan.csv");
---           Saldoer.Lav_Serienummer (Konto => 2);
-
---           Saldoer.Import_CSV (3, "../netbank/poster-prioitet-bl.csv");
---           Saldoer.Lav_Serienummer (Konto => 3);
-
---           Saldoer.Import_CSV (4, "../netbank/poster-grundejer-201X.csv");
---           Saldoer.Lav_Serienummer (Konto => 4);
-
---           return AWS.Response.Build
---             (MIME.Text_HTML,
---              Message_Body => "<html><body><h1>Import</html>");
 
       elsif URI = "/test" then
          --  Konti.Test;
