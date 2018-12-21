@@ -1,7 +1,6 @@
 ------------------------------------------------------------------------------
---                                  Kontoplot                               --
 --                                                                          --
---                     Copyright (C) 2014, Jesper Quorning                  --
+--                     Copyright (C) 2018, Jesper Quorning                  --
 --                                                                          --
 --  This is free software;  you can redistribute it  and/or modify it       --
 --  under terms of the  GNU General Public License as published  by the     --
@@ -33,13 +32,22 @@ package body Web_Callbacks is
    Web_Base : constant String := "../web/";
    Translations : AWS.Templates.Translate_Set;
 
+   procedure Associate (Placeholder : String;
+                        Value       : String);
+   --  Update template translation Placeholder with Value.
+
+   procedure Associate (Placeholder : String;
+                        Value       : String)
+   is
+   begin
+      AWS.Templates.Insert (Translations,
+                            AWS.Templates.Assoc (Placeholder, Value));
+   end Associate;
+
    procedure Initialize is
    begin
       --  Static translations
-      AWS.Templates.Insert
-        (Translations,
-         AWS.Templates.Assoc ("COMMAND_TABLE",
-                              Parser.Web_Help));
+      Associate ("COMMAND_TABLE", Parser.Web_Help);
    end Initialize;
 
 
@@ -51,21 +59,13 @@ package body Web_Callbacks is
       CMD  : constant String := AWS.Parameters.Get (List, "cmd");
    begin
       Parser.Parse_Input (CMD);
+
       Database.Get_Jobs (Database.Jobs);
       Database.Get_Lists (Database.Lists);
 
-      AWS.Templates.Insert
-        (Translations,
-         AWS.Templates.Assoc ("JOBS_TABLE",
-                              Web_IO.Jobs_Image (Database.Jobs)));
-      AWS.Templates.Insert
-        (Translations,
-         AWS.Templates.Assoc ("LISTS_TABLE",
-                              Web_IO.Lists_Image (Database.Lists)));
-      AWS.Templates.Insert
-        (Translations,
-         AWS.Templates.Assoc ("LAST_COMMAND",
-                              Parser.Get_Last_Command));
+      Associate ("JOBS_TABLE",   Web_IO.Jobs_Image (Database.Jobs));
+      Associate ("LISTS_TABLE",  Web_IO.Lists_Image (Database.Lists));
+      Associate ("LAST_COMMAND", Parser.Get_Last_Command);
    end Serve_Main_Page;
 
    ----------
