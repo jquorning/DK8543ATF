@@ -20,10 +20,10 @@
 </fieldset>
 </form>
 
-<h2>Aktuelle liste</h2>
+<h2>Lister</h2>
 @_LISTS_TABLE_@
 
-<h2>Jobs i aktuelle liste</h2>
+<h2>Jobs i @_CURRENT_LIST_@</h2>
 @_JOBS_TABLE_@
 
 <h2>Kommandoer</h2>

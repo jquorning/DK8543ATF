@@ -16,6 +16,7 @@
 ------------------------------------------------------------------------------
 
 with Ada.Text_IO;
+with Ada.Strings.Unbounded;
 
 with AWS.MIME;
 with AWS.Templates;
@@ -50,6 +51,19 @@ package body Web_Callbacks is
       Associate ("COMMAND_TABLE", Parser.Web_Help);
    end Initialize;
 
+   function Current_List_Name (Lists : Database.List_Set) return String;
+   --  Return name of current list
+
+   function Current_List_Name (Lists : Database.List_Set) return String is
+      use type Database.List_Id;
+   begin
+      for List of Lists.Vector loop
+         if Lists.Current = List.Id then
+            return Ada.Strings.Unbounded.To_String (List.Name);
+         end if;
+      end loop;
+      return "UNKNOWN=XXX";
+   end Current_List_Name;
 
    procedure Serve_Main_Page (Request : in AWS.Status.Data);
    --  Build main web page "/"
@@ -63,8 +77,9 @@ package body Web_Callbacks is
       Database.Get_Jobs (Database.Jobs);
       Database.Get_Lists (Database.Lists);
 
-      Associate ("JOBS_TABLE",   Web_IO.Jobs_Image (Database.Jobs));
+      Associate ("CURRENT_LIST", Current_List_Name (Database.Lists));
       Associate ("LISTS_TABLE",  Web_IO.Lists_Image (Database.Lists));
+      Associate ("JOBS_TABLE",   Web_IO.Jobs_Image (Database.Jobs));
       Associate ("LAST_COMMAND", Parser.Get_Last_Command);
    end Serve_Main_Page;
 
