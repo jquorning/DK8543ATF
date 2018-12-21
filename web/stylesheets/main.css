@@ -22,5 +22,19 @@ p, ul {
   font-size: 100%;
   margin: 0.5em 0;
 }
+table {
+  font-family: ariel, sans-serif;
+  width: 60%;
+}
+td,th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 1px;
+}
+td {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 1px;
+}
 
 @import url(print.css);
