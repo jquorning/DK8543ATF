@@ -17,14 +17,16 @@ package body Web_IO is
    begin
       Append (S, "<table><tr><th>Ref</th><th>Act</th><th>Title</th></tr>");
       for Job of Jobs.Vector loop
-         Append (S, "<tr>");
+
+         if Job.Id = Jobs.Current then
+            Append (S, "<tr style=""Background-Color:#Dddd2222"">");
+         else
+            Append (S, "<tr>");
+         end if;
+
          Append (S, "<td><a href=""/?cmd=set%20job%20" & Job.Ref & """>"
                    & Job.Ref & "</a></td>");
-         if Job.Id = Jobs.Current then
-            Append (S, "<td>XXX</td>");
-         else
-            Append (S, "<td></td>");
-         end if;
+         Append (S, "<td></td>");
          Append (S, "<td>" & To_String (Job.Title) & "</td>");
          Append (S, "</tr>");
       end loop;
@@ -44,14 +46,17 @@ package body Web_IO is
       Append (S, "<table><tr><th>Ref</th><th>Act</th>"
                 & "<th>Title</th><th>Description</th></tr>");
       for List of Lists.Vector loop
-         Append (S, "<tr>");
-         Append (S, "<td><a href=""/?cmd=set%20list%20" & List.Ref & """>"
-                   & List.Ref & "</a></td>");
+
          if List.Id = Lists.Current then
-            Append (S, "<td>XXX</td>");
+            Append (S, "<tr style=""Background-Color:#Dddd2222"">");
          else
-            Append (S, "<td></td>");
+            Append (S, "<tr>");
          end if;
+
+         Append (S, "<td>");
+         Append (S, "<a href=""/?cmd=set%20list%20" & List.Ref & """>"
+                   & List.Ref & "</a></td>");
+         Append (S, "<td></td>");
          Append (S, "<td>");
          Append (S, List.Name);
          Append (S, "</td>");
