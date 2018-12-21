@@ -74,8 +74,8 @@ package body Web_Callbacks is
    begin
       Parser.Parse_Input (CMD);
 
-      Database.Get_Jobs (Database.Jobs);
       Database.Get_Lists (Database.Lists);
+      Database.Get_Jobs (Database.Jobs);
 
       Associate ("CURRENT_LIST", Current_List_Name (Database.Lists));
       Associate ("LISTS_TABLE",  Web_IO.Lists_Image (Database.Lists));
@@ -100,25 +100,11 @@ package body Web_Callbacks is
         URI = "/stylesheets/print.css" or
         URI = "/stylesheets/main.css" or
         URI = "/stylesheets/boilerplate.css" or
-        URI = "/css/rg.css" or
-        URI = "/css/royal_greenland.css"
+        URI = "/css/rg.css"
       then
          return AWS.Response.Build
            (MIME.Text_CSS,
             Message_Body => Templates.Parse (Web_Base & Filename));
-
---        elsif
---          URI = "/js/flot/jquery.min.js" or
---          URI = "/js/flot/jquery.flot.min.js" or
---          URI = "/js/flot/jquery.flot.crosshair.min.js" or
---          URI = "/js/flot/jquery.flot.symbol.js" or
---          URI = "/js/flot/jquery.flot.symbol.js.jq" or
---          URI = "/js/flot/jquery.flot.time.js"
---        then
---           Ada.Text_IO.Put_Line ("Serving flot " & URI);
---           return AWS.Response.Build
---             (MIME.Text_HTML,
---              Message_Body => Templates.Parse (Web_Base & Filename));
 
       elsif URI = "/favicon.ico" then
          Ada.Text_IO.Put_Line ("Serving ikon " & URI);
