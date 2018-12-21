@@ -104,7 +104,7 @@ package body Parser is
 
    procedure Put_Error is
    begin
-      Ada.Text_IO.Put_Line ("Unknown command");
+      Ada.Text_IO.Put_Line ("Unknown command: '" & Get_Last_Command & "'");
    end Put_Error;
 
    function Exit_Program return Boolean is

@@ -18,7 +18,8 @@ package body Web_IO is
       Append (S, "<table><tr><th>Ref</th><th>Act</th><th>Title</th></tr>");
       for Job of Jobs.Vector loop
          Append (S, "<tr>");
-         Append (S, "<td>" & Job.Ref & "</td>");
+         Append (S, "<td><a href=""/?cmd=set%20job%20" & Job.Ref & """>"
+                   & Job.Ref & "</a></td>");
          if Job.Id = Jobs.Current then
             Append (S, "<td>XXX</td>");
          else
@@ -44,7 +45,8 @@ package body Web_IO is
                 & "<th>Title</th><th>Description</th></tr>");
       for List of Lists.Vector loop
          Append (S, "<tr>");
-         Append (S, "<td>" & List.Ref & "</td>");
+         Append (S, "<td><a href=""/?cmd=set%20list%20" & List.Ref & """>"
+                   & List.Ref & "</a></td>");
          if List.Id = Lists.Current then
             Append (S, "<td>XXX</td>");
          else
