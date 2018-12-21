@@ -6,18 +6,70 @@
 with Ada.Text_IO;
 --  with Ada.Calendar;
 with Ada.Strings.Fixed;
+with Ada.IO_Exceptions;
 --  with Integer_Text_IO;
+with Ada.Environment_Variables;
 
 --  with GNAT.Calendar.Time_IO;
 
 package body Database is
+--   pragma Link_With ("-lsqlite3");
+
+   use Ada.Strings.Unbounded;
+
+   function "+" (Source : String)
+                return Unbounded_String
+     renames To_Unbounded_String;
 
    Database_File_Name : constant String := "todo.db";
 
    procedure Open is
+      Success : Boolean := False;
+
+      procedure Try_Open (File_Name :     String;
+                          Success   : out Boolean);
+
+      procedure Try_Open (File_Name :     String;
+                          Success   : out Boolean)
+      is
+         use SQLite, Ada.IO_Exceptions;
+      begin
+         Success := True;  --  Optimism - result when no exception
+         DB := SQLite.Open (File_Name => File_Name,
+                            Flags     => READWRITE or FULLMUTEX);
+      exception
+         when Use_Error =>   --  Could not open database file
+            Success := False;
+      end Try_Open;
+
+      package Env renames Ada.Environment_Variables;
+
+      Home  : constant String
+        := (if Env.Exists ("HOME") then Env.Value ("HOME") else "");
+
+      Paths : constant array (Positive range <>) of Unbounded_String
+          := (+"./", +Home & "/etc/", +"/etc/", +Home & "/Work/etc/");
+
+
    begin
-      DB := SQLite.Open (File_Name => Database_File_Name);
+      for Path of Paths loop
+
+         declare
+            Full_Path_Name : constant String
+              := To_String (Path) & Database_File_Name;
+         begin
+            Try_Open (Full_Path_Name, Success);
+            if Success then
+               return;
+            end if;
+         end;
+      end loop;
+      raise Program_Error with "Could not open database file";
    end Open;
+
+   function Get_Id (S : SQLite.Statement) return Interfaces.Integer_64;
+   subtype S2 is String (1 .. 2);
+   function To_S (A : Natural) return S2;
 
    function Get_Id (S : SQLite.Statement) return Interfaces.Integer_64 is
       use Interfaces;
@@ -25,7 +77,6 @@ package body Database is
       return SQLite.Column (S, 1);
    end Get_Id;
 
-   subtype S2 is String (1 .. 2);
    function To_S (A : Natural) return S2 is
       package Natural_IO is new Ada.Text_IO.Integer_IO (Positive);
       S : S2;
@@ -248,6 +299,9 @@ package body Database is
    end Get_Job_Id;
 
    subtype S3 is String (1 .. 3);
+   function Same (Ref : in S3;
+                  S   : in String) return Boolean;
+
    function Same (Ref : in S3;
                   S   : in String) return Boolean
    is

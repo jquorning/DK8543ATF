@@ -57,6 +57,15 @@ package body Parser is
       Put_Line ("type help to show help text");
    end Put_Banner;
 
+
+   procedure Put_Error;
+   procedure Set (Command : in String);
+   procedure Show (Command : in String);
+   procedure Add (Command : in String);
+   procedure Event (Command : in String);
+   procedure Transfer (Command : in String);
+
+
    procedure Put_Error is
    begin
       Ada.Text_IO.Put_Line ("Unknown command");
@@ -66,6 +75,7 @@ package body Parser is
    begin
       return not Run_Program;
    end Exit_Program;
+
 
    procedure Set (Command : in String) is
       Space_Pos : constant Natural := Ada.Strings.Fixed.Index (Command, " ");
@@ -104,6 +114,7 @@ package body Parser is
       end if;
    end Show;
 
+
    procedure Add (Command : in String) is
       Space_Pos : constant Natural := Ada.Strings.Fixed.Index (Command, " ");
       First     : constant String
@@ -125,6 +136,7 @@ package body Parser is
          raise Constraint_Error;
       end if;
    end Add;
+
 
    procedure Event (Command : in String) is
       pragma Unreferenced (Command);
