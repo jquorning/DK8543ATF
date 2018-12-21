@@ -1,0 +1,26 @@
+@import url(boilerplate.css);
+
+/* Primary Styles */
+body, select, input, textarea, button {
+  font-family: Cambria, Georgia, "Lucida Bright", serif;
+  font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+body {
+  margin: 1em;
+}
+h1 {
+  font-size: 200%;
+}
+h2 {
+  font-size: 150%;
+}
+h1,
+h2 {
+  margin: 0.5em 0;
+}
+p, ul {
+  font-size: 100%;
+  margin: 0.5em 0;
+}
+
+@import url(print.css);

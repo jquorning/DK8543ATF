@@ -1,0 +1,70 @@
+
+body
+{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    
+}
+
+table.historie,table.annoteringer
+{
+    border-collapse:collapse;
+}
+table.historie,th.historie, td.historie,table.annoteringer,th.annoteringer,td.annoteringer,table.modninger,th.modninger,td.modninger
+{
+    border: 1px solid black;
+}
+table.alarmer,th.alarmer,td.alarmer
+{
+    border: 1px solid black;
+    text-align: left;
+}
+table.manual,th.manual,td.manual
+{
+    border: 1px solid black;
+    text-align: left;
+}
+td
+{
+    padding-top:    2px;
+    padding-bottom: 2px;
+    padding-right:  10px;
+    padding-left:   10px;
+}
+td.temp, td.salt {
+    text-align: right;
+}
+
+p.navigation {
+    text-align:  right;
+    font-weight: bold;
+    font-size: 140%;
+}
+h1,h2,h3 {
+    text-align: left;
+}
+p
+{
+    text-align: left;
+}
+div.plot_tank, div.plot_koger, div.plot_i_tanke, div.plot_til_fra, div.plot_flow
+{
+    width:  960px;
+    height: 500px;
+}
+
+td.legendLabel
+{
+    text-align: left;
+    font-size: 140%;
+}
+div.annotering
+{
+    text-align: left;
+}
+div.tickLabel
+{
+    font-size: 120%;
+}

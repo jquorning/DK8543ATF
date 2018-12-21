@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
---                                 T O D O                                  --
+--                                   Kontoplot                              --
 --                                                                          --
---                     Copyright (C) 2014, Jesper Quorning                  --
+--                     Copyright (C) 2010-2012, AdaCore                     --
 --                                                                          --
 --  This is free software;  you can redistribute it  and/or modify it       --
 --  under terms of the  GNU General Public License as published  by the     --
@@ -15,23 +15,14 @@
 --  distributed  with  this  software;   see  file COPYING3.  If not, go    --
 --  to http://www.gnu.org/licenses for a complete copy of the license.      --
 ------------------------------------------------------------------------------
+with AWS.Response;
+with AWS.Status;
 
-with "aws";
-with "components-sqlite.gpr";
+package Web_Callbacks is
 
-project Todo is
-   for Source_Dirs use ("src");
-   for Object_Dir use "obj";
-   for Exec_Dir use "bin";
-   for Main use ("todo.adb");
+   procedure Initialize;
 
-   package Builder is
-      for Default_Switches ("Ada") use ("-O2", "-gnaty", "-g");
-   end Builder;
+   function Main (Request : in AWS.Status.Data)
+                 return AWS.Response.Data;
 
-   package Compiler is
-      for Switches ("Ada") use ("-gnaty", "-gnatwa", "-O2", --  "-gnatf",
-                                "-g");
-   end Compiler;
-
-end Todo;
+end Web_Callbacks;

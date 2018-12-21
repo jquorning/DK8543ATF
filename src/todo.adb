@@ -4,9 +4,11 @@
 
 with Database;
 with Parser;
+with Web_Server;
 
 procedure Todo is
 begin
+   Web_Server.Startup;
    Database.Open;
 
    Database.Get_Current (Database.Jobs.Current,
@@ -23,4 +25,5 @@ begin
       exit when Parser.Exit_Program;
    end loop;
 
+   Web_Server.Shutdown;
 end Todo;
