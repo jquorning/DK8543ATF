@@ -80,7 +80,7 @@ package body Web_Callbacks is
       Associate ("CURRENT_LIST",    Current_List_Name (Database.Lists));
       Associate ("LISTS_TABLE",     Web_IO.Lists_Image (Database.Lists));
       Associate ("JOBS_TABLE",      Web_IO.Jobs_Image (Database.Jobs));
-      Associate ("JOB_INFORMATION", "ZZZZZ");
+      Associate ("JOB_INFORMATION", Web_IO.Job_Image (Database.Jobs.Current));
       Associate ("LAST_COMMAND",    Parser.Get_Last_Command);
    end Serve_Main_Page;
 

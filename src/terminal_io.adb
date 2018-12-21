@@ -3,6 +3,7 @@
 --
 
 with Ada.Text_IO;
+with Ada.Strings.Unbounded;
 
 package body Terminal_IO is
 
@@ -41,6 +42,27 @@ package body Terminal_IO is
          New_Line;
       end loop;
    end Put_Lists;
+
+
+   procedure Show_Job (Job : in Database.Job_Id) is
+      use Ada.Text_IO, Ada.Strings.Unbounded;
+
+      Info   : constant Database.Job_Info  := Database.Get_Job_Info (Job);
+      Events : constant Database.Event_Lists.Vector
+        := Database.Get_Job_Events (Job);
+   begin
+      Put_Line (To_String (Info.Title) & " (" & Job'Img & ")");
+      Put ("List (" & Info.List'Img & ")");
+      Put ("Owner: " & To_String (Info.Owner));
+      New_Line;
+
+      for Event of Events loop
+         Put (To_String (Event.Stamp));
+         Put ("    ");
+         Put (To_String (Event.Kind));
+         New_Line;
+      end loop;
+   end Show_Job;
 
 
 end Terminal_IO;

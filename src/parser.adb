@@ -142,10 +142,9 @@ package body Parser is
 --          else Command (Space_Pos .. Command'Last));
    begin
       if First = "list" then
---         Database.Show_List (Database.Lists.Current);
          Commands.Show_List (Database.Lists.Current);
       elsif First = "job" then
-         Database.Show_Job (Database.Jobs.Current);
+         Terminal_IO.Show_Job (Database.Jobs.Current);
       else
          raise Constraint_Error;
       end if;

@@ -155,45 +155,55 @@ package body Database is
    end Get_Lists;
 
 
-   procedure Show_Job (Job : in Job_Id) is
-      use SQLite, Interfaces, Ada.Text_IO;
-      Command_1 : constant Statement :=
+   function Get_Job_Info (Job : in Job_Id) return Job_Info is
+      use SQLite, Interfaces;
+
+      Command : constant Statement :=
         Prepare (Database.DB,
                  "SELECT Title, List, Owner " &
                    "FROM Job " &
                    "WHERE Id=?");
-      Command_2 : constant Statement :=
+   begin
+      Command.Bind (1, Integer_64 (Job));
+      Command.Step;
+      declare
+         Title : constant String     := Command.Column (1);
+         List  : constant Integer_64 := Command.Column (2);
+         Owner : constant String     := Command.Column (3);
+      begin
+         return Job_Info'(To_Unbounded_String (Title),
+                          List_Id (List),
+                          To_Unbounded_String (Owner));
+      end;
+   end Get_Job_Info;
+
+
+   function Get_Job_Events (Job : in Job_Id)
+                           return Event_Lists.Vector
+   is
+      use SQLite, Interfaces;
+
+      Command : constant Statement :=
         Prepare (Database.DB,
                  "SELECT Stamp, Kind " &
                    "FROM Event " &
                    "WHERE Job=? " &
                    "ORDER BY Stamp ASC");
+      Events : Event_Lists.Vector;
    begin
-      Command_1.Bind (1, Integer_64 (Job));
-      Command_1.Step;
-      declare
-         Title : constant String     := Command_1.Column (1);
-         List  : constant Integer_64 := Command_1.Column (2);
-         Owner : constant String     := Command_1.Column (3);
-      begin
-         Put_Line (Title & " (" & Job'Img & ")");
-         Put_Line ("List (" & List'Img & ")  Owner: " & Owner);
-      end;
-
-      Command_2.Bind (1, Integer_64 (Job));
-      while Command_2.Step loop
+      Command.Bind (1, Integer_64 (Job));
+      while Command.Step loop
          declare
-            Stamp : constant String := Command_2.Column (1);
-            Kind  : constant String := Command_2.Column (2);
+            Stamp : constant String := Command.Column (1);
+            Kind  : constant String := Command.Column (2);
          begin
-            Put (Stamp);
-            Put ("    ");
-            Put (Kind);
-            New_Line;
+            Events.Append ((To_Unbounded_String (Stamp),
+                            To_Unbounded_String (Kind)));
          end;
       end loop;
+      return Events;
+   end Get_Job_Events;
 
-   end Show_Job;
 
    procedure Add_Job (Id    : in Job_Id;
                       Title : in String;

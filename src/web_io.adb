@@ -68,4 +68,36 @@ package body Web_IO is
    end Lists_Image;
 
 
+   function Job_Image (Job : in Database.Job_Id)
+                      return HTML_String
+   is
+      --  use Ada.Text_IO,
+      use Ada.Strings.Unbounded;
+
+      Info   : constant Database.Job_Info  := Database.Get_Job_Info (Job);
+      Events : constant Database.Event_Lists.Vector
+        := Database.Get_Job_Events (Job);
+      A : Unbounded_String;
+   begin
+      Append (A, "<p>");
+      Append (A, To_String (Info.Title) & " (" & Job'Img & ")");
+      Append (A, "</p>");
+      Append (A, "<p>");
+      Append (A, "List (" & Info.List'Img & ")");
+      Append (A, "Owner: " & To_String (Info.Owner));
+      Append (A, "</p>");
+
+      Append (A, "<table><tr><th>Date Time</th><th>Event</th></tr>");
+      for Event of Events loop
+         Append (A, "<tr>");
+         Append (A, "<td>" & To_String (Event.Stamp) & "</td>");
+         Append (A, "<td>" & To_String (Event.Kind)  & "</td>");
+         Append (A, "</tr>");
+      end loop;
+      Append (A, "</table>");
+
+      return To_String (A);
+   end Job_Image;
+
+
 end Web_IO;
