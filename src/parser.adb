@@ -4,6 +4,7 @@
 
 with Ada.Text_IO;
 with Ada.Strings.Fixed;
+with Ada.Strings.Unbounded;
 with Ada.Calendar;
 
 with Database.Events;
@@ -24,29 +25,61 @@ package body Parser is
       return Ada.Text_IO.Get_Line;
    end Get_Input;
 
+   use Ada.Strings.Unbounded;
+   function "-" (Source : String) return Unbounded_String
+     renames To_Unbounded_String;
+
+   type Help_Line is
+      record
+         Command : Unbounded_String;
+         Comment : Unbounded_String;
+      end record;
+
+   Help_Lines : constant array (Positive range <>) of Help_Line :=
+     ((-"help",  -"Print this help text"),
+      (-"quit",  -"Quit program"),
+      (-"view",  -"Show current list"),
+      (-"lists", -"Show all list"),
+      (-"set list LIST", -"Set LIST to current"),
+      (-"set job JOB",   -"Set JOB to current"),
+      (-"show list",
+        -"Show all jobs in current list"),
+      (-"show job",      -"Show jobs details"),
+      (-"add job TITLE", -"Add job to current list"),
+      (-"add list NAME", -"Add list to database"),
+      (-"split serial JOB COUNT",
+       -"Split job into count serial jobs"),
+      (-"split parallel JOB COUNT ",
+       -"Split job into count parallel jobs"),
+      (-"move LIST",
+       -"Move current job to other list"),
+      (-"trans LIST",
+       -"Transfer current job to other list"),
+      (-"event KIND", -"Add event to current job"));
+
+   function Web_Help return String is
+      S : Unbounded_String;
+   begin
+      Append (S, "<table>");
+      for Line of Help_Lines loop
+         Append (S, "<tr><td>"
+                   & Line.Command
+                   & "</td><td>"
+                   & Line.Comment
+                   & "</td></tr>");
+      end loop;
+      Append (S, "</table>");
+      return To_String (S);
+   end Web_Help;
+
    procedure Put_Help is
       use Ada.Text_IO;
    begin
-      Put_Line ("help        - Print this help text      " &
-                  "quit        - Quit program");
-      Put_Line ("view        - Show current list         " &
-                  "lists       - Show all list");
-      Put_Line ("set list <list>              - Set list to current");
-      Put_Line ("set job <job>                - Set job to current");
-      Put_Line ("show list                    " &
-                  "- Show all jobs in current list");
-      Put_Line ("show job                     - Show jobs details");
-      Put_Line ("add job <title>              - Add job to current list");
-      Put_Line ("add list <name>              - Add list to database");
-      Put_Line ("split serial <job> <count>   " &
-                  "- Split job into count serial jobs");
-      Put_Line ("split parallel <job> <count> " &
-                  "- Split job into count parallel jobs");
-      Put_Line ("move <list>                  " &
-                  "- Move current job to other list");
-      Put_Line ("trans <list>                 " &
-                  "- transfer current job to other list");
-      Put_Line ("event <kind>                 - Add event to current job");
+      for Line of Help_Lines loop
+         Put (To_String (Line.Command));
+         Set_Col (33);
+         Put_Line (To_String (Line.Comment));
+      end loop;
    end Put_Help;
 
    procedure Put_Banner is

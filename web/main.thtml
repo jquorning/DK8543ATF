@@ -12,18 +12,15 @@
 <h1>TODO</h1>
 <p>Visning og redigering af todo-lister.</p>
 
+<h2>Kommandoer</h2>
+@_COMMAND_TABLE_@
+
 <h2>Aktuelle liste</h2>
 <p>Den aktuelle liste er: XXXX</p>
 
 <h2>Jobs is aktuelle liste</h2>
 <p>XXXX</p>
 
-<h2>Kommandoer</h2>
-<p>XXXX</p>
-
-<h2>Kommandoer</h2>
-<p>XXXX</p>
-@_COMMAND_TABLE_@
 
 <h2>Menu</h2>
 <li><a href="import">Import CSV</a>

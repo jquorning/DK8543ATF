@@ -24,6 +24,8 @@ with AWS.Templates;
 
 with GNAT.Traceback.Symbolic;
 
+with Parser;  --  Web_Help
+
 package body Web_Callbacks is
 
    Web_Base : constant String := "../web/";
@@ -34,7 +36,7 @@ package body Web_Callbacks is
       AWS.Templates.Insert
         (Translations,
          AWS.Templates.Assoc ("COMMAND_TABLE",
-                              "YYYY"));
+                              Parser.Web_Help));
    end Initialize;
 
    ----------
