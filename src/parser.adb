@@ -218,7 +218,8 @@ package body Parser is
       elsif First = "help" then
          Put_Help;
       elsif First = "view" then
-         Database.Get_Jobs (Database.Jobs);
+         Database.Get_Jobs (Database.Jobs,
+                            List => Database.Lists.Current);
          Terminal_IO.Put_Jobs (Database.Jobs);
       elsif First = "lists" then
          Database.Get_Lists (Database.Lists);

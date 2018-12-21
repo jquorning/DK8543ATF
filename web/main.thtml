@@ -16,7 +16,7 @@
 <form action="/" method="post">
 <fieldset>
 <legend>Indtast kommando og håb det bedste...</legend>
-<input type="text" name="cmd" value="@_LAST_COMMAND_@" size="200" autofocus="on">
+<input type="text" name="cmd" value="@_LAST_COMMAND_@" size="100" autofocus="on">
 </fieldset>
 </form>
 

@@ -2,19 +2,13 @@
 --
 --
 
---  with SQLite;
 with Ada.Text_IO;
---  with Ada.Calendar;
---  with Ada.Strings.Fixed;
 with Ada.IO_Exceptions;
---  with Integer_Text_IO;
 with Ada.Environment_Variables;
 
 with Terminal_IO;
---  with GNAT.Calendar.Time_IO;
 
 package body Database is
---   pragma Link_With ("-lsqlite3");
 
    use Ada.Strings.Unbounded;
 
@@ -105,23 +99,15 @@ package body Database is
    end Get_Current;
 
    procedure Get_Jobs (Jobs :    out Job_Set;
-                       List : in     List_Id := 0)
+                       List : in     List_Id)
    is
       use SQLite;
---        Command_1 : constant Statement;
---        :=
---          Prepare (Database.DB,
---                   "SELECT Id, Title " &
---                     "FROM Job");
---        Command_2 : constant Statement :=
---          Prepare (Database.DB,
---                   "SELECT Id, Title " &
---                     "FROM Job WHERE List = ?");
+
       Command : Statement;
       Count   : Positive := Positive'First;
    begin
       Jobs.Vector.Clear;
-      if List = 0 then
+      if List = All_Lists then
          Command := Prepare (Database.DB,
                              "SELECT Id, Title " &
                                "FROM Job");

@@ -55,8 +55,9 @@ package Database is
    procedure Get_Current (Job  : out Job_Id;
                           List : out List_Id);
 
+   All_Lists : constant List_Id := 0;
    procedure Get_Jobs (Jobs :    out Job_Set;
-                       List : in     List_Id := 0);
+                       List : in     List_Id);
 
    procedure Get_Lists (Lists : out List_Set);
 

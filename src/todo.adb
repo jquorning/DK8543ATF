@@ -16,7 +16,7 @@ begin
                          Database.Lists.Current);
 
    Database.Get_Lists (Database.Lists);
-   Database.Get_Jobs (Database.Jobs);
+   Database.Get_Jobs (Database.Jobs, List => Database.All_Lists);
 
    Parser.Put_Banner;
    Terminal_IO.Put_Lists (Database.Lists);

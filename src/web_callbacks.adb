@@ -75,7 +75,7 @@ package body Web_Callbacks is
       Parser.Parse_Input (CMD);
 
       Database.Get_Lists (Database.Lists);
-      Database.Get_Jobs (Database.Jobs);
+      Database.Get_Jobs (Database.Jobs, List => Database.Lists.Current);
 
       Associate ("CURRENT_LIST", Current_List_Name (Database.Lists));
       Associate ("LISTS_TABLE",  Web_IO.Lists_Image (Database.Lists));
