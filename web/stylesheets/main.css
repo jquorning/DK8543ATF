@@ -26,10 +26,11 @@ table {
   font-family: ariel, sans-serif;
   width: 60%;
 }
-td,th {
+th {
   border: 1px solid #dddddd;
   text-align: left;
-  padding: 1px;
+  padding: 3px;
+  background: #aaddaa;
 }
 td {
   border: 1px solid #dddddd;
