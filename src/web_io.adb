@@ -15,7 +15,7 @@ package body Web_IO is
 
       S : Ada.Strings.Unbounded.Unbounded_String;
    begin
-      Append (S, "<table><tr><th>Ref</th><th>Act</th><th>Title</th></tr>");
+      Append (S, "<table><tr><th>Ref</th><th>Title</th></tr>");
       for Job of Jobs.Vector loop
 
          if Job.Id = Jobs.Current then
@@ -26,7 +26,6 @@ package body Web_IO is
 
          Append (S, "<td><a href=""/?cmd=set%20job%20" & Job.Ref & """>"
                    & Job.Ref & "</a></td>");
-         Append (S, "<td></td>");
          Append (S, "<td>" & To_String (Job.Title) & "</td>");
          Append (S, "</tr>");
       end loop;
@@ -43,7 +42,7 @@ package body Web_IO is
 
       S : Ada.Strings.Unbounded.Unbounded_String;
    begin
-      Append (S, "<table><tr><th>Ref</th><th>Act</th>"
+      Append (S, "<table><tr><th>Ref</th>"
                 & "<th>Title</th><th>Description</th></tr>");
       for List of Lists.Vector loop
 
@@ -56,7 +55,6 @@ package body Web_IO is
          Append (S, "<td>");
          Append (S, "<a href=""/?cmd=set%20list%20" & List.Ref & """>"
                    & List.Ref & "</a></td>");
-         Append (S, "<td></td>");
          Append (S, "<td>");
          Append (S, List.Name);
          Append (S, "</td>");
