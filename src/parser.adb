@@ -9,6 +9,7 @@ with Ada.Calendar;
 with Database.Events;
 with Commands;
 with Terminal_IO;
+with CSV_IO;
 
 package body Parser is
 
@@ -157,6 +158,8 @@ package body Parser is
          Transfer (Rest);
       elsif First = "event" then
          Event (Rest);
+      elsif First = "export" then
+         CSV_IO.Export ("todo_text.csv");
       else
          Terminal_IO.Put_Error ("Unknown command: '" & Get_Last_Command & "'");
       end if;
