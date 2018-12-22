@@ -38,8 +38,10 @@ package Database is
 
    Top_Level : constant Job_Id := 0;
    All_Jobs  : constant Job_Id := -1;
-   procedure Get_Jobs (Jobs   :    out Job_Set;
-                       Parent : in     Job_Id);
+
+   function Get_Jobs (Top : in Job_Id)
+                     return Job_Set;
+   --  Get set of jobs at level Top.
 
    type Job_Info is
       record

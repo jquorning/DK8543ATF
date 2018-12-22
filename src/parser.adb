@@ -152,20 +152,9 @@ package body Parser is
       elsif First = "help" then
          Terminal_IO.Put_Help;
       elsif First = "view" then
-         declare
-            Cur_Jobs : Database.Job_Set;
-         begin
-            Database.Get_Jobs (Cur_Jobs,
-                               Parent => Database.Get_Current_Job);
-            Terminal_IO.Put_Jobs (Cur_Jobs);
-         end;
+         Terminal_IO.Put_Jobs (Database.Get_Jobs (Database.Get_Current_Job));
       elsif First = "top" then
-         declare
-            Top_Jobs : Database.Job_Set;
-         begin
-            Database.Get_Jobs (Top_Jobs, Database.Top_Level);
-            Terminal_IO.Put_Jobs (Top_Jobs);
-         end;
+         Terminal_IO.Put_Jobs (Database.Get_Jobs (Database.Top_Level));
       elsif First = "set" then
          Set (Rest);
       elsif First = "show" then

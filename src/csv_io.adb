@@ -34,11 +34,9 @@ package body CSV_IO is
 --                  List.Id'Img,
 --                  Ada.Strings.Unbounded.To_String (List.Desc));
          declare
-            Jobs : Database.Job_Set;
+            Jobs : constant Database.Job_Set :=
+              Database.Get_Jobs (Top => Database.All_Jobs);
          begin
-            --  Database.Get_Jobs (Jobs, List => List.Id);
-            Database.Get_Jobs (Jobs, Parent => Database.All_Jobs);
-
             for Job of Jobs.Vector loop
                Put_Row (Col_1 => Job.Ref,
                         Col_2 => Ada.Strings.Unbounded.To_String (Job.Title),

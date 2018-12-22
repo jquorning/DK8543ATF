@@ -66,9 +66,9 @@ package body Web_Callbacks is
                      return String
    is
       use type Database.Job_Id;
-      Top_Jobs : Database.Job_Set;
+      Top_Jobs : constant Database.Job_Set :=
+        Database.Get_Jobs (Database.Top_Level);
    begin
-      Database.Get_Jobs (Top_Jobs, Database.Top_Level);
       for J of Top_Jobs.Vector loop
          if Job = J.Id then
             return Ada.Strings.Unbounded.To_String (J.Title);
@@ -81,20 +81,19 @@ package body Web_Callbacks is
    procedure Serve_Main_Page (Request : in AWS.Status.Data) is
       List : constant AWS.Parameters.List := AWS.Status.Parameters (Request);
       CMD  : constant String := AWS.Parameters.Get (List, "cmd");
-
-      function Get_Image (Top : Database.Job_Id) return String;
-      function Get_Image (Top : Database.Job_Id) return String is
-         Jobs : Database.Job_Set;
-      begin
-         Database.Get_Jobs (Jobs, Top);
-         return Web_IO.Jobs_Image (Jobs);
-      end Get_Image;
    begin
       Parser.Parse_Input (CMD);
 
       Associate ("CUR_JOB_NAME",   Job_Name (Database.Get_Current_Job));
-      Associate ("TOP_JOBS_TABLE", Get_Image (Database.Top_Level));
-      Associate ("CUR_JOBS_TABLE", Get_Image (Database.Get_Current_Job));
+
+      Associate ("TOP_JOBS_TABLE",
+                 Web_IO.Jobs_Image (Database.Get_Jobs (Database.Top_Level)));
+
+      Associate ("CUR_JOBS_TABLE",
+                 Web_IO.Jobs_Image
+                   (Database.Get_Jobs
+                      (Database.Get_Current_Job)));
+
       Associate ("JOB_INFORMATION",
                  Web_IO.Job_Image (Database.Get_Current_Job));
       Associate ("LAST_COMMAND",    Parser.Get_Last_Command);

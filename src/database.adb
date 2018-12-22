@@ -105,16 +105,19 @@ package body Database is
    end Set_Current_Job;
 
 
-   procedure Get_Jobs (Jobs   :    out Job_Set;
-                       Parent : in     Job_Id)
+   function Get_Jobs (Top : in Job_Id)
+                     return Job_Set
+     --  procedure Get_Jobs (Jobs   :    out Job_Set;
+     --                       Parent : in     Job_Id)
    is
       use SQLite;
 
       Command : Statement;
       Count   : Positive := Positive'First;
+      Jobs    : Job_Set;
    begin
       Jobs.Vector.Clear;
-      if Parent = All_Jobs then
+      if Top = All_Jobs then
          Command := Prepare (Database.DB,
                              "SELECT Id, Title " &
                                "FROM Job");
@@ -122,7 +125,7 @@ package body Database is
          Command := Prepare (Database.DB,
                              "SELECT Id, Title " &
                                "FROM Job WHERE List = ?");
-         Command.Bind (1, Interfaces.Integer_64 (Parent));
+         Command.Bind (1, Interfaces.Integer_64 (Top));
       end if;
 
       while Command.Step loop
@@ -135,6 +138,8 @@ package body Database is
          end;
          Count := Positive'Succ (Count);
       end loop;
+
+      return Jobs;
    end Get_Jobs;
 
 --     procedure Get_Lists (Lists : out List_Set) is
@@ -319,9 +324,8 @@ package body Database is
                          Job     :    out Job_Id;
                          Success :    out Boolean)
    is
-      Top_Jobs : Job_Set;
+      Top_Jobs : constant Job_Set := Database.Get_Jobs (Database.Top_Level);
    begin
-      Database.Get_Jobs (Top_Jobs, Database.Top_Level);
       for J of Top_Jobs.Vector loop
          if J.Ref = Text then
             Job     := J.Id;
