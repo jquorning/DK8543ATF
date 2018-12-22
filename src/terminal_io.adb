@@ -16,6 +16,12 @@ package body Terminal_IO is
       use Database;
       Current_Job : constant Database.Job_Id := Database.Get_Current_Job;
    begin
+
+      if Jobs.Vector.Is_Empty then
+         Put_Line ("<< No Jobs >>");
+         return;
+      end if;
+
       for Job of Jobs.Vector loop
          if Job.Id = Current_Job then
             Put (Symbols.White_Right_Pointing_Index);

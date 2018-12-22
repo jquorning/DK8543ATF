@@ -34,6 +34,10 @@ package body Web_IO is
       Current_Job : constant Database.Job_Id := Database.Get_Current_Job;
       S : Ada.Strings.Unbounded.Unbounded_String;
    begin
+      if Jobs.Vector.Is_Empty then
+         return "<p>oO  No Jobs  Oo</p>";
+      end if;
+
       Append (S, "<table><tr><th>Ref</th><th>Title</th></tr>");
       for Job of Jobs.Vector loop
 
