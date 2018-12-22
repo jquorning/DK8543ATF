@@ -5,6 +5,8 @@
 with Ada.Text_IO;
 with Ada.Strings.Unbounded;
 
+with Symbols;
+
 package body Terminal_IO is
 
 
@@ -13,6 +15,8 @@ package body Terminal_IO is
       use Database;
    begin
       for Job of Jobs.Vector loop
+         Put (Symbols.White_Star);
+         Put ("  ");
          Put (Job.Ref);
          Put ((if Job.Id = Jobs.Current then "*" else " "));
          Put ("  ");
@@ -31,6 +35,8 @@ package body Terminal_IO is
             Name_Image : String (1 .. Lists.Name_Width) := (others => ' ');
             Name       : constant String := US.To_String (List.Name);
          begin
+            Put (Symbols.White_Star);
+            Put ("  ");
             Put (List.Ref);
             Put ((if List.Id = Lists.Current then "*" else " "));
             Put ("  ");
