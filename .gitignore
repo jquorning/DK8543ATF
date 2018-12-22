@@ -1,6 +1,7 @@
 todo.db
 obj/
 bin/
+var/
 *.log
 *.history
 *.csv
