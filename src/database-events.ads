@@ -7,8 +7,8 @@ with Interfaces;
 
 package Database.Events is
 
-   type Event_Kind is (Created, Startet, Stalled, Completed,
-                       Commented, Deadline, Milestone);
+   type Event_Kind is (Created, Startet, Stalled, Done,
+                       Text, Deadline, Milestone);
    type Event_Id   is new Interfaces.Integer_64;
 
    procedure Add_Event (Job   : in     Job_Id;

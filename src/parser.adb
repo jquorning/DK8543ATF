@@ -108,7 +108,7 @@ package body Parser is
    begin
       Database.Events.Add_Event (Database.Jobs.Current,
                                  Ada.Calendar.Clock,
-                                 Database.Events.Deadline,
+                                 Database.Events.Done,
                                  Id);
    end Event;
 
