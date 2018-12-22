@@ -34,9 +34,6 @@ package Database is
    procedure Set_Current_Job (Job : in Job_Id);
    --  Set current jon in persistent storage.
 
-   Cur_Jobs : Job_Set;  --  Current jobs
-   Top_Jobs : Job_Set;  --  Top level jobs
-
    procedure Open;
 
    Top_Level : constant Job_Id := 0;

@@ -317,8 +317,11 @@ package body Database is
 
    procedure Lookup_Job (Text    : in     String;
                          Job     :    out Job_Id;
-                         Success :    out Boolean) is
+                         Success :    out Boolean)
+   is
+      Top_Jobs : Job_Set;
    begin
+      Database.Get_Jobs (Top_Jobs, Database.Top_Level);
       for J of Top_Jobs.Vector loop
          if J.Ref = Text then
             Job     := J.Id;

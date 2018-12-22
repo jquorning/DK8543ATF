@@ -11,23 +11,30 @@ with Terminal_IO;
 with Interactive;
 
 procedure Todo is
+
+   procedure Show (Top : Database.Job_Id);
+
+   procedure Show (Top : Database.Job_Id) is
+      Jobs : Database.Job_Set;
+   begin
+      Database.Get_Jobs (Jobs, Top);
+      Terminal_IO.Put_Jobs (Jobs);
+   end Show;
+
 begin
    Interactive.Initialize;
    Web_Server.Startup;
    Database.Open;
 
-   Database.Get_Jobs (Database.Top_Jobs, Parent => Database.Top_Level);
-   Database.Get_Jobs (Database.Cur_Jobs, Parent => Database.Get_Current_Job);
-
    Terminal_IO.Put_Banner;
 
    Ada.Text_IO.New_Line;
    Ada.Text_IO.Put_Line ("Top Jobs:");
-   Terminal_IO.Put_Jobs (Database.Top_Jobs);
+   Show (Database.Top_Level);
 
    Ada.Text_IO.New_Line;
    Ada.Text_IO.Put_Line ("Current Jobs:");
-   Terminal_IO.Put_Jobs (Database.Cur_Jobs);
+   Show (Database.Get_Current_Job);
 
    loop
       Parser.Parse_Input (Interactive.Get_Line);
