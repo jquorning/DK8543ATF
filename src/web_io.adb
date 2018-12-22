@@ -31,12 +31,13 @@ package body Web_IO is
       use Ada.Strings.Unbounded;
       use type Database.Job_Id;
 
+      Current_Job : constant Database.Job_Id := Database.Get_Current_Job;
       S : Ada.Strings.Unbounded.Unbounded_String;
    begin
       Append (S, "<table><tr><th>Ref</th><th>Title</th></tr>");
       for Job of Jobs.Vector loop
 
-         if Job.Id = Jobs.Current then
+         if Job.Id = Current_Job then
             Append (S, "<tr style=""Background-Color:#Dddd2222"">");
          else
             Append (S, "<tr>");
@@ -52,44 +53,43 @@ package body Web_IO is
    end Jobs_Image;
 
 
-   function Lists_Image (Lists : in Database.List_Set)
-                        return String
-   is
-      use Ada.Strings.Unbounded;
-      use type Database.List_Id;
+--     function Lists_Image (Lists : in Database.List_Set)
+--                          return String
+--     is
+--        use Ada.Strings.Unbounded;
+--        use type Database.List_Id;
 
-      S : Ada.Strings.Unbounded.Unbounded_String;
-   begin
-      Append (S, "<table><tr><th>Ref</th>"
-                & "<th>Title</th><th>Description</th></tr>");
-      for List of Lists.Vector loop
+--        S : Ada.Strings.Unbounded.Unbounded_String;
+--     begin
+--        Append (S, "<table><tr><th>Ref</th>"
+--                  & "<th>Title</th><th>Description</th></tr>");
+--        for List of Lists.Vector loop
 
-         if List.Id = Lists.Current then
-            Append (S, "<tr style=""Background-Color:#Dddd2222"">");
-         else
-            Append (S, "<tr>");
-         end if;
+--           if List.Id = Lists.Current then
+--              Append (S, "<tr style=""Background-Color:#Dddd2222"">");
+--           else
+--              Append (S, "<tr>");
+--           end if;
 
-         Append (S, "<td>");
-         Append (S, "<a href=""/?cmd=set%20list%20" & List.Ref & """>"
-                   & List.Ref & "</a></td>");
-         Append (S, "<td>");
-         Append (S, List.Name);
-         Append (S, "</td>");
-         Append (S, "<td>");
-         Append (S, List.Desc);
-         Append (S, "</td>");
-         Append (S, "</tr>");
-      end loop;
-      Append (S, "</table>");
-      return To_String (S);
-   end Lists_Image;
+--           Append (S, "<td>");
+--           Append (S, "<a href=""/?cmd=set%20list%20" & List.Ref & """>"
+--                     & List.Ref & "</a></td>");
+--           Append (S, "<td>");
+--           Append (S, List.Name);
+--           Append (S, "</td>");
+--           Append (S, "<td>");
+--           Append (S, List.Desc);
+--           Append (S, "</td>");
+--           Append (S, "</tr>");
+--        end loop;
+--        Append (S, "</table>");
+--        return To_String (S);
+--     end Lists_Image;
 
 
    function Job_Image (Job : in Database.Job_Id)
                       return HTML_String
    is
-      --  use Ada.Text_IO,
       use Ada.Strings.Unbounded;
 
       Info   : constant Database.Job_Info  := Database.Get_Job_Info (Job);
@@ -101,7 +101,7 @@ package body Web_IO is
       Append (A, To_String (Info.Title) & " (" & Job'Img & ")");
       Append (A, "</p>");
       Append (A, "<p>");
-      Append (A, "List (" & Info.List'Img & ")");
+      Append (A, "Parent (" & Info.Parent'Img & ")");
       Append (A, "Owner: " & To_String (Info.Owner));
       Append (A, "</p>");
 

@@ -22,7 +22,7 @@ package Commands is
      ((-"help",  -"Print this help text"),
       (-"quit",  -"Quit program"),
       (-"view",  -"Show current list"),
-      (-"lists", -"Show all list"),
+      (-"top",   -"Show top level jobs"),
       (-"set list LIST", -"Set LIST to current"),
       (-"set job JOB",   -"Set JOB to current"),
       (-"show list",
@@ -42,10 +42,11 @@ package Commands is
       (-"export", -"Export jobs to csv file (todo.csv)"));
 
 
-   procedure Create_Job (Job   : in Database.Job_Id;
-                         Title : in String;
-                         List  : in Database.List_Id);
+   procedure Create_Job (Job    : in Database.Job_Id;
+                         Title  : in String;
+                         --  List  : in Database.List_Id);
+                         Parent : in Database.Job_Id);
 
-   procedure Show_List (List : in Database.List_Id);
+--   procedure Show_List (List : in Database.List_Id);
 
 end Commands;

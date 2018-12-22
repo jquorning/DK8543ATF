@@ -1,5 +1,5 @@
 --
---
+--  Database body
 --
 
 with Ada.Text_IO;
@@ -82,22 +82,31 @@ package body Database is
       return S;
    end To_S;
 
-   procedure Get_Current (Job  : out Job_Id;
-                          List : out List_Id)
-   is
+   function Get_Current_Job return Job_Id is
       use SQLite, Interfaces;
       Command : constant Statement :=
         Prepare (Database.DB,
-                 "SELECT Job, List " &
-                   "FROM Current");
+                 "SELECT Job FROM Current");
    begin
       Command.Step;
-      Job  := Job_Id  (Integer_64'(Command.Column (1)));
-      List := List_Id (Integer_64'(Command.Column (2)));
-   end Get_Current;
+      return
+        Job_Id (Integer_64'(Command.Column (1)));
+   end Get_Current_Job;
 
-   procedure Get_Jobs (Jobs :    out Job_Set;
-                       List : in     List_Id)
+
+   procedure Set_Current_Job (Job : in Job_Id) is
+      use SQLite, Interfaces;
+      Command : constant Statement :=
+        Prepare (Database.DB,
+                 "UPDATE Current SET Job=?");
+   begin
+      Command.Bind (1, Integer_64 (Job));
+      Command.Step;
+   end Set_Current_Job;
+
+
+   procedure Get_Jobs (Jobs   :    out Job_Set;
+                       Parent : in     Job_Id)
    is
       use SQLite;
 
@@ -105,7 +114,7 @@ package body Database is
       Count   : Positive := Positive'First;
    begin
       Jobs.Vector.Clear;
-      if List = All_Lists then
+      if Parent = All_Jobs then
          Command := Prepare (Database.DB,
                              "SELECT Id, Title " &
                                "FROM Job");
@@ -113,7 +122,7 @@ package body Database is
          Command := Prepare (Database.DB,
                              "SELECT Id, Title " &
                                "FROM Job WHERE List = ?");
-         Command.Bind (1, Interfaces.Integer_64 (List));
+         Command.Bind (1, Interfaces.Integer_64 (Parent));
       end if;
 
       while Command.Step loop
@@ -128,31 +137,31 @@ package body Database is
       end loop;
    end Get_Jobs;
 
-   procedure Get_Lists (Lists : out List_Set) is
-      use SQLite;
-      Command : constant Statement :=
-        Prepare (Database.DB,
-                 "SELECT Id, Name, Description " &
-                   "FROM List ");
-      Count : Positive := Positive'First;
-   begin
-      Lists.Vector.Clear;
-      Lists.Name_Width := 0;
-      while Command.Step loop
-         declare
-            Id         : constant List_Id := List_Id (Get_Id (Command));
-            Name_Image : constant String  := Column (Command, 2);
-            Desc_Image : constant String  := Column (Command, 3);
-         begin
-            Lists.Vector.Append (("L" & To_S (Count), Id,
-                                  US.To_Unbounded_String (Name_Image),
-                                  US.To_Unbounded_String (Desc_Image)));
-            Lists.Name_Width := Natural'Max (Lists.Name_Width,
-                                             Name_Image'Length);
-         end;
-         Count := Positive'Succ (Count);
-      end loop;
-   end Get_Lists;
+--     procedure Get_Lists (Lists : out List_Set) is
+--        use SQLite;
+--        Command : constant Statement :=
+--          Prepare (Database.DB,
+--                   "SELECT Id, Name, Description " &
+--                     "FROM List ");
+--        Count : Positive := Positive'First;
+--     begin
+--        Lists.Vector.Clear;
+--        Lists.Name_Width := 0;
+--        while Command.Step loop
+--           declare
+--              Id         : constant List_Id := List_Id (Get_Id (Command));
+--              Name_Image : constant String  := Column (Command, 2);
+--              Desc_Image : constant String  := Column (Command, 3);
+--           begin
+--              Lists.Vector.Append (("L" & To_S (Count), Id,
+--                                    US.To_Unbounded_String (Name_Image),
+--                                    US.To_Unbounded_String (Desc_Image)));
+--              Lists.Name_Width := Natural'Max (Lists.Name_Width,
+--                                               Name_Image'Length);
+--           end;
+--           Count := Positive'Succ (Count);
+--        end loop;
+--     end Get_Lists;
 
 
    function Get_Job_Info (Job : in Job_Id) return Job_Info is
@@ -172,7 +181,8 @@ package body Database is
          Owner : constant String     := Command.Column (3);
       begin
          return Job_Info'(To_Unbounded_String (Title),
-                          List_Id (List),
+                          --  List_Id (List),
+                          Job_Id (List),
                           To_Unbounded_String (Owner));
       end;
    end Get_Job_Info;
@@ -205,10 +215,10 @@ package body Database is
    end Get_Job_Events;
 
 
-   procedure Add_Job (Id    : in Job_Id;
-                      Title : in String;
-                      List  : in List_Id;
-                      Owner : in String)
+   procedure Add_Job (Id     : in Job_Id;
+                      Title  : in String;
+                      Parent : in Job_Id;
+                      Owner  : in String)
    is
       use SQLite, Interfaces;
       Command : constant Statement :=
@@ -218,30 +228,30 @@ package body Database is
    begin
       Bind (Command, 1, Integer_64 (Id));
       Bind (Command, 2, Title);
-      Bind (Command, 3, Integer_64 (List));
+      Bind (Command, 3, Integer_64 (Parent));
       Bind (Command, 4, Owner);
       Command.Step;
    end Add_Job;
 
-   procedure Create_List (Name : in String)
-   is
-      use SQLite;
-      Command_1 : constant Statement :=
-        Prepare (Database.DB,
-                 "SELECT MAX(Id) + 1 FROM List");
-      Command_2 : constant Statement :=
-        Prepare (Database.DB,
-                 "INSERT INTO List (Id, Name) " &
-                   "VALUES (?,?)");
-      Id : Interfaces.Integer_64;
-   begin
-      Command_1.Step;
-      Id := Get_Id (Command_1);
+--     procedure Create_List (Name : in String)
+--     is
+--        use SQLite;
+--        Command_1 : constant Statement :=
+--          Prepare (Database.DB,
+--                   "SELECT MAX(Id) + 1 FROM List");
+--        Command_2 : constant Statement :=
+--          Prepare (Database.DB,
+--                   "INSERT INTO List (Id, Name) " &
+--                     "VALUES (?,?)");
+--        Id : Interfaces.Integer_64;
+--     begin
+--        Command_1.Step;
+--        Id := Get_Id (Command_1);
 
-      Command_2.Bind (1, Id);
-      Command_2.Bind (2, Name);
-      Command_2.Step;
-   end Create_List;
+--        Command_2.Bind (1, Id);
+--        Command_2.Bind (2, Name);
+--        Command_2.Step;
+--     end Create_List;
 
    function Get_Job_Id return Job_Id
    is
@@ -279,31 +289,49 @@ package body Database is
 --        end if;
 --     end Same;
 
-   function Lookup_List (List : in String) return List_Id is
-   begin
-      for L of Lists.Vector loop
-         --  if Same (L.Ref, List) then
-         if L.Ref = List then
-            return L.Id;
-         end if;
-      end loop;
-      raise Constraint_Error;
-   end Lookup_List;
+--     function Lookup_List (List : in String) return List_Id is
+--     begin
+--        for L of Lists.Vector loop
+--           --  if Same (L.Ref, List) then
+--           if L.Ref = List then
+--              return L.Id;
+--           end if;
+--        end loop;
+--        raise Constraint_Error;
+--     end Lookup_List;
 
-   function Lookup_Job  (Job  : in String) return Job_Id is
+--     function Lookup_Job (Job : in String) return Job_Id is
+--     begin
+--  Ada.Text_IO.Put_Line ("Job to search for : " & Job);
+--        for J of Jobs.Vector loop
+--           --  if Same (J.Ref, Job) then
+--  --         Ada.Text_IO.Put_Line ("#" & J.Ref & "#" & Job & "#");
+--  Ada.Text_IO.Put_Line (J.Ref);
+--           if J.Ref = Job then
+--              return J.Id;
+--           end if;
+--        end loop;
+--        raise Constraint_Error;
+--     end Lookup_Job;
+
+
+   procedure Lookup_Job (Text    : in     String;
+                         Job     :    out Job_Id;
+                         Success :    out Boolean) is
    begin
-      for J of Jobs.Vector loop
-         --  if Same (J.Ref, Job) then
---         Ada.Text_IO.Put_Line ("#" & J.Ref & "#" & Job & "#");
-         if J.Ref = Job then
-            return J.Id;
+      for J of Top_Jobs.Vector loop
+         if J.Ref = Text then
+            Job     := J.Id;
+            Success := True;
+            return;
          end if;
       end loop;
-      raise Constraint_Error;
+      Success := False;
    end Lookup_Job;
 
-   procedure Transfer (Job     : in Job_Id;
-                       To_List : in List_Id)
+
+   procedure Transfer (Job       : in Job_Id;
+                       To_Parent : in Job_Id)
    is
       use SQLite, Interfaces;
       Command : constant Statement :=
@@ -311,11 +339,10 @@ package body Database is
                  "UPDATE Job SET List=? " &
                    "WHERE Id=?");
    begin
---        Ada.Text_IO.Put_Line ("Job => " % Job'Img);
---        Ada.Text_IO.Put_Line ("To_List => " % Job'Img);
-      Command.Bind (1, Integer_64 (To_List));
+      Command.Bind (1, Integer_64 (To_Parent));
       Command.Bind (2, Integer_64 (Job));
       Command.Step;
    end Transfer;
+
 
 end Database;

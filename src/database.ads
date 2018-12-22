@@ -1,5 +1,5 @@
 --
---
+--  Database
 --
 
 with Ada.Strings.Unbounded;
@@ -26,52 +26,29 @@ package Database is
    type Job_Set is
       record
          Vector  : Job_Vectors.Vector;
-         Current : Job_Id;
       end record;
 
-   type List_Id is new Interfaces.Integer_64;
+   function Get_Current_Job return Job_Id;
+   --  Get current job from persistent database storage.
 
-   type List_Desc is
-      record
-         Ref  : String (1 .. 3);
-         Id   : List_Id;
-         Name : US.Unbounded_String;
-         Desc : US.Unbounded_String;
-      end record;
+   procedure Set_Current_Job (Job : in Job_Id);
+   --  Set current jon in persistent storage.
 
-   package List_Vectors is new Ada.Containers.Vectors (Positive, List_Desc);
-   type List_Set is
-      record
-         Vector     : List_Vectors.Vector;
-         Current    : List_Id;
-         Name_Width : Natural;
-      end record;
-
-   Jobs  : Job_Set;
-   Lists : List_Set;
+   Cur_Jobs : Job_Set;  --  Current jobs
+   Top_Jobs : Job_Set;  --  Top level jobs
 
    procedure Open;
 
-   procedure Get_Current (Job  : out Job_Id;
-                          List : out List_Id);
-
-   All_Lists : constant List_Id := 0;
-   procedure Get_Jobs (Jobs :    out Job_Set;
-                       List : in     List_Id);
-
-   procedure Get_Lists (Lists : out List_Set);
-
---   procedure Put_Jobs (Jobs : in Job_Set);
---   procedure Put_Lists (Lists : in List_Set);
-
---   procedure Show_List (List : in List_Id);
---   procedure Show_Job (Job : in Job_Id);
+   Top_Level : constant Job_Id := 0;
+   All_Jobs  : constant Job_Id := -1;
+   procedure Get_Jobs (Jobs   :    out Job_Set;
+                       Parent : in     Job_Id);
 
    type Job_Info is
       record
-         Title : US.Unbounded_String;
-         List  : List_Id;
-         Owner : US.Unbounded_String;
+         Title  : US.Unbounded_String;
+         Parent : Job_Id;
+         Owner  : US.Unbounded_String;
       end record;
 
    function Get_Job_Info (Job : in Job_Id) return Job_Info;
@@ -90,24 +67,20 @@ package Database is
                            return Event_Lists.Vector;
 
 
-   procedure Add_Job (Id    : in Job_Id;
-                      Title : in String;
-                      List  : in List_Id;
-                      Owner : in String);
-
---     procedure Create_Job (Id    : in Job_Id;
---                           Title : in String;
---                           List  : in List_Id);
-
-   procedure Create_List (Name : in String);
+   procedure Add_Job (Id     : in Job_Id;
+                      Title  : in String;
+                      Parent : in Job_Id;
+                      Owner  : in String);
 
    function Get_Job_Id return Job_Id;
 
-   function Lookup_List (List : in String) return List_Id;
-   function Lookup_Job  (Job  : in String) return Job_Id;
+   procedure Lookup_Job (Text    : in     String;
+                         Job     :    out Job_Id;
+                         Success :    out Boolean);
+   --  Loopup Text as job in top level. Job is set on Success,
 
-   procedure Transfer (Job     : in Job_Id;
-                       To_List : in List_Id);
+   procedure Transfer (Job       : in Job_Id;
+                       To_Parent : in Job_Id);
 
 private
 

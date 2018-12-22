@@ -40,13 +40,23 @@ package body Parser is
         := (if Space_Pos = 0 then ""
         else Ada.Strings.Fixed.Trim (Command (Space_Pos .. Command'Last),
                                      Ada.Strings.Both));
+      Lookup_Success : Boolean;
    begin
-      if First = "list" then
-         Database.Lists.Current := Database.Lookup_List (Rest);
-      elsif First = "job" then
-         Database.Jobs.Current  := Database.Lookup_Job (Rest);
+      if First = "job" then
+         declare
+            New_Current_Job : Database.Job_Id;
+         begin
+            Database.Lookup_Job (Text    => Rest,
+                                 Job     => New_Current_Job,
+                                 Success => Lookup_Success);
+            if Lookup_Success then
+               Database.Set_Current_Job (New_Current_Job);
+            else
+               raise Constraint_Error with "Could not lookup Text";
+            end if;
+         end;
       else
-         raise Constraint_Error;
+         raise Constraint_Error with "Set with unknown First";
       end if;
    end Set;
 
@@ -60,10 +70,11 @@ package body Parser is
 --          := (if Space_Pos = 0 then ""
 --          else Command (Space_Pos .. Command'Last));
    begin
-      if First = "list" then
-         Commands.Show_List (Database.Lists.Current);
-      elsif First = "job" then
-         Terminal_IO.Show_Job (Database.Jobs.Current);
+      --  if First = "list" then
+      --     Commands.Show_List (Database.Lists.Current);
+      --  els
+      if First = "job" then
+         Terminal_IO.Show_Job (Database.Get_Current_Job);
       else
          raise Constraint_Error;
       end if;
@@ -83,10 +94,10 @@ package body Parser is
          Commands.Create_Job
            (Database.Get_Job_Id,
             Ada.Strings.Fixed.Trim (Rest, Ada.Strings.Both),
-            Database.Lists.Current);
-      elsif First = "list" then
-         Database.Create_List
-           (Ada.Strings.Fixed.Trim (Rest, Ada.Strings.Both));
+            Parent => Database.Get_Current_Job);
+--      elsif First = "list" then
+--         Database.Create_List
+--           (Ada.Strings.Fixed.Trim (Rest, Ada.Strings.Both));
       else
          raise Constraint_Error;
       end if;
@@ -106,7 +117,7 @@ package body Parser is
       Id : Database.Events.Event_Id;
       pragma Unreferenced (Id);
    begin
-      Database.Events.Add_Event (Database.Jobs.Current,
+      Database.Events.Add_Event (Database.Get_Current_Job,
                                  Ada.Calendar.Clock,
                                  Database.Events.Done,
                                  Id);
@@ -114,9 +125,12 @@ package body Parser is
 
    procedure Transfer (Command : in String) is
       use Database;
+      Success   : Boolean;
+      To_Parent : Job_Id;
    begin
-      Transfer (Job     => Jobs.Current,
-                To_List => Lookup_List (Command));
+      Lookup_Job (Command, To_Parent, Success);
+      Transfer (Job       => Database.Get_Current_Job,
+                To_Parent => To_Parent);
    end Transfer;
 
 
@@ -138,12 +152,13 @@ package body Parser is
       elsif First = "help" then
          Terminal_IO.Put_Help;
       elsif First = "view" then
-         Database.Get_Jobs (Database.Jobs,
-                            List => Database.Lists.Current);
-         Terminal_IO.Put_Jobs (Database.Jobs);
-      elsif First = "lists" then
-         Database.Get_Lists (Database.Lists);
-         Terminal_IO.Put_Lists (Database.Lists);
+         Database.Get_Jobs (Database.Cur_Jobs,
+                            Parent => Database.Get_Current_Job);
+         Terminal_IO.Put_Jobs (Database.Cur_Jobs);
+      elsif First = "top" then
+         Database.Get_Jobs (Database.Top_Jobs,
+                            Parent => Database.Top_Level);
+         Terminal_IO.Put_Jobs (Database.Top_Jobs);
       elsif First = "set" then
          Set (Rest);
       elsif First = "show" then

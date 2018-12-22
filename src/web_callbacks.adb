@@ -24,7 +24,7 @@ with AWS.Parameters;
 
 with GNAT.Traceback.Symbolic;
 
-with Parser;  --  Web_Help
+with Parser;
 with Database;
 with Web_IO;
 
@@ -33,9 +33,18 @@ package body Web_Callbacks is
    Web_Base : constant String := "../web/";
    Translations : AWS.Templates.Translate_Set;
 
+
+   function Job_Name (Job : in Database.Job_Id)
+                     return String;
+   --  Get name of current job.
+
    procedure Associate (Placeholder : String;
                         Value       : String);
    --  Update template translation Placeholder with Value.
+
+   procedure Serve_Main_Page (Request : in AWS.Status.Data);
+   --  Build main web page "/"
+
 
    procedure Associate (Placeholder : String;
                         Value       : String)
@@ -45,28 +54,27 @@ package body Web_Callbacks is
                             AWS.Templates.Assoc (Placeholder, Value));
    end Associate;
 
+
    procedure Initialize is
    begin
       --  Static translations
       Associate ("COMMAND_TABLE", Web_IO.Help_Image);
    end Initialize;
 
-   function Current_List_Name (Lists : Database.List_Set) return String;
-   --  Return name of current list
 
-   function Current_List_Name (Lists : Database.List_Set) return String is
-      use type Database.List_Id;
+   function Job_Name (Job : in Database.Job_Id)
+                     return String
+   is
+      use type Database.Job_Id;
    begin
-      for List of Lists.Vector loop
-         if Lists.Current = List.Id then
-            return Ada.Strings.Unbounded.To_String (List.Name);
+      for J of Database.Top_Jobs.Vector loop
+         if Job = J.Id then
+            return Ada.Strings.Unbounded.To_String (J.Title);
          end if;
       end loop;
       return "UNKNOWN=XXX";
-   end Current_List_Name;
+   end Job_Name;
 
-   procedure Serve_Main_Page (Request : in AWS.Status.Data);
-   --  Build main web page "/"
 
    procedure Serve_Main_Page (Request : in AWS.Status.Data) is
       List : constant AWS.Parameters.List := AWS.Status.Parameters (Request);
@@ -74,13 +82,14 @@ package body Web_Callbacks is
    begin
       Parser.Parse_Input (CMD);
 
-      Database.Get_Lists (Database.Lists);
-      Database.Get_Jobs (Database.Jobs, List => Database.Lists.Current);
+      Database.Get_Jobs (Database.Cur_Jobs, Database.Get_Current_Job);
+      Database.Get_Jobs (Database.Top_Jobs, Parent => Database.Top_Level);
 
-      Associate ("CURRENT_LIST",    Current_List_Name (Database.Lists));
-      Associate ("LISTS_TABLE",     Web_IO.Lists_Image (Database.Lists));
-      Associate ("JOBS_TABLE",      Web_IO.Jobs_Image (Database.Jobs));
-      Associate ("JOB_INFORMATION", Web_IO.Job_Image (Database.Jobs.Current));
+      Associate ("CUR_JOB_NAME",   Job_Name (Database.Get_Current_Job));
+      Associate ("TOP_JOBS_TABLE", Web_IO.Jobs_Image (Database.Top_Jobs));
+      Associate ("CUR_JOBS_TABLE", Web_IO.Jobs_Image (Database.Cur_Jobs));
+      Associate ("JOB_INFORMATION",
+                 Web_IO.Job_Image (Database.Get_Current_Job));
       Associate ("LAST_COMMAND",    Parser.Get_Last_Command);
    end Serve_Main_Page;
 
