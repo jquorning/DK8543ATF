@@ -21,12 +21,14 @@ package body Symbols is
       return Image (Image'Last - 2 .. Image'Last - 1);
    end To_Hex;
 
-   function HTML_Image (Symbol : Symbol_Type) return String is
-   begin
-      return "&#x"
-        & To_Hex (Character'Pos (Symbol (1)))
-        & To_Hex (Character'Pos (Symbol (2))) & ";";
-   end HTML_Image;
+--   function HTML_Image (Symbol : Symbol_Type) return String is
+--   begin
+--      return "&#x"
+--        & To_Hex (Character'Pos (Symbol (1)))
+--        & To_Hex (Character'Pos (Symbol (2))) & ";";
+--   end HTML_Image;
+
+   procedure Dummy is null;
 
 end Symbols;
 

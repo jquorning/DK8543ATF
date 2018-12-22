@@ -15,11 +15,18 @@ package body Terminal_IO is
       use Database;
    begin
       for Job of Jobs.Vector loop
+         if Job.Id = Jobs.Current then
+            Put (Symbols.White_Right_Pointing_Index);
+         else
+            Put (" ");
+         end if;
+         Put (" ");
+
          Put (Symbols.White_Star);
-         Put ("  ");
+         Put (" ");
          Put (Job.Ref);
-         Put ((if Job.Id = Jobs.Current then "*" else " "));
-         Put ("  ");
+
+         Put (" ");
          Put (US.To_String (Job.Title));
          New_Line;
       end loop;
@@ -35,14 +42,21 @@ package body Terminal_IO is
             Name_Image : String (1 .. Lists.Name_Width) := (others => ' ');
             Name       : constant String := US.To_String (List.Name);
          begin
+            if List.Id = Lists.Current then
+               Put (Symbols.White_Right_Pointing_Index);
+            else
+               Put (" ");
+            end if;
+            Put (" ");
+
             Put (Symbols.White_Star);
-            Put ("  ");
+            Put (" ");
             Put (List.Ref);
-            Put ((if List.Id = Lists.Current then "*" else " "));
-            Put ("  ");
+
+            Put (" ");
             Name_Image (1 .. Name'Last) := Name;
             Put (Name_Image);
-            Put ("  ");
+            Put (" ");
             Put (US.To_String (List.Desc));
          end;
          New_Line;
