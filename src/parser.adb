@@ -49,6 +49,7 @@ package body Parser is
       end if;
    end Set;
 
+
    procedure Show (Command : in String) is
       Space_Pos : constant Natural := Ada.Strings.Fixed.Index (Command, " ");
       First     : constant String
@@ -117,6 +118,7 @@ package body Parser is
                 To_List => Lookup_List (Command));
    end Transfer;
 
+
    procedure Parse_Input (Input : in String) is
       Space_Pos : constant Natural := Ada.Strings.Fixed.Index (Input, " ");
       First     : constant String
@@ -165,9 +167,11 @@ package body Parser is
 
    end Parse_Input;
 
+
    function Get_Last_Command return String is
    begin
       return Ada.Strings.Unbounded.To_String (Last_Command);
    end Get_Last_Command;
+
 
 end Parser;
