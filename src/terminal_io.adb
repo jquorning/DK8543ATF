@@ -99,4 +99,19 @@ package body Terminal_IO is
    end Put_Help;
 
 
+   procedure Put_Error (Text : in String) is
+   begin
+      Ada.Text_IO.Put_Line ("Unknown command: '" & Text & "'");
+   end Put_Error;
+
+
+   procedure Put_Banner is
+      use Ada.Text_IO;
+   begin
+      Put_Line ("TODO List program");
+      Put_Line ("=================");
+      Put_Line ("type help to show help text");
+   end Put_Banner;
+
+
 end Terminal_IO;

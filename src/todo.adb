@@ -20,16 +20,11 @@ begin
    Database.Get_Lists (Database.Lists);
    Database.Get_Jobs (Database.Jobs, List => Database.All_Lists);
 
-   Parser.Put_Banner;
+   Terminal_IO.Put_Banner;
    Terminal_IO.Put_Lists (Database.Lists);
+
    loop
---      Parser.Put_Prompt;
---      Parser.Parse_Input (Parser.Get_Input);
-      declare
-         Command : constant String := Interactive.Get_Line;
-      begin
-         Parser.Parse_Input (Command);
-      end;
+      Parser.Parse_Input (Interactive.Get_Line);
       exit when Parser.Exit_Program;
    end loop;
 

@@ -1,8 +1,7 @@
 --
---
+--  Parser body
 --
 
-with Ada.Text_IO;
 with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded;
 with Ada.Calendar;
@@ -13,42 +12,17 @@ with Terminal_IO;
 
 package body Parser is
 
-   Prompt_Text  : constant String := "TODO ";
-   Run_Program  : Boolean         := True;
+   Run_Program  : Boolean := True;
+
    Last_Command : Ada.Strings.Unbounded.Unbounded_String;
 
-   procedure Put_Prompt is
-   begin
-      Ada.Text_IO.Put (Prompt_Text);
-   end Put_Prompt;
 
-   function Get_Input return String is
-   begin
-      return Ada.Text_IO.Get_Line;
-   end Get_Input;
-
-
-   procedure Put_Banner is
-      use Ada.Text_IO;
-   begin
-      Put_Line ("TODO List program");
-      Put_Line ("=================");
-      Put_Line ("type help to show help text");
-   end Put_Banner;
-
-
-   procedure Put_Error;
    procedure Set (Command : in String);
    procedure Show (Command : in String);
    procedure Add (Command : in String);
    procedure Event (Command : in String);
    procedure Transfer (Command : in String);
 
-
-   procedure Put_Error is
-   begin
-      Ada.Text_IO.Put_Line ("Unknown command: '" & Get_Last_Command & "'");
-   end Put_Error;
 
    function Exit_Program return Boolean is
    begin
@@ -182,12 +156,12 @@ package body Parser is
       elsif First = "event" then
          Event (Rest);
       else
-         Put_Error;
+         Terminal_IO.Put_Error ("Unknown command: '" & Get_Last_Command & "'");
       end if;
 
    exception
       when Constraint_Error =>
-         Put_Error;
+         Terminal_IO.Put_Error ("Constraint_Error in parser");
 
    end Parse_Input;
 
