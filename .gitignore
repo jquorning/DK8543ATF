@@ -7,3 +7,4 @@ todo.db
 obj/
 bin/
 *.log
+*.history
