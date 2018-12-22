@@ -6,6 +6,7 @@ with Ada.Text_IO;
 with Ada.Strings.Unbounded;
 
 with Symbols;
+with Commands;
 
 package body Terminal_IO is
 
@@ -83,6 +84,19 @@ package body Terminal_IO is
          New_Line;
       end loop;
    end Show_Job;
+
+
+   procedure Put_Help is
+      use Ada.Text_IO;
+      use Ada.Strings.Unbounded;
+   begin
+      for Line of Commands.Help_Lines loop
+         Set_Col (1);
+         Put (To_String (Line.Command));
+         Set_Col (33);
+         Put_Line (To_String (Line.Comment));
+      end loop;
+   end Put_Help;
 
 
 end Terminal_IO;

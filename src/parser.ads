@@ -8,8 +8,8 @@ package Parser is
 
    function Get_Input return String;
 
-   function Web_Help return String;
-   procedure Put_Help;
+--   function Web_Help return String;
+--   procedure Put_Help;
 
    procedure Put_Banner;
 

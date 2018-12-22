@@ -4,7 +4,25 @@
 
 with Ada.Strings.Unbounded;
 
+with Commands;
+
 package body Web_IO is
+
+   function Help_Image return HTML_String is
+      use Ada.Strings.Unbounded;
+      S : Unbounded_String;
+   begin
+      Append (S, "<table>");
+      for Line of Commands.Help_Lines loop
+         Append (S, "<tr><td>"
+                   & Line.Command
+                   & "</td><td>"
+                   & Line.Comment
+                   & "</td></tr>");
+      end loop;
+      Append (S, "</table>");
+      return To_String (S);
+   end Help_Image;
 
 
    function Jobs_Image (Jobs : in Database.Job_Set)

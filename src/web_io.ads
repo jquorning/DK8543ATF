@@ -8,6 +8,8 @@ package Web_IO is
 
    subtype HTML_String is String;
 
+   function Help_Image return HTML_String;
+
    function Jobs_Image (Jobs : in Database.Job_Set)
                        return HTML_String;
 

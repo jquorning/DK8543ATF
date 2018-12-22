@@ -48,7 +48,7 @@ package body Web_Callbacks is
    procedure Initialize is
    begin
       --  Static translations
-      Associate ("COMMAND_TABLE", Parser.Web_Help);
+      Associate ("COMMAND_TABLE", Web_IO.Help_Image);
    end Initialize;
 
    function Current_List_Name (Lists : Database.List_Set) return String;
