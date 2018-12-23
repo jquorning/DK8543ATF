@@ -34,6 +34,34 @@ package body Database.Events is
    end Add_Event;
 
 
+   function Get_Job_Events (Job : in Job_Id)
+                           return Event_Lists.Vector
+   is
+      use SQLite, Interfaces;
+      use Ada.Strings.Unbounded;
+
+      Command : constant Statement :=
+        Prepare (Database.DB,
+                 "SELECT Stamp, Kind " &
+                   "FROM Event " &
+                   "WHERE Job=? " &
+                   "ORDER BY Stamp ASC");
+      Events : Event_Lists.Vector;
+   begin
+      Command.Bind (1, Integer_64 (Job));
+      while Command.Step loop
+         declare
+            Stamp : constant String := Command.Column (1);
+            Kind  : constant String := Command.Column (2);
+         begin
+            Events.Append ((To_Unbounded_String (Stamp),
+                            To_Unbounded_String (Kind)));
+         end;
+      end loop;
+      return Events;
+   end Get_Job_Events;
+
+
    function Is_Done (Job : in Job_Id)
                     return Boolean
    is

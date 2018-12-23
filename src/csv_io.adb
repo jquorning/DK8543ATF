@@ -6,6 +6,7 @@ with Ada.Text_IO;
 with Ada.Strings.Unbounded;
 
 with Database;
+with Database.Events;
 
 package body CSV_IO is
 
@@ -43,8 +44,9 @@ package body CSV_IO is
                         Col_3 => Job.Id'Img,
                         Col_4 => "");
                declare
-                  Events : constant Database.Event_Lists.Vector :=
-                    Database.Get_Job_Events (Job.Id);
+                  use Database.Events;
+                  Events : constant Event_Lists.Vector :=
+                    Get_Job_Events (Job.Id);
                begin
                   for Event of Events loop
                      Put_Row ("",

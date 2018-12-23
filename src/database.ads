@@ -53,19 +53,6 @@ package Database is
    function Get_Job_Info (Job : in Job_Id) return Job_Info;
 
 
-   type Job_Event is
-      record
-         Stamp : US.Unbounded_String;
-         Kind  : US.Unbounded_String;
-      end record;
-
-   package Event_Lists is
-      new Ada.Containers.Vectors (Positive, Job_Event);
-
-   function Get_Job_Events (Job : in Job_Id)
-                           return Event_Lists.Vector;
-
-
    procedure Add_Job (Id     : in Job_Id;
                       Title  : in String;
                       Parent : in Job_Id;

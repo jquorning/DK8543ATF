@@ -95,12 +95,12 @@ package body Web_IO is
    function Job_Image (Job : in Database.Job_Id)
                       return HTML_String
    is
+      use Database.Events;
       use Ada.Strings.Unbounded;
 
       Info   : constant Database.Job_Info  := Database.Get_Job_Info (Job);
-      Events : constant Database.Event_Lists.Vector
-        := Database.Get_Job_Events (Job);
-      A : Unbounded_String;
+      Events : constant Event_Lists.Vector := Get_Job_Events (Job);
+      A      : Unbounded_String;
    begin
       Append (A, "<p>" & To_String (Info.Title) & " (Id " & Job'Img & ")</p>");
       Append (A, "<p>Parent (Id " & Info.Parent'Img & ")</p>");

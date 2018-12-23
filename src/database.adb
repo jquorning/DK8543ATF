@@ -193,33 +193,6 @@ package body Database is
    end Get_Job_Info;
 
 
-   function Get_Job_Events (Job : in Job_Id)
-                           return Event_Lists.Vector
-   is
-      use SQLite, Interfaces;
-
-      Command : constant Statement :=
-        Prepare (Database.DB,
-                 "SELECT Stamp, Kind " &
-                   "FROM Event " &
-                   "WHERE Job=? " &
-                   "ORDER BY Stamp ASC");
-      Events : Event_Lists.Vector;
-   begin
-      Command.Bind (1, Integer_64 (Job));
-      while Command.Step loop
-         declare
-            Stamp : constant String := Command.Column (1);
-            Kind  : constant String := Command.Column (2);
-         begin
-            Events.Append ((To_Unbounded_String (Stamp),
-                            To_Unbounded_String (Kind)));
-         end;
-      end loop;
-      return Events;
-   end Get_Job_Events;
-
-
    procedure Add_Job (Id     : in Job_Id;
                       Title  : in String;
                       Parent : in Job_Id;

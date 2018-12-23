@@ -77,16 +77,15 @@ package body Terminal_IO is
       use Ada.Text_IO, Ada.Strings.Unbounded;
 
       Info   : constant Database.Job_Info  := Database.Get_Job_Info (Job);
-      Events : constant Database.Event_Lists.Vector
-        := Database.Get_Job_Events (Job);
-      Done       : Boolean; --   := Database.Events.Is_Done (Job);
+      Events : constant Database.Events.Event_Lists.Vector
+        := Database.Events.Get_Job_Events (Job);
+      Done       : constant Boolean := Database.Events.Is_Done (Job);
       Done_Image : constant String  := Boolean'Image (Done);
    begin
       Put_Line (To_String (Info.Title) & " (Id" & Job'Img & ")");
       Put_Line ("Parent (Id" & Info.Parent'Img & ")");
       Put_Line ("Owner  (" & To_String (Info.Owner) & ")");
-      Done := Database.Events.Is_Done (Job);
-      Put_Line ("Status DONE: " & Boolean'Image (Done));
+      Put_Line ("Status DONE: " & Done_Image);
       New_Line;
 
       for Event of Events loop
