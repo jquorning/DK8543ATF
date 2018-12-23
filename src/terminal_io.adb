@@ -7,6 +7,7 @@ with Ada.Strings.Unbounded;
 
 with Symbols;
 with Commands;
+with Database.Events;
 
 package body Terminal_IO is
 
@@ -78,10 +79,14 @@ package body Terminal_IO is
       Info   : constant Database.Job_Info  := Database.Get_Job_Info (Job);
       Events : constant Database.Event_Lists.Vector
         := Database.Get_Job_Events (Job);
+      Done       : Boolean; --   := Database.Events.Is_Done (Job);
+      Done_Image : constant String  := Boolean'Image (Done);
    begin
-      Put_Line (To_String (Info.Title) & " (" & Job'Img & ")");
-      Put ("Parent (" & Info.Parent'Img & ")");
-      Put ("Owner: "  & To_String (Info.Owner));
+      Put_Line (To_String (Info.Title) & " (Id" & Job'Img & ")");
+      Put_Line ("Parent (Id" & Info.Parent'Img & ")");
+      Put_Line ("Owner  (" & To_String (Info.Owner) & ")");
+      Done := Database.Events.Is_Done (Job);
+      Put_Line ("Status DONE: " & Boolean'Image (Done));
       New_Line;
 
       for Event of Events loop

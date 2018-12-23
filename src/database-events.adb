@@ -1,9 +1,10 @@
 --
---
+--  Database.Events body
 --
 
-with SQLite;
 with GNAT.Calendar.Time_IO;
+
+with SQLite;
 
 package body Database.Events is
 
@@ -31,5 +32,32 @@ package body Database.Events is
       Command_2.Bind (4, Event_Kind'Image (Kind));
       Command_2.Step;
    end Add_Event;
+
+
+   function Is_Done (Job : in Job_Id)
+                    return Boolean
+   is
+      use SQLite;
+
+      Command : constant Statement :=
+        Prepare (Database.DB,
+                 "SELECT Stamp, Kind FROM Event " &
+                   "WHERE Job=? ORDER BY Stamp DESC");
+   begin
+      Command.Bind (1, Interfaces.Integer_64 (Job));
+
+      if Command.Step then
+         declare
+--            Stamp_Image : constant String := Command.Column (1);
+            Kind_Image  : constant String := Command.Column (2);
+         begin
+            return Kind_Image = "DONE";
+         end;
+      end if;
+
+      return False;  --  No events for Job
+
+   end Is_Done;
+
 
 end Database.Events;

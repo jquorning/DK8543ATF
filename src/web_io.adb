@@ -4,6 +4,7 @@
 
 with Ada.Strings.Unbounded;
 
+with Database.Events;
 with Commands;
 
 package body Web_IO is
@@ -101,13 +102,12 @@ package body Web_IO is
         := Database.Get_Job_Events (Job);
       A : Unbounded_String;
    begin
-      Append (A, "<p>");
-      Append (A, To_String (Info.Title) & " (" & Job'Img & ")");
-      Append (A, "</p>");
-      Append (A, "<p>");
-      Append (A, "Parent (" & Info.Parent'Img & ")");
-      Append (A, "Owner: " & To_String (Info.Owner));
-      Append (A, "</p>");
+      Append (A, "<p>" & To_String (Info.Title) & " (Id " & Job'Img & ")</p>");
+      Append (A, "<p>Parent (Id " & Info.Parent'Img & ")</p>");
+      Append (A, "<p>Owner  (" & To_String (Info.Owner) & "</p>");
+      Append (A, String'("<p>Status DONE: "
+                           & Boolean'Image (Database.Events.Is_Done (Job))
+                           & "</p>"));
 
       Append (A, "<table><tr><th>Date Time</th><th>Event</th></tr>");
       for Event of Events loop

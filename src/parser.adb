@@ -5,6 +5,8 @@
 with Ada.Strings.Fixed;
 with Ada.Strings.Unbounded;
 with Ada.Calendar;
+with Ada.Exceptions;
+with Ada.Text_IO;
 
 with Database.Events;
 with Commands;
@@ -19,7 +21,6 @@ package body Parser is
 
 
    procedure Set (Command : in String);
-   procedure Show (Command : in String);
    procedure Add (Command : in String);
    procedure Event (Command : in String);
    procedure Transfer (Command : in String);
@@ -59,26 +60,6 @@ package body Parser is
          raise Constraint_Error with "Set with unknown First";
       end if;
    end Set;
-
-
-   procedure Show (Command : in String) is
-      Space_Pos : constant Natural := Ada.Strings.Fixed.Index (Command, " ");
-      First     : constant String
-        := (if Space_Pos = 0 then Command
-        else Command (Command'First .. Space_Pos - 1));
---        Rest     : constant String
---          := (if Space_Pos = 0 then ""
---          else Command (Space_Pos .. Command'Last));
-   begin
-      --  if First = "list" then
-      --     Commands.Show_List (Database.Lists.Current);
-      --  els
-      if First = "job" then
-         Terminal_IO.Show_Job (Database.Get_Current_Job);
-      else
-         raise Constraint_Error;
-      end if;
-   end Show;
 
 
    procedure Add (Command : in String) is
@@ -151,14 +132,23 @@ package body Parser is
          Run_Program := False;
       elsif First = "help" then
          Terminal_IO.Put_Help;
-      elsif First = "view" then
+      elsif
+        First = "view" or
+        First = "ls"
+      then
          Terminal_IO.Put_Jobs (Database.Get_Jobs (Database.Get_Current_Job));
-      elsif First = "top" then
+      elsif
+        First = "top" or
+        First = "cd"
+      then
          Terminal_IO.Put_Jobs (Database.Get_Jobs (Database.Top_Level));
       elsif First = "set" then
          Set (Rest);
-      elsif First = "show" then
-         Show (Rest);
+      elsif
+        First = "show" or
+        First = "cat"
+      then
+         Terminal_IO.Show_Job (Database.Get_Current_Job);
       elsif First = "add" then
          Add (Rest);
       elsif First = "split" then
@@ -176,8 +166,13 @@ package body Parser is
       end if;
 
    exception
+
       when Constraint_Error =>
          Terminal_IO.Put_Error ("Constraint_Error in parser");
+
+      when E : others =>
+         Ada.Text_IO.Put_Line (Ada.Exceptions.Exception_Information (E));
+         Terminal_IO.Put_Error (" Other exception raised");
 
    end Parse_Input;
 

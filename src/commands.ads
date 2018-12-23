@@ -21,19 +21,21 @@ package Commands is
    Help_Lines : constant array (Positive range <>) of Help_Line :=
      ((-"help",  -"Print this help text"),
       (-"quit",  -"Quit program"),
+      (-"ls",    -"Show current list"),
       (-"view",  -"Show current list"),
       (-"top",   -"Show top level jobs"),
-      (-"set list LIST", -"Set LIST to current"),
-      (-"set job JOB",   -"Set JOB to current"),
-      (-"show list",
-        -"Show all jobs in current list"),
-      (-"show job",      -"Show jobs details"),
+      (-"cd",    -"Show top level jobs"),
+      (-"set JOB",       -"Set JOB to current"),
+      (-"show",          -"Show jobs details"),
+      (-"cat",           -"Show jobs details"),
       (-"add job TITLE", -"Add job to current list"),
       (-"add list NAME", -"Add list to database"),
       (-"split serial JOB COUNT",
        -"Split job into count serial jobs"),
       (-"split parallel JOB COUNT ",
        -"Split job into count parallel jobs"),
+      (-"text TEXT",
+       -"Add free text to current job"),
       (-"move LIST",
        -"Move current job to other list"),
       (-"trans LIST",
@@ -44,9 +46,6 @@ package Commands is
 
    procedure Create_Job (Job    : in Database.Job_Id;
                          Title  : in String;
-                         --  List  : in Database.List_Id);
                          Parent : in Database.Job_Id);
-
---   procedure Show_List (List : in Database.List_Id);
 
 end Commands;

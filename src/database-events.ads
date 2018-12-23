@@ -16,4 +16,7 @@ package Database.Events is
                         Kind  : in     Event_Kind;
                         Id    :    out Event_Id);
 
+   function Is_Done (Job : in Job_Id) return Boolean;
+   --  Is last event in events for Job a DONE.
+
 end Database.Events;
