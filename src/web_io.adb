@@ -100,21 +100,21 @@ package body Web_IO is
 
       Info   : constant Database.Job_Info  := Database.Get_Job_Info (Job);
       Events : constant Event_Lists.Vector := Get_Job_Events (Job);
-      A      : Unbounded_String;
+      A      : Unbounded_String := To_Unbounded_String
+        ("<p>" & To_String (Info.Title) & " (Id " & Job'Img & ")</p>" &
+           "<p>Parent (Id " & Info.Parent'Img & ")</p>"               &
+           "<p>Owner  (" & To_String (Info.Owner) & "</p>"            &
+           "<p>Status DONE: "
+           & Boolean'Image (Database.Events.Is_Done (Job))
+           & "</p>");
    begin
-      Append (A, "<p>" & To_String (Info.Title) & " (Id " & Job'Img & ")</p>");
-      Append (A, "<p>Parent (Id " & Info.Parent'Img & ")</p>");
-      Append (A, "<p>Owner  (" & To_String (Info.Owner) & "</p>");
-      Append (A, String'("<p>Status DONE: "
-                           & Boolean'Image (Database.Events.Is_Done (Job))
-                           & "</p>"));
-
       Append (A, "<table><tr><th>Date Time</th><th>Event</th></tr>");
       for Event of Events loop
-         Append (A, "<tr>");
-         Append (A, "<td>" & To_String (Event.Stamp) & "</td>");
-         Append (A, "<td>" & To_String (Event.Kind)  & "</td>");
-         Append (A, "</tr>");
+         Append (A,
+                 "<tr>" &
+                   "<td>" & To_String (Event.Stamp) & "</td>" &
+                   "<td>" & To_String (Event.Kind)  & "</td>" &
+                   "</tr>");
       end loop;
       Append (A, "</table>");
 
