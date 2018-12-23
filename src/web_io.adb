@@ -98,22 +98,22 @@ package body Web_IO is
       use Database.Events;
       use Ada.Strings.Unbounded;
 
-      Info   : constant Database.Job_Info  := Database.Get_Job_Info (Job);
-      Events : constant Event_Lists.Vector := Get_Job_Events (Job);
-      A      : Unbounded_String := To_Unbounded_String
-        ("<p>" & To_String (Info.Title) & " (Id " & Job'Img & ")</p>" &
-           "<p>Parent (Id " & Info.Parent'Img & ")</p>"               &
-           "<p>Owner  (" & To_String (Info.Owner) & "</p>"            &
-           "<p>Status DONE: "
-           & Boolean'Image (Database.Events.Is_Done (Job))
-           & "</p>");
+      Info       : constant Database.Job_Info  := Database.Get_Job_Info (Job);
+      Events     : constant Event_Lists.Vector := Get_Job_Events (Job);
+      Done       : constant Boolean            := Is_Done (Job);
+      Done_Image : constant String             := Boolean'Image (Done);
+      A          : Unbounded_String :=
+        "<p>Title  (" & Info.Title & ") (Id " & Job'Img & ")</p>" &
+        "<p>Parent (Id " & Info.Parent'Img & ")</p>"     &
+        "<p>Owner  (" & Info.Owner & "</p>"              &
+        "<p>Status DONE: " & Done_Image & "</p>";
    begin
       Append (A, "<table><tr><th>Date Time</th><th>Event</th></tr>");
       for Event of Events loop
          Append (A,
                  "<tr>" &
-                   "<td>" & To_String (Event.Stamp) & "</td>" &
-                   "<td>" & To_String (Event.Kind)  & "</td>" &
+                   "<td>" & Event.Stamp & "</td>" &
+                   "<td>" & Event.Kind  & "</td>" &
                    "</tr>");
       end loop;
       Append (A, "</table>");

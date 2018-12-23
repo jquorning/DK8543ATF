@@ -15,7 +15,8 @@ package body Terminal_IO is
    procedure Put_Jobs (Jobs : in Database.Job_Set) is
       use Ada.Text_IO;
       use Database;
-      Current_Job : constant Database.Job_Id := Database.Get_Current_Job;
+
+      Current_Job : constant Job_Id := Get_Current_Job;
    begin
 
       if Jobs.Vector.Is_Empty then
@@ -31,7 +32,12 @@ package body Terminal_IO is
          end if;
          Put (" ");
 
-         Put (Symbols.White_Star);
+         if Events.Is_Done (Job.Id) then
+            Put (Symbols.Black_Star);
+         else
+            Put (Symbols.White_Star);
+         end if;
+
          Put (" ");
          Put (Job.Ref);
 
@@ -40,37 +46,6 @@ package body Terminal_IO is
          New_Line;
       end loop;
    end Put_Jobs;
-
-
---     procedure Put_Lists (Lists : in Database.List_Set) is
---        use Ada.Text_IO;
---        use Database;
---     begin
---        for List of Lists.Vector loop
---           declare
---              Name_Image : String (1 .. Lists.Name_Width) := (others => ' ');
---              Name       : constant String := US.To_String (List.Name);
---           begin
---              if List.Id = Lists.Current then
---                 Put (Symbols.White_Right_Pointing_Index);
---              else
---                 Put (" ");
---              end if;
---              Put (" ");
-
---              Put (Symbols.White_Star);
---              Put (" ");
---              Put (List.Ref);
-
---              Put (" ");
---              Name_Image (1 .. Name'Last) := Name;
---              Put (Name_Image);
---              Put (" ");
---              Put (US.To_String (List.Desc));
---           end;
---           New_Line;
---        end loop;
---     end Put_Lists;
 
 
    procedure Show_Job (Job : in Database.Job_Id) is
