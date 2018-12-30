@@ -86,16 +86,8 @@ package body Web_Callbacks is
    begin
       Parser.Parse_Input (CMD);
 
-      Associate ("CUR_JOB_NAME",   Job_Name (Database.Jobs.Get_Current_Job));
-
-      Associate ("TOP_JOBS_TABLE",
-                 Web_IO.Jobs_Image (Database.Jobs.Get_Jobs
-                                      (Database.Jobs.Top_Level)));
-
-      Associate ("CUR_JOBS_TABLE",
-                 Web_IO.Jobs_Image
-                   (Database.Jobs.Get_Jobs
-                      (Database.Jobs.Get_Current_Job)));
+      Associate ("CUR_JOB_NAME", Job_Name (Database.Jobs.Get_Current_Job));
+      Associate ("JOBS_LIST",    Web_IO.Jobs_Image);
 
       Associate ("JOB_INFORMATION",
                  Web_IO.Job_Image (Database.Jobs.Get_Current_Job));

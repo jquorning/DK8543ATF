@@ -7,6 +7,7 @@ with Ada.Strings.Unbounded;
 with Database.Jobs;
 with Database.Events;
 with Commands;
+with Navigate;
 
 package body Web_IO is
 
@@ -28,32 +29,48 @@ package body Web_IO is
    end Help_Image;
 
 
-   function Jobs_Image (Jobs : in Types.Job_Sets.Vector)
-                       return String
+   function Jobs_Image return String
    is
+      use Navigate;
       use Ada.Strings.Unbounded;
       use type Types.Job_Id;
 
-      Current_Job : constant Types.Job_Id
-        := Database.Jobs.Get_Current_Job;
       S : Ada.Strings.Unbounded.Unbounded_String;
    begin
-      if Jobs.Is_Empty then
+      if List.Set.Is_Empty then
          return "<p>oO  No Jobs  Oo</p>";
       end if;
 
-      Append (S, "<table><tr><th>Ref</th><th>Title</th></tr>");
-      for Job of Jobs loop
+      Append (S, "<table><tr><th>DN</th><th>Ref</th><th>Title</th></tr>");
+      for Index in List.Set.First_Index .. List.Set.Last_Index loop
 
-         if Job.Id = Current_Job then
+         --  Highlight
+         if List.Set (Index).Id = List.Current then
             Append (S, "<tr style=""Background-Color:#Dddd2222"">");
          else
             Append (S, "<tr>");
          end if;
 
---         Append (S, "<td><a href=""/?cmd=set%20job%20" & Job.Ref & """>"
---                   & Job.Ref & "</a></td>");
-         Append (S, "<td>" & To_String (Job.Title) & "</td>");
+         --  DONE
+         if Database.Events.Is_Done (List.Set (Index).Id) then
+            Append (S, "<td>X</td>");
+         else
+            Append (S, "<td>O</td>");
+         end if;
+
+         --  Reference
+         Append (S, "<td><a href=""/?cmd=set%20job%20"
+                   & List.Refs (Index).Ref & """>"
+                   & List.Refs (Index).Ref & "</a></td>");
+
+         --  Title
+         if List.Refs (Index).Level = 0 then
+            Append (S, "<td>" & To_String (List.Set (Index).Title) & "</td>");
+         else
+            Append (S, "<td>" & "___" & To_String (List.Set (Index).Title)
+                      & "</td>");
+         end if;
+
          Append (S, "</tr>");
       end loop;
       Append (S, "</table>");

@@ -10,8 +10,7 @@ package Web_IO is
 
    function Help_Image return HTML_String;
 
-   function Jobs_Image (Jobs : in Types.Job_Sets.Vector)
-                       return HTML_String;
+   function Jobs_Image return HTML_String;
 
    function Job_Image (Job : in Types.Job_Id)
                       return HTML_String;
