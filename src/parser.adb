@@ -49,12 +49,11 @@ package body Parser is
          declare
             New_Current_Job : Database.Jobs.Job_Id;
          begin
-            --  Database.Jobs.Lookup_Job (Text    => Rest,
             Navigate.Lookup_Job (Text    => Rest,
                                  Job     => New_Current_Job,
                                  Success => Lookup_Success);
             if Lookup_Success then
-               Database.Jobs.Set_Current_Job (New_Current_Job);
+               Commands.Set_Current_Job (New_Current_Job);
             else
                raise Constraint_Error with "Could not lookup Text";
             end if;

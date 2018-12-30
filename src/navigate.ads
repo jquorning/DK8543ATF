@@ -38,7 +38,7 @@ package Navigate is
    --  Loopup Text as job in navigation list. Job is set on Success.
 
 
-   type Ref_Type   is new String (1 .. 3);
+   subtype Ref_Type is String (1 .. 3);
    type Ref_Pair is
       record
          Ref   : Ref_Type;

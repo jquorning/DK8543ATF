@@ -27,7 +27,7 @@ package Database.Jobs is
    --  Get current job from persistent database storage.
 
    procedure Set_Current_Job (Job : in Job_Id);
-   --  Set current jon in persistent storage.
+   --  Set current job in persistent storage.
 
    procedure Open;
 

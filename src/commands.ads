@@ -48,4 +48,6 @@ package Commands is
                          Title  : in String;
                          Parent : in Database.Jobs.Job_Id);
 
+   procedure Set_Current_Job (Job : in Database.Jobs.Job_Id);
+
 end Commands;

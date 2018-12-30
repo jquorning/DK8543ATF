@@ -90,7 +90,7 @@ package body Navigate is
       --  Build references for top level.
       for Job in Set.First_Index .. Set.Last_Index loop
          List.Set.Append  (Set (Job));
-         List.Refs.Append (Ref_Pair'(Ref_Type ("J" & To_S2 (Natural (Job))),
+         List.Refs.Append (Ref_Pair'("J" & To_S2 (Natural (Job)),
                                      List.Set (Job).Id, 0));
          if List.Set (Job).Id = List.Current then
             declare
@@ -113,13 +113,8 @@ package body Navigate is
 
    procedure Lookup_Job (Text    : in     String;
                          Job     :    out Database.Jobs.Job_Id;
-                         Success :    out Boolean)
-   is
-      use Database.Jobs;
-
---      Top_Jobs : constant Job_Set := Get_Jobs (Top_Level);
+                         Success :    out Boolean) is
    begin
-      --  for J of Top_Jobs.Vector loop
       for Pair of List.Refs loop
          if Pair.Ref = Ref_Type (Text) then
             Job     := Pair.Job;

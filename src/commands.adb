@@ -5,6 +5,7 @@
 with Ada.Calendar;
 
 with Database.Events;
+with Navigate;
 
 package body Commands is
 
@@ -21,5 +22,11 @@ package body Commands is
                                  Database.Events.Created, Id);
    end Create_Job;
 
+   procedure Set_Current_Job (Job : in Database.Jobs.Job_Id) is
+   begin
+      Database.Jobs.Set_Current_Job (Job);
+      Navigate.List.Current := Job;
+      Navigate.Refresh_List;
+   end Set_Current_Job;
 
 end Commands;
