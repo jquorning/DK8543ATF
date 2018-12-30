@@ -4,11 +4,13 @@
 
 with Ada.Text_IO;
 
+with Database.Jobs;
 with Database;
 with Parser;
 with Web_Server;
 with Terminal_IO;
 with Interactive;
+with Navigate;
 
 procedure Todo is
 begin
@@ -19,12 +21,11 @@ begin
    Terminal_IO.Put_Banner;
 
    Ada.Text_IO.New_Line;
-   Ada.Text_IO.Put_Line ("Top Jobs:");
-   Terminal_IO.Put_Jobs (Database.Get_Jobs (Database.Top_Level));
-
-   Ada.Text_IO.New_Line;
-   Ada.Text_IO.Put_Line ("Current Jobs:");
-   Terminal_IO.Put_Jobs (Database.Get_Jobs (Database.Get_Current_Job));
+   Ada.Text_IO.Put_Line ("List:");
+   Navigate.Build_Path (Database.Jobs.Get_Current_Job);
+   Terminal_IO.Put_Path;
+   Navigate.Refresh_List;
+   Terminal_IO.Put_Jobs;
 
    loop
       Parser.Parse_Input (Interactive.Get_Line);

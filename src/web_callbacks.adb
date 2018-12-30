@@ -25,7 +25,7 @@ with AWS.Parameters;
 with GNAT.Traceback.Symbolic;
 
 with Parser;
-with Database;
+with Database.Jobs;
 with Web_IO;
 
 package body Web_Callbacks is
@@ -34,7 +34,7 @@ package body Web_Callbacks is
    Translations : AWS.Templates.Translate_Set;
 
 
-   function Job_Name (Job : in Database.Job_Id)
+   function Job_Name (Job : in Database.Jobs.Job_Id)
                      return String;
    --  Get name of current job.
 
@@ -62,12 +62,12 @@ package body Web_Callbacks is
    end Initialize;
 
 
-   function Job_Name (Job : in Database.Job_Id)
+   function Job_Name (Job : in Database.Jobs.Job_Id)
                      return String
    is
-      use type Database.Job_Id;
-      Top_Jobs : constant Database.Job_Set :=
-        Database.Get_Jobs (Database.Top_Level);
+      use type Database.Jobs.Job_Id;
+      Top_Jobs : constant Database.Jobs.Job_Set :=
+        Database.Jobs.Get_Jobs (Database.Jobs.Top_Level);
    begin
       for J of Top_Jobs.Vector loop
          if Job = J.Id then
@@ -84,18 +84,19 @@ package body Web_Callbacks is
    begin
       Parser.Parse_Input (CMD);
 
-      Associate ("CUR_JOB_NAME",   Job_Name (Database.Get_Current_Job));
+      Associate ("CUR_JOB_NAME",   Job_Name (Database.Jobs.Get_Current_Job));
 
       Associate ("TOP_JOBS_TABLE",
-                 Web_IO.Jobs_Image (Database.Get_Jobs (Database.Top_Level)));
+                 Web_IO.Jobs_Image (Database.Jobs.Get_Jobs
+                                      (Database.Jobs.Top_Level)));
 
       Associate ("CUR_JOBS_TABLE",
                  Web_IO.Jobs_Image
-                   (Database.Get_Jobs
-                      (Database.Get_Current_Job)));
+                   (Database.Jobs.Get_Jobs
+                      (Database.Jobs.Get_Current_Job)));
 
       Associate ("JOB_INFORMATION",
-                 Web_IO.Job_Image (Database.Get_Current_Job));
+                 Web_IO.Job_Image (Database.Jobs.Get_Current_Job));
       Associate ("LAST_COMMAND",    Parser.Get_Last_Command);
    end Serve_Main_Page;
 

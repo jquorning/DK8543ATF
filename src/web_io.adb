@@ -9,6 +9,7 @@ with Commands;
 
 package body Web_IO is
 
+
    function Help_Image return HTML_String is
       use Ada.Strings.Unbounded;
       S : Unbounded_String;
@@ -26,13 +27,14 @@ package body Web_IO is
    end Help_Image;
 
 
-   function Jobs_Image (Jobs : in Database.Job_Set)
+   function Jobs_Image (Jobs : in Database.Jobs.Job_Set)
                        return String
    is
       use Ada.Strings.Unbounded;
-      use type Database.Job_Id;
+      use type Database.Jobs.Job_Id;
 
-      Current_Job : constant Database.Job_Id := Database.Get_Current_Job;
+      Current_Job : constant Database.Jobs.Job_Id
+        := Database.Jobs.Get_Current_Job;
       S : Ada.Strings.Unbounded.Unbounded_String;
    begin
       if Jobs.Vector.Is_Empty then
@@ -48,8 +50,8 @@ package body Web_IO is
             Append (S, "<tr>");
          end if;
 
-         Append (S, "<td><a href=""/?cmd=set%20job%20" & Job.Ref & """>"
-                   & Job.Ref & "</a></td>");
+--         Append (S, "<td><a href=""/?cmd=set%20job%20" & Job.Ref & """>"
+--                   & Job.Ref & "</a></td>");
          Append (S, "<td>" & To_String (Job.Title) & "</td>");
          Append (S, "</tr>");
       end loop;
@@ -58,50 +60,18 @@ package body Web_IO is
    end Jobs_Image;
 
 
---     function Lists_Image (Lists : in Database.List_Set)
---                          return String
---     is
---        use Ada.Strings.Unbounded;
---        use type Database.List_Id;
-
---        S : Ada.Strings.Unbounded.Unbounded_String;
---     begin
---        Append (S, "<table><tr><th>Ref</th>"
---                  & "<th>Title</th><th>Description</th></tr>");
---        for List of Lists.Vector loop
-
---           if List.Id = Lists.Current then
---              Append (S, "<tr style=""Background-Color:#Dddd2222"">");
---           else
---              Append (S, "<tr>");
---           end if;
-
---           Append (S, "<td>");
---           Append (S, "<a href=""/?cmd=set%20list%20" & List.Ref & """>"
---                     & List.Ref & "</a></td>");
---           Append (S, "<td>");
---           Append (S, List.Name);
---           Append (S, "</td>");
---           Append (S, "<td>");
---           Append (S, List.Desc);
---           Append (S, "</td>");
---           Append (S, "</tr>");
---        end loop;
---        Append (S, "</table>");
---        return To_String (S);
---     end Lists_Image;
-
-
-   function Job_Image (Job : in Database.Job_Id)
+   function Job_Image (Job : in Database.Jobs.Job_Id)
                       return HTML_String
    is
       use Database.Events;
       use Ada.Strings.Unbounded;
 
-      Info       : constant Database.Job_Info  := Database.Get_Job_Info (Job);
-      Events     : constant Event_Lists.Vector := Get_Job_Events (Job);
-      Done       : constant Boolean            := Is_Done (Job);
-      Done_Image : constant String             := Boolean'Image (Done);
+      Info       : constant Database.Jobs.Job_Info
+        := Database.Jobs.Get_Job_Info (Job);
+
+      Events     : constant Event_Lists.Vector     := Get_Job_Events (Job);
+      Done       : constant Boolean                := Is_Done (Job);
+      Done_Image : constant String                 := Boolean'Image (Done);
       A          : Unbounded_String :=
         "<p>Title  (" & Info.Title & ") (Id " & Job'Img & ")</p>" &
         "<p>Parent (Id " & Info.Parent'Img & ")</p>"     &

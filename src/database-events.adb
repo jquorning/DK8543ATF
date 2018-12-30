@@ -8,7 +8,7 @@ with SQLite;
 
 package body Database.Events is
 
-   procedure Add_Event (Job   : in     Job_Id;
+   procedure Add_Event (Job   : in     Jobs.Job_Id;
                         Stamp : in     Ada.Calendar.Time;
                         Kind  : in     Event_Kind;
                         Id    :    out Event_Id)
@@ -34,7 +34,7 @@ package body Database.Events is
    end Add_Event;
 
 
-   function Get_Job_Events (Job : in Job_Id)
+   function Get_Job_Events (Job : in Jobs.Job_Id)
                            return Event_Lists.Vector
    is
       use SQLite, Interfaces;
@@ -62,7 +62,7 @@ package body Database.Events is
    end Get_Job_Events;
 
 
-   function Is_Done (Job : in Job_Id)
+   function Is_Done (Job : in Jobs.Job_Id)
                     return Boolean
    is
       use SQLite;

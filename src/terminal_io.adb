@@ -1,6 +1,6 @@
 --
---
---
+--  Terminal_IO body
+--  Output to terminal screen
 
 with Ada.Text_IO;
 with Ada.Strings.Unbounded;
@@ -8,52 +8,71 @@ with Ada.Strings.Unbounded;
 with Symbols;
 with Commands;
 with Database.Events;
+with Navigate;
 
 package body Terminal_IO is
 
 
-   procedure Put_Jobs (Jobs : in Database.Job_Set) is
+   procedure Put_Jobs is
       use Ada.Text_IO;
-      use Database;
+      use Database.Jobs;
+      use Navigate;
 
-      Current_Job : constant Job_Id := Get_Current_Job;
+      Set : Job_Vectors.Vector renames List.Set.Vector;
    begin
 
-      if Jobs.Vector.Is_Empty then
+      if Set.Is_Empty then
          Put_Line ("<< No Jobs >>");
          return;
       end if;
 
-      for Job of Jobs.Vector loop
-         if Job.Id = Current_Job then
-            Put (Symbols.White_Right_Pointing_Index);
-         else
+      for Index in Set.First_Index .. Set.Last_Index loop
+         declare
+            Pair : Ref_Pair renames List.Refs       (Index);
+            Desc : Job_Desc renames List.Set.Vector (Index);
+         begin
+            --  Current job marking
+            if Desc.Id = Current_Job then
+               Put (Symbols.White_Right_Pointing_Index);
+            else
+               Put (" ");
+            end if;
             Put (" ");
-         end if;
-         Put (" ");
 
-         if Events.Is_Done (Job.Id) then
-            Put (Symbols.Black_Star);
-         else
-            Put (Symbols.White_Star);
-         end if;
+            --  Indent
+            for Indent in 1 .. Pair.Level loop
+               Put ("   ");
+            end loop;
 
-         Put (" ");
-         Put (Job.Ref);
+            --  DONE star
+            if Database.Events.Is_Done (Desc.Id) then
+               Put (Symbols.Black_Star);
+            else
+               Put (Symbols.White_Star);
+            end if;
 
-         Put (" ");
-         Put (US.To_String (Job.Title));
-         New_Line;
+            --  Reference indication
+            Put (" ");
+            Put (String (Pair.Ref));
+
+            --  Job title
+            Put (" ");
+            Put (Ada.Strings.Unbounded.To_String (Desc.Title));
+            New_Line;
+         end;
       end loop;
    end Put_Jobs;
 
 
-   procedure Show_Job (Job : in Database.Job_Id) is
+   procedure Show_Job (Job : in Database.Jobs.Job_Id) is
       use Ada.Text_IO, Ada.Strings.Unbounded;
 
-      Info   : constant Database.Job_Info  := Database.Get_Job_Info (Job);
+      Info   : constant Database.Jobs.Job_Info
+        := Database.Jobs.Get_Job_Info (Job);
+
       Events : constant Database.Events.Event_Lists.Vector
         := Database.Events.Get_Job_Events (Job);
+
       Done       : constant Boolean := Database.Events.Is_Done (Job);
       Done_Image : constant String  := Boolean'Image (Done);
    begin
@@ -99,5 +118,10 @@ package body Terminal_IO is
       Put_Line ("type help to show help text");
    end Put_Banner;
 
+
+   procedure Put_Path is
+   begin
+      Ada.Text_IO.Put_Line (Navigate.Path_Image);
+   end Put_Path;
 
 end Terminal_IO;
