@@ -94,15 +94,15 @@ package body Database.Jobs is
 
 
    function Get_Jobs (Top : in Job_Id)
-                     return Job_Set
+                     return Job_Sets.Vector
    is
       use SQLite;
 
       Command : Statement;
       Count   : Positive := Positive'First;
-      Jobs    : Job_Set;
+      Jobs    : Job_Sets.Vector;
    begin
-      Jobs.Vector.Clear;
+      Jobs.Clear;
       if Top = All_Jobs then
          Command := Prepare (Database.DB,
                              "SELECT Id, Title " &
@@ -119,9 +119,8 @@ package body Database.Jobs is
             Title_Image : constant String := Column (Command, 2);
             Id          : constant Job_Id := Job_Id (Get_Id (Command));
          begin
-            Jobs.Vector.Append (( --  "J" & To_S (Count),
-                                 Id,
-                                 US.To_Unbounded_String (Title_Image)));
+            Jobs.Append
+              ((Id, US.To_Unbounded_String (Title_Image)));
          end;
          Count := Positive'Succ (Count);
       end loop;

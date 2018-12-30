@@ -51,7 +51,7 @@ package Navigate is
 
    type List_Type is
       record
-         Set     : Database.Jobs.Job_Set;
+         Set     : Database.Jobs.Job_Sets.Vector;
          Refs    : Ref_Vectors.Vector;
          Current : Database.Jobs.Job_Id;
       end record;

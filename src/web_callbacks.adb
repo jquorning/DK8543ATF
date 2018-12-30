@@ -65,11 +65,11 @@ package body Web_Callbacks is
    function Job_Name (Job : in Database.Jobs.Job_Id)
                      return String
    is
-      use type Database.Jobs.Job_Id;
-      Top_Jobs : constant Database.Jobs.Job_Set :=
-        Database.Jobs.Get_Jobs (Database.Jobs.Top_Level);
+      use Database.Jobs;
+      Top_Jobs : constant Job_Sets.Vector :=
+        Get_Jobs (Database.Jobs.Top_Level);
    begin
-      for J of Top_Jobs.Vector loop
+      for J of Top_Jobs loop
          if Job = J.Id then
             return Ada.Strings.Unbounded.To_String (J.Title);
          end if;

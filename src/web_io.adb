@@ -27,7 +27,7 @@ package body Web_IO is
    end Help_Image;
 
 
-   function Jobs_Image (Jobs : in Database.Jobs.Job_Set)
+   function Jobs_Image (Jobs : in Database.Jobs.Job_Sets.Vector)
                        return String
    is
       use Ada.Strings.Unbounded;
@@ -37,12 +37,12 @@ package body Web_IO is
         := Database.Jobs.Get_Current_Job;
       S : Ada.Strings.Unbounded.Unbounded_String;
    begin
-      if Jobs.Vector.Is_Empty then
+      if Jobs.Is_Empty then
          return "<p>oO  No Jobs  Oo</p>";
       end if;
 
       Append (S, "<table><tr><th>Ref</th><th>Title</th></tr>");
-      for Job of Jobs.Vector loop
+      for Job of Jobs loop
 
          if Job.Id = Current_Job then
             Append (S, "<tr style=""Background-Color:#Dddd2222"">");

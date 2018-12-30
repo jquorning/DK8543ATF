@@ -80,31 +80,30 @@ package body Navigate is
       end To_S2;
 
       use Database.Jobs;
-      Set : constant Job_Set := Get_Jobs (Top_Level);
+      Set : constant Job_Sets.Vector := Get_Jobs (Top_Level);
    begin
-      List.Set.Vector.Clear;
+      List.Set.Clear;
       List.Refs.Clear;
 
       List.Current := Get_Current_Job;
 
       --  Build references for top level.
-      for Job in Set.Vector.First_Index .. Set.Vector.Last_Index loop
-         List.Set.Vector.Append (Set.Vector (Job));
-         Ref_Vectors.Append (List.Refs,
-                             Ref_Pair'(Ref_Type ("J" & To_S2 (Natural (Job))),
-                                       List.Set.Vector (Job).Id, 0));
-         if List.Set.Vector (Job).Id = List.Current then
+      for Job in Set.First_Index .. Set.Last_Index loop
+         List.Set.Append  (Set (Job));
+         List.Refs.Append (Ref_Pair'(Ref_Type ("J" & To_S2 (Natural (Job))),
+                                     List.Set (Job).Id, 0));
+         if List.Set (Job).Id = List.Current then
             declare
-               Subset : constant Job_Set := Get_Jobs (List.Current);
+               Subset : constant Job_Sets.Vector := Get_Jobs (List.Current);
                subtype Index_Range is Job_Index
-                 range Subset.Vector.First_Index .. Subset.Vector.Last_Index;
+                 range Subset.First_Index .. Subset.Last_Index;
                Refs   : Ref_Vectors.Vector;
             begin
                for Index in Index_Range loop
                   Refs.Append ((Ref_Type ("T" & To_S2 (Integer (Index))),
-                                Subset.Vector (Index).Id, 1));
+                                Subset (Index).Id, 1));
                end loop;
-               List.Set.Vector.Append (Subset.Vector);
+               List.Set .Append (Subset);
                List.Refs.Append (Refs);
             end;
          end if;

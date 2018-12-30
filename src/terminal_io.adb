@@ -17,19 +17,17 @@ package body Terminal_IO is
       use Ada.Text_IO;
       use Database.Jobs;
       use Navigate;
-
-      Set : Job_Vectors.Vector renames List.Set.Vector;
    begin
 
-      if Set.Is_Empty then
+      if List.Set.Is_Empty then
          Put_Line ("<< No Jobs >>");
          return;
       end if;
 
-      for Index in Set.First_Index .. Set.Last_Index loop
+      for Index in List.Set.First_Index .. List.Set.Last_Index loop
          declare
-            Pair : Ref_Pair renames List.Refs       (Index);
-            Desc : Job_Desc renames List.Set.Vector (Index);
+            Pair : Ref_Pair renames List.Refs (Index);
+            Desc : Job_Desc renames List.Set  (Index);
          begin
             --  Current job marking
             if Desc.Id = Current_Job then

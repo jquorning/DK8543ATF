@@ -20,13 +20,8 @@ package Database.Jobs is
       end record;
 
    type Job_Index is new Positive;
-   package Job_Vectors is
+   package Job_Sets is
       new Ada.Containers.Vectors (Job_Index, Job_Desc);
-
-   type Job_Set is
-      record
-         Vector  : Job_Vectors.Vector;
-      end record;
 
    function Get_Current_Job return Job_Id;
    --  Get current job from persistent database storage.
@@ -40,7 +35,7 @@ package Database.Jobs is
    All_Jobs  : constant Job_Id := -1;
 
    function Get_Jobs (Top : in Job_Id)
-                     return Job_Set;
+                     return Job_Sets.Vector;
    --  Get set of jobs at level Top.
 
    type Job_Info is
