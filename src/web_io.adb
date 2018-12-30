@@ -8,6 +8,7 @@ with Database.Jobs;
 with Database.Events;
 with Commands;
 with Navigate;
+with Symbols;
 
 package body Web_IO is
 
@@ -53,9 +54,9 @@ package body Web_IO is
 
          --  DONE
          if Database.Events.Is_Done (List.Set (Index).Id) then
-            Append (S, "<td>X</td>");
+            Append (S, "<td>" & Symbols.HTML (Symbols.Black_Star) & "</td>");
          else
-            Append (S, "<td>O</td>");
+            Append (S, "<td>" & Symbols.HTML (Symbols.White_Star) & "</td>");
          end if;
 
          --  Reference

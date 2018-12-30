@@ -33,7 +33,7 @@ package body Terminal_IO is
          begin
             --  Current job marking
             if Desc.Id = List.Current then
-               Put (Symbols.White_Right_Pointing_Index);
+               Put (Symbols.UTF8 (Symbols.Black_Right_Pointing_Index));
             else
                Put (" ");
             end if;
@@ -46,9 +46,9 @@ package body Terminal_IO is
 
             --  DONE star
             if Database.Events.Is_Done (Desc.Id) then
-               Put (Symbols.Black_Star);
+               Put (Symbols.UTF8 (Symbols.Black_Star));
             else
-               Put (Symbols.White_Star);
+               Put (Symbols.UTF8 (Symbols.White_Star));
             end if;
 
             --  Reference indication

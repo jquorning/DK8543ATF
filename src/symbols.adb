@@ -28,7 +28,50 @@ package body Symbols is
 --        & To_Hex (Character'Pos (Symbol (2))) & ";";
 --   end HTML_Image;
 
-   procedure Dummy is null;
+   type Ss_Type is
+      record
+         UTF8 : String (1 .. 3);
+         HTML : String (1 .. 8);
+      end record;
+
+   ESC : constant Character := Character'Val (16#E2#);
+
+   List : constant array (Symbol_Type) of Ss_Type :=
+     (Black_Star =>
+        ((ESC & Character'Val (16#98#) & Character'Val (16#85#)), "&#x2605;"),
+      White_Star =>
+        ((ESC & Character'Val (16#98#) & Character'Val (16#86#)), "&#x2606;"),
+      Black_Right_Pointing_Index =>
+        ((ESC & Character'Val (16#98#) & Character'Val (16#9B#)), "&#x261B;"),
+      White_Right_Pointing_Index =>
+        ((ESC & Character'Val (16#98#) & Character'Val (16#9E#)), "&#x261E;"),
+
+      Check_Mark =>
+        ((ESC & Character'Val (16#9C#) & Character'Val (16#93#)), "&#x2713;"),
+      Heavy_Check_Mark =>
+        ((ESC & Character'Val (16#9C#) & Character'Val (16#94#)), "&#x2714;"),
+      Multiplication_X =>
+        ((ESC & Character'Val (16#9C#) & Character'Val (16#95#)), "&#x2715;"),
+      Heavy_Multiplication_X =>
+        ((ESC & Character'Val (16#9C#) & Character'Val (16#96#)), "&#x2716;"),
+      Ballot_X =>
+        ((ESC & Character'Val (16#9C#) & Character'Val (16#97#)), "&#x2717;"),
+      Heavy_Ballot_X =>
+        ((ESC & Character'Val (16#9C#) & Character'Val (16#98#)), "&#x2718;")
+     );
+
+
+   function UTF8 (Symbol : in Symbol_Type)
+                 return String
+   is
+      (List (Symbol).UTF8);
+
+
+   function HTML (Symbol : in Symbol_Type)
+                 return String
+   is
+      (List (Symbol).HTML);
+
 
 end Symbols;
 
