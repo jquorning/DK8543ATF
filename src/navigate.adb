@@ -92,8 +92,8 @@ package body Navigate is
       --  Build references for top level.
       for Job in Set.First_Index .. Set.Last_Index loop
          List.Set.Append  (Set (Job));
-         List.Refs.Append (Ref_Pair'("J" & To_S2 (Natural (Job)),
-                                     List.Set (Job).Id, 0));
+         List.Refs.Append
+           (Ref_Pair'("J" & To_S2 (Natural (Job)), 0));
          if List.Set (Job).Id = List.Current then
             declare
                Subset : constant Types.Job_Sets.Vector
@@ -103,8 +103,8 @@ package body Navigate is
                Refs   : Ref_Vectors.Vector;
             begin
                for Index in Index_Range loop
-                  Refs.Append ((Ref_Type ("T" & To_S2 (Integer (Index))),
-                                Subset (Index).Id, 1));
+                  Refs.Append
+                    (("T" & To_S2 (Integer (Index)), 1));
                end loop;
                List.Set .Append (Subset);
                List.Refs.Append (Refs);
@@ -118,9 +118,9 @@ package body Navigate is
                          Job     :    out Types.Job_Id;
                          Success :    out Boolean) is
    begin
-      for Pair of List.Refs loop
-         if Pair.Ref = Ref_Type (Text) then
-            Job     := Pair.Job;
+      for Index in List.Set.First_Index .. List.Set.Last_Index loop
+         if List.Refs (Index).Ref = Text then
+            Job     := List.Set (Index).Id;
             Success := True;
             return;
          end if;

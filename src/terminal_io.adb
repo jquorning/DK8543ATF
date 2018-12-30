@@ -32,7 +32,7 @@ package body Terminal_IO is
             Desc : Job_Desc renames List.Set  (Index);
          begin
             --  Current job marking
-            if Desc.Id = Current_Job then
+            if Desc.Id = List.Current then
                Put (Symbols.White_Right_Pointing_Index);
             else
                Put (" ");

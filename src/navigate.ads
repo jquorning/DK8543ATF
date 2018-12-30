@@ -36,7 +36,6 @@ package Navigate is
    type Ref_Pair is
       record
          Ref   : Ref_Type;
-         Job   : Types.Job_Id;
          Level : Natural;  --  0: Top level
       end record;
 
