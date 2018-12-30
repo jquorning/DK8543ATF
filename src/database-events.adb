@@ -8,20 +8,23 @@ with SQLite;
 
 package body Database.Events is
 
-   procedure Add_Event (Job   : in     Jobs.Job_Id;
+   SQL_Add_Event_S : constant String := "SELECT MAX(Id) + 1 FROM Event";
+   SQL_Add_Event_I : constant String
+     := "INSERT INTO Event (Id, Job, Stamp, Kind) VALUES (?,?,?,?)";
+   SQL_Is_Done_S : constant String
+     := "SELECT Stamp, Kind FROM Event WHERE Job=? ORDER BY Stamp DESC";
+   SQL_Get_Events_S : constant String
+     := "SELECT Stamp, Kind FROM Event WHERE Job=? ORDER BY Stamp ASC";
+
+   procedure Add_Event (Job   : in     Types.Job_Id;
                         Stamp : in     Ada.Calendar.Time;
                         Kind  : in     Event_Kind;
                         Id    :    out Event_Id)
    is
       use SQLite, Interfaces;
       use GNAT.Calendar.Time_IO;
-      Command_1 : constant Statement :=
-        Prepare (Database.DB,
-                 "SELECT MAX(Id) + 1 FROM Event");
-      Command_2 : constant Statement :=
-        Prepare (Database.DB,
-                 "INSERT INTO Event (Id, Job, Stamp, Kind) " &
-                   "VALUES (?,?,?,?)");
+      Command_1 : constant Statement := Database.DB.Prepare (SQL_Add_Event_S);
+      Command_2 : constant Statement := Database.DB.Prepare (SQL_Add_Event_I);
    begin
       Command_1.Step;
       Id := Event_Id (Integer_64'(Command_1.Column (1)));
@@ -34,19 +37,14 @@ package body Database.Events is
    end Add_Event;
 
 
-   function Get_Job_Events (Job : in Jobs.Job_Id)
+   function Get_Job_Events (Job : in Types.Job_Id)
                            return Event_Lists.Vector
    is
       use SQLite, Interfaces;
       use Ada.Strings.Unbounded;
 
-      Command : constant Statement :=
-        Prepare (Database.DB,
-                 "SELECT Stamp, Kind " &
-                   "FROM Event " &
-                   "WHERE Job=? " &
-                   "ORDER BY Stamp ASC");
-      Events : Event_Lists.Vector;
+      Command : constant Statement := Database.DB.Prepare (SQL_Get_Events_S);
+      Events  : Event_Lists.Vector;
    begin
       Command.Bind (1, Integer_64 (Job));
       while Command.Step loop
@@ -62,15 +60,12 @@ package body Database.Events is
    end Get_Job_Events;
 
 
-   function Is_Done (Job : in Jobs.Job_Id)
+   function Is_Done (Job : in Types.Job_Id)
                     return Boolean
    is
       use SQLite;
 
-      Command : constant Statement :=
-        Prepare (Database.DB,
-                 "SELECT Stamp, Kind FROM Event " &
-                   "WHERE Job=? ORDER BY Stamp DESC");
+      Command : constant Statement := Database.DB.Prepare (SQL_Is_Done_S);
    begin
       Command.Bind (1, Interfaces.Integer_64 (Job));
 

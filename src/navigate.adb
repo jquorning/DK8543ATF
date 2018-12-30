@@ -5,21 +5,23 @@
 with Ada.Strings.Unbounded;
 with Ada.Text_IO;
 
+with Database.Jobs;
+
 package body Navigate is
 
    type Level_Index is new Positive;
 
-   use type Database.Jobs.Job_Id;
+   use type Types.Job_Id;
 
    package Path_Vectors is
       new Ada.Containers.Vectors (Level_Index,
-                                  Database.Jobs.Job_Id);
+                                  Types.Job_Id);
    Path : Path_Vectors.Vector;
 
    procedure Top is
    begin
       Path := Path_Vectors.Empty_Vector;
-      Path_Vectors.Append (Path, Database.Jobs.Job_Id'(0));
+      Path_Vectors.Append (Path, Types.Job_Id'(0));
    end Top;
 
 
@@ -40,9 +42,9 @@ package body Navigate is
    end Path_Image;
 
 
-   procedure Build_Path (Job : in Database.Jobs.Job_Id) is
-      Iter : Database.Jobs.Job_Id := Job;
-      Info : Database.Jobs.Job_Info;
+   procedure Build_Path (Job : in Types.Job_Id) is
+      Iter : Types.Job_Id := Job;
+      Info : Types.Job_Info;
    begin
       Ada.Text_IO.Put_Line ("Build_Path" & Job'Img);
       Path := Path_Vectors.Empty_Vector;
@@ -56,7 +58,7 @@ package body Navigate is
    end Build_Path;
 
 
-   function Current_Job return Database.Jobs.Job_Id is
+   function Current_Job return Types.Job_Id is
    begin
       return Path.Last_Element;
    end Current_Job;
@@ -80,7 +82,7 @@ package body Navigate is
       end To_S2;
 
       use Database.Jobs;
-      Set : constant Job_Sets.Vector := Get_Jobs (Top_Level);
+      Set : constant Types.Job_Sets.Vector := Get_Jobs (Top_Level);
    begin
       List.Set.Clear;
       List.Refs.Clear;
@@ -94,8 +96,9 @@ package body Navigate is
                                      List.Set (Job).Id, 0));
          if List.Set (Job).Id = List.Current then
             declare
-               Subset : constant Job_Sets.Vector := Get_Jobs (List.Current);
-               subtype Index_Range is Job_Index
+               Subset : constant Types.Job_Sets.Vector
+                 := Get_Jobs (List.Current);
+               subtype Index_Range is Types.Job_Index
                  range Subset.First_Index .. Subset.Last_Index;
                Refs   : Ref_Vectors.Vector;
             begin
@@ -112,7 +115,7 @@ package body Navigate is
 
 
    procedure Lookup_Job (Text    : in     String;
-                         Job     :    out Database.Jobs.Job_Id;
+                         Job     :    out Types.Job_Id;
                          Success :    out Boolean) is
    begin
       for Pair of List.Refs loop

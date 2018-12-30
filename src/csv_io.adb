@@ -7,6 +7,7 @@ with Ada.Strings.Unbounded;
 
 with Database.Jobs;
 with Database.Events;
+with Types;
 
 package body CSV_IO is
 
@@ -35,7 +36,7 @@ package body CSV_IO is
 --                  List.Id'Img,
 --                  Ada.Strings.Unbounded.To_String (List.Desc));
          declare
-            Jobs : constant Database.Jobs.Job_Sets.Vector :=
+            Jobs : constant Types.Job_Sets.Vector :=
               Database.Jobs.Get_Jobs (Top => Database.Jobs.All_Jobs);
          begin
             for Job of Jobs loop

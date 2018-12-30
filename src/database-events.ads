@@ -8,7 +8,8 @@ with Ada.Strings.Unbounded;
 
 with Interfaces;
 
-with Database.Jobs;
+--  with Database.Jobs;
+with Types;
 
 package Database.Events is
 
@@ -18,7 +19,7 @@ package Database.Events is
                        Text, Deadline, Milestone);
    type Event_Id   is new Interfaces.Integer_64;
 
-   procedure Add_Event (Job   : in     Database.Jobs.Job_Id;
+   procedure Add_Event (Job   : in     Types.Job_Id;
                         Stamp : in     Ada.Calendar.Time;
                         Kind  : in     Event_Kind;
                         Id    :    out Event_Id);
@@ -32,11 +33,11 @@ package Database.Events is
    package Event_Lists is
       new Ada.Containers.Vectors (Positive, Event_Info);
 
-   function Get_Job_Events (Job : in Jobs.Job_Id)
+   function Get_Job_Events (Job : in Types.Job_Id)
                            return Event_Lists.Vector;
 
 
-   function Is_Done (Job : in Jobs.Job_Id) return Boolean;
+   function Is_Done (Job : in Types.Job_Id) return Boolean;
    --  Is last event in events for Job a DONE.
 
 end Database.Events;

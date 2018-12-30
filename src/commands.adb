@@ -5,14 +5,15 @@
 with Ada.Calendar;
 
 with Database.Events;
+with Database.Jobs;
 with Navigate;
 
 package body Commands is
 
 
-   procedure Create_Job (Job    : in Database.Jobs.Job_Id;
+   procedure Create_Job (Job    : in Types.Job_Id;
                          Title  : in String;
-                         Parent : in Database.Jobs.Job_Id)
+                         Parent : in Types.Job_Id)
    is
       Id : Database.Events.Event_Id;
       pragma Unreferenced (Id);
@@ -22,7 +23,7 @@ package body Commands is
                                  Database.Events.Created, Id);
    end Create_Job;
 
-   procedure Set_Current_Job (Job : in Database.Jobs.Job_Id) is
+   procedure Set_Current_Job (Job : in Types.Job_Id) is
    begin
       Database.Jobs.Set_Current_Job (Job);
       Navigate.List.Current := Job;

@@ -8,6 +8,7 @@ with Ada.Strings.Unbounded;
 with Symbols;
 with Commands;
 with Database.Events;
+with Database.Jobs;
 with Navigate;
 
 package body Terminal_IO is
@@ -17,6 +18,7 @@ package body Terminal_IO is
       use Ada.Text_IO;
       use Database.Jobs;
       use Navigate;
+      use Types;
    begin
 
       if List.Set.Is_Empty then
@@ -62,10 +64,10 @@ package body Terminal_IO is
    end Put_Jobs;
 
 
-   procedure Show_Job (Job : in Database.Jobs.Job_Id) is
+   procedure Show_Job (Job : in Types.Job_Id) is
       use Ada.Text_IO, Ada.Strings.Unbounded;
 
-      Info   : constant Database.Jobs.Job_Info
+      Info   : constant Types.Job_Info
         := Database.Jobs.Get_Job_Info (Job);
 
       Events : constant Database.Events.Event_Lists.Vector

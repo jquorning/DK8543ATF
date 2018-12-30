@@ -27,6 +27,7 @@ with GNAT.Traceback.Symbolic;
 with Parser;
 with Database.Jobs;
 with Web_IO;
+with Types;
 
 package body Web_Callbacks is
 
@@ -34,7 +35,7 @@ package body Web_Callbacks is
    Translations : AWS.Templates.Translate_Set;
 
 
-   function Job_Name (Job : in Database.Jobs.Job_Id)
+   function Job_Name (Job : in Types.Job_Id)
                      return String;
    --  Get name of current job.
 
@@ -62,10 +63,11 @@ package body Web_Callbacks is
    end Initialize;
 
 
-   function Job_Name (Job : in Database.Jobs.Job_Id)
+   function Job_Name (Job : in Types.Job_Id)
                      return String
    is
       use Database.Jobs;
+      use Types;
       Top_Jobs : constant Job_Sets.Vector :=
         Get_Jobs (Database.Jobs.Top_Level);
    begin

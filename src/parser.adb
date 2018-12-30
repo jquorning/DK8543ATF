@@ -14,6 +14,7 @@ with Commands;
 with Terminal_IO;
 with Navigate;
 with CSV_IO;
+with Types;
 
 package body Parser is
 
@@ -47,7 +48,7 @@ package body Parser is
    begin
       if First = "job" then
          declare
-            New_Current_Job : Database.Jobs.Job_Id;
+            New_Current_Job : Types.Job_Id;
          begin
             Navigate.Lookup_Job (Text    => Rest,
                                  Job     => New_Current_Job,
@@ -110,7 +111,7 @@ package body Parser is
    procedure Transfer (Command : in String) is
       use Database.Jobs;
       Success   : Boolean;
-      To_Parent : Job_Id;
+      To_Parent : Types.Job_Id;
    begin
       Navigate.Lookup_Job (Command, To_Parent, Success);
       Transfer (Job       => Get_Current_Job,

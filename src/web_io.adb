@@ -4,6 +4,7 @@
 
 with Ada.Strings.Unbounded;
 
+with Database.Jobs;
 with Database.Events;
 with Commands;
 
@@ -27,13 +28,13 @@ package body Web_IO is
    end Help_Image;
 
 
-   function Jobs_Image (Jobs : in Database.Jobs.Job_Sets.Vector)
+   function Jobs_Image (Jobs : in Types.Job_Sets.Vector)
                        return String
    is
       use Ada.Strings.Unbounded;
-      use type Database.Jobs.Job_Id;
+      use type Types.Job_Id;
 
-      Current_Job : constant Database.Jobs.Job_Id
+      Current_Job : constant Types.Job_Id
         := Database.Jobs.Get_Current_Job;
       S : Ada.Strings.Unbounded.Unbounded_String;
    begin
@@ -60,13 +61,13 @@ package body Web_IO is
    end Jobs_Image;
 
 
-   function Job_Image (Job : in Database.Jobs.Job_Id)
+   function Job_Image (Job : in Types.Job_Id)
                       return HTML_String
    is
       use Database.Events;
       use Ada.Strings.Unbounded;
 
-      Info       : constant Database.Jobs.Job_Info
+      Info       : constant Types.Job_Info
         := Database.Jobs.Get_Job_Info (Job);
 
       Events     : constant Event_Lists.Vector     := Get_Job_Events (Job);

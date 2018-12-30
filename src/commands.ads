@@ -4,7 +4,7 @@
 
 with Ada.Strings.Unbounded;
 
-with Database.Jobs;
+with Types;
 
 package Commands is
 
@@ -44,10 +44,10 @@ package Commands is
       (-"export", -"Export jobs to csv file (todo.csv)"));
 
 
-   procedure Create_Job (Job    : in Database.Jobs.Job_Id;
+   procedure Create_Job (Job    : in Types.Job_Id;
                          Title  : in String;
-                         Parent : in Database.Jobs.Job_Id);
+                         Parent : in Types.Job_Id);
 
-   procedure Set_Current_Job (Job : in Database.Jobs.Job_Id);
+   procedure Set_Current_Job (Job : in Types.Job_Id);
 
 end Commands;
