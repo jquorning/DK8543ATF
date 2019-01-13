@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------------
---                                 T O D O                                  --
+--                          W H A T _ T O _ T O D O                         --
 --                                                                          --
 --                     Copyright (C) 2014, Jesper Quorning                  --
 --                                                                          --
@@ -18,16 +18,16 @@
 
 with "aws";                    --  web server
 with "components-sqlite.gpr";  --  sqlite3
---  with "gnatcoll_readline.gpr";  --  readline
 
-project Todo is
+project What_To_Do is
    for Source_Dirs use ("src");
    for Object_Dir use "obj";
    for Exec_Dir use "bin";
-   for Main use ("todo.adb");
+   for Main use ("what_to_do.adb");
+   for Executable_Name ("what_to_do.adb") use "what-to-do";
 
    package Builder is
-      for Default_Switches ("Ada") use ("-gnatwa", "-gnaty"); -- , "-g", "-O2");
+      for Default_Switches ("Ada") use ("-gnatwa", "-gnaty");
    end Builder;
 
-end Todo;
+end What_To_Do;
