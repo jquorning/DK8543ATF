@@ -5,11 +5,12 @@
 with Ada.Text_IO;
 with Ada.Strings.Unbounded;
 
-with Symbols;
 with Commands;
 with Database.Events;
 with Database.Jobs;
 with Navigate;
+with Decoration;
+with Status;
 
 package body Terminal_IO is
 
@@ -28,15 +29,26 @@ package body Terminal_IO is
 
       for Index in List.Set.First_Index .. List.Set.Last_Index loop
          declare
-            Pair : Ref_Pair renames List.Refs (Index);
-            Desc : Job_Desc renames List.Set  (Index);
+            use Ada.Strings.Unbounded;
+            Pair    : Ref_Pair renames List.Refs (Index);
+            Desc    : Job_Desc renames List.Set  (Index);
+            TITLE   : String   renames To_String (Desc.Title);
+
+            IS_DONE : constant Boolean  := Database.Events.Is_Done (Desc.Id);
+
+            STATE   : constant Status.State_Type  :=
+              (if IS_DONE then Status.Done else Status.Fresh);
+
+            STAT    : constant Status.Status_Type := (STATE, True, True);
          begin
+
             --  Current job marking
-            if Desc.Id = List.Current then
-               Put (Symbols.UTF8 (Symbols.Black_Right_Pointing_Index));
-            else
-               Put (" ");
-            end if;
+            Put (Decoration.Current_Image (STAT));
+--            if Desc.Id = List.Current then
+--               Put (Symbols.UTF8 (Symbols.Black_Right_Pointing_Index));
+--            else
+--               Put (" ");
+--            end if;
             Put (" ");
 
             --  Indent
@@ -45,19 +57,22 @@ package body Terminal_IO is
             end loop;
 
             --  DONE star
-            if Database.Events.Is_Done (Desc.Id) then
-               Put (Symbols.UTF8 (Symbols.Black_Star));
-            else
-               Put (Symbols.UTF8 (Symbols.White_Star));
-            end if;
+            Put (Decoration.Status_Image (STAT));
+--            if Database.Events.Is_Done (Desc.Id) then
+--               Put (Symbols.UTF8 (Symbols.Black_Star));
+--            else
+--               Put (Symbols.UTF8 (Symbols.White_Star));
+--            end if;
+            Put (" ");
 
             --  Reference indication
-            Put (" ");
             Put (String (Pair.Ref));
+            Put (" ");
 
             --  Job title
-            Put (" ");
-            Put (Ada.Strings.Unbounded.To_String (Desc.Title));
+            Put (Decoration.Title_Image (Status => STAT,
+                                         Title  => TITLE));
+--            Put (Ada.Strings.Unbounded.To_String (Desc.Title));
             New_Line;
          end;
       end loop;

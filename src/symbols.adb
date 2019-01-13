@@ -37,7 +37,13 @@ package body Symbols is
    ESC : constant Character := Character'Val (16#E2#);
 
    List : constant array (Symbol_Type) of Ss_Type :=
-     (Black_Star =>
+     (Space               =>  ("   ", "&#x0020;"),
+      Plus_Sign           =>  (" + ", "&#x002B;"),
+      Minus_Sign          =>  (" - ", "&#x2212;"),
+      Multiplication_Sign =>  (" * ", "&#x00D7;"),
+      Division_Sign       =>  (" / ", "&#x00F7;"),
+
+      Black_Star =>
         ((ESC & Character'Val (16#98#) & Character'Val (16#85#)), "&#x2605;"),
       White_Star =>
         ((ESC & Character'Val (16#98#) & Character'Val (16#86#)), "&#x2606;"),
@@ -57,9 +63,13 @@ package body Symbols is
       Ballot_X =>
         ((ESC & Character'Val (16#9C#) & Character'Val (16#97#)), "&#x2717;"),
       Heavy_Ballot_X =>
-        ((ESC & Character'Val (16#9C#) & Character'Val (16#98#)), "&#x2718;")
-     );
-
+        ((ESC & Character'Val (16#9C#) & Character'Val (16#98#)), "&#x2718;"),
+      Medium_Left_Parenthesis_Ornament             =>  (" ( ", "&#x2768;"),
+      Medium_Right_Parenthesis_Ornament            =>  (" ) ", "&#x2769;"),
+      Medium_Flattened_Left_Parenthesis_Ornament   =>  (" ( ", "&#x276A;"),
+      Medium_Flattened_Right_Parenthesis_Ornament  =>  (" ) ", "&#x276B;"),
+      Medium_Left_Pointing_Angle_Bracket_Ornament  =>  (" < ", "&#x276C;"),
+      Medium_Right_Pointing_Angle_Bracket_Ornament =>  (" > ", "&#x276D;"));
 
    function UTF8 (Symbol : in Symbol_Type)
                  return String
