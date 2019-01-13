@@ -12,8 +12,6 @@ package Database.Jobs is
    procedure Set_Current_Job (Job : in Types.Job_Id);
    --  Set current job in persistent storage.
 
-   procedure Open;
-
    use type Types.Job_Id;
    Top_Level : constant Types.Job_Id := 0;
    All_Jobs  : constant Types.Job_Id := -1;

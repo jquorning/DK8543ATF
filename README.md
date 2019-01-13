@@ -4,8 +4,8 @@ SQLite3
 
 
 
-default.todo
-   Database (backup). Den aktuelle ligger Work/etc/default.todo
+what-to-do.todo
+   Database (backup). Den aktuelle ligger Work/etc/what-to-do.todo
 
 bin/what-to-do
    Executable
