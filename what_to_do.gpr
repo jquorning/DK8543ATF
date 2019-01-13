@@ -24,10 +24,10 @@ project What_To_Do is
    for Object_Dir use "obj";
    for Exec_Dir use "bin";
    for Main use ("what_to_do.adb");
-   for Executable_Name ("what_to_do.adb") use "what-to-do";
 
    package Builder is
       for Default_Switches ("Ada") use ("-gnatwa", "-gnaty");
+      for Executable ("what_to_do.adb") use "what-to-do";
    end Builder;
 
 end What_To_Do;
