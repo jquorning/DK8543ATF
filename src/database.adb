@@ -14,7 +14,6 @@ package body Database is
                 return Unbounded_String
      renames To_Unbounded_String;
 
-   Database_File_Name : constant String := "what-to-do.todo";
 
    procedure Open is
       Success : Boolean := False;
@@ -40,16 +39,20 @@ package body Database is
       Home  : constant String
         := (if Env.Exists ("HOME") then Env.Value ("HOME") else "");
 
-      Paths : constant array (Positive range <>) of Unbounded_String
-          := (+"./", +Home & "/etc/", +"/etc/", +Home & "/Work/etc/");
+      Default_Name : constant String := "what-to-do.todo";
 
+      Paths : constant array (Positive range <>) of Unbounded_String :=
+          (+"./"                & Default_Name,
+           +Home & "/etc/"      & Default_Name,
+           +"/etc/"             & Default_Name,
+           +Home & "/."         & Default_Name);  --  Hidden
 
    begin
       for Path of Paths loop
 
          declare
             Full_Path_Name : constant String
-              := To_String (Path) & Database_File_Name;
+              := To_String (Path);
          begin
             Try_Open (Full_Path_Name, Success);
             if Success then
