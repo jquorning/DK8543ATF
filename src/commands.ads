@@ -41,7 +41,7 @@ package Commands is
       (-"trans LIST",
        -"Transfer current job to other list"),
       (-"event KIND", -"Add event to current job"),
-      (-"export", -"Export jobs to csv file (todo.csv)"));
+      (-"export", -"Export jobs to csv file (what-to-do.csv)"));
 
 
    procedure Create_Job (Job    : in Types.Job_Id;

@@ -14,7 +14,7 @@ package body Database is
                 return Unbounded_String
      renames To_Unbounded_String;
 
-   Database_File_Name : constant String := "todo.db";
+   Database_File_Name : constant String := "default.todo";
 
    procedure Open is
       Success : Boolean := False;
