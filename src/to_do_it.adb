@@ -13,10 +13,19 @@ with Web_Server;
 with Terminal_IO;
 with Interactive;
 with Navigate;
+with Files;
 
 procedure To_Do_It is
    Config : Setup.Configuration;
 begin
+   declare
+      List : Files.Collection_List;
+   begin
+      Files.Append_Collections (List, ".");
+      Files.Append_Collections (List, "..");
+      Files.Append_Collections (List, "/Users/jquorning2");
+   end;
+
    Command_Line.Parse (Config);
 
    Interactive.Initialize;

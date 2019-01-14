@@ -64,5 +64,24 @@ package body Database is
       raise Program_Error with "Could not open database file";
    end Open;
 
+   ---------------------------------------------------------------------------
+
+   function Is_Valid (File_Name : in String)
+                     return Boolean
+   is
+      DB : SQLite.Data_Base;
+      pragma Unreferenced (DB);
+   begin
+      DB := SQLite.Open (File_Name => File_Name,
+                         Flags     => SQLite.READONLY);
+      return True;
+   exception
+
+      when Ada.IO_Exceptions.Use_Error =>
+         return False;
+
+   end Is_Valid;
+   --  True when File_Name designates valid database.
+
 
 end Database;
