@@ -168,7 +168,7 @@ package body Parser is
       elsif First = "event" then
          Event (Rest);
       elsif First = "export" then
-         CSV_IO.Export ("what-to-do.csv");
+         CSV_IO.Export ("to-do-it.csv");
       else
          Terminal_IO.Put_Error ("Unknown command: '" & Get_Last_Command & "'");
       end if;

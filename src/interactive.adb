@@ -9,12 +9,12 @@ with Readline_Helper;
 
 package body Interactive is
 
-   History_File : constant String := "what-to-do.history";
+   History_File : constant String := "to-do-it.history";
 
    procedure Initialize is
    begin
       GNATCOLL.Readline.Initialize
-        (Appname      => "what-to-do",
+        (Appname      => "to-do-it",
          History_File => History_File,
          Completer    => Readline_Helper.Completer'Access);
    end Initialize;

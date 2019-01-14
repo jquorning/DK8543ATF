@@ -10,7 +10,7 @@ package body Readline_Helper is
    --  List of commands to match
 
    function Base_Commands (Text : String; State : Integer) return String;
-   --  Return what-to-do commands one by one iterating by State from 0 and up.
+   --  Return to-do-it commands one by one iterating by State from 0 and up.
 
    function Null_Commands (Text : String; State : Integer) return String;
    --  Return NUL string unconditionally signalling no completions.

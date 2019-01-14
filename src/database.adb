@@ -39,7 +39,7 @@ package body Database is
       Home  : constant String
         := (if Env.Exists ("HOME") then Env.Value ("HOME") else "");
 
-      Default_Name : constant String := "what-to-do.todo";
+      Default_Name : constant String := "to-do-it.todoit";
 
       Paths : constant array (Positive range <>) of Unbounded_String :=
           (+"./"                & Default_Name,
