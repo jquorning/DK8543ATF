@@ -3,7 +3,7 @@
 ##
 
 all:
-	gprbuild ../what_to_do.gpr
+	gprbuild ../to_do_it.gpr
 
 clean:
-	gprclean -q ../what_to_do.gpr
+	gprclean -q ../to_do_it.gpr

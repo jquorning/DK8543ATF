@@ -1,10 +1,10 @@
 
 ##
-##  Copyright (C) 2017 Jesper Quorning
+##  Copyright (C) 2019 Jesper Quorning
 ##
 
 all:
-	gprbuild what_to_do.gpr
+	gprbuild to_do_it.gpr
 
 clean:
-	gprclean -c what_to_do.gpr
+	gprclean -q to_do_it.gpr

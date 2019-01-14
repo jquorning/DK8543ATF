@@ -12,7 +12,7 @@ with Terminal_IO;
 with Interactive;
 with Navigate;
 
-procedure What_To_Do is
+procedure To_Do_It is
 begin
    Interactive.Initialize;
    Web_Server.Startup;
@@ -34,4 +34,4 @@ begin
 
    Web_Server.Shutdown;
    Interactive.Finalize;
-end What_To_Do;
+end To_Do_It;

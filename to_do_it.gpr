@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------------
---                          W H A T _ T O _ T O D O                         --
+--                               T O _ D O _ I T                            --
 --                                                                          --
 --                     Copyright (C) 2014, Jesper Quorning                  --
 --                                                                          --
@@ -19,15 +19,16 @@
 with "aws";                    --  web server
 with "components-sqlite.gpr";  --  sqlite3
 
-project What_To_Do is
+project To_Do_It is
+
    for Source_Dirs use ("src");
-   for Object_Dir use "obj";
-   for Exec_Dir use "bin";
-   for Main use ("what_to_do.adb");
+   for Object_Dir  use "obj";
+   for Exec_Dir    use "bin";
+   for Main        use ("to_do_it.adb");
 
    package Builder is
-      for Default_Switches ("Ada") use ("-gnatwa", "-gnaty");
-      for Executable ("what_to_do.adb") use "what-to-do";
+      for Default_Switches ("Ada")    use ("-gnatwa", "-gnaty");
+      for Executable ("to_do_it.adb") use "to-do-it";
    end Builder;
 
-end What_To_Do;
+end To_Do_It;
