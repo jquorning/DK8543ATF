@@ -4,6 +4,8 @@
 
 with Ada.Text_IO;
 
+with Setup;
+with Command_Line;
 with Database.Jobs;
 with Database;
 with Parser;
@@ -13,7 +15,10 @@ with Interactive;
 with Navigate;
 
 procedure To_Do_It is
+   Config : Setup.Configuration;
 begin
+   Command_Line.Parse (Config);
+
    Interactive.Initialize;
    Web_Server.Startup;
    Database.Open;
@@ -34,4 +39,12 @@ begin
 
    Web_Server.Shutdown;
    Interactive.Finalize;
+
+   Command_Line.Set_Exit_Status (Command_Line.Success);
+
+exception
+
+   when Command_Line.Terminate_Program =>
+      null;
+
 end To_Do_It;

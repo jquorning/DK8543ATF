@@ -6,6 +6,8 @@ with Ada.Strings.Unbounded;
 with Ada.IO_Exceptions;
 with Ada.Environment_Variables;
 
+with Setup;
+
 package body Database is
 
    use Ada.Strings.Unbounded;
@@ -39,13 +41,12 @@ package body Database is
       Home  : constant String
         := (if Env.Exists ("HOME") then Env.Value ("HOME") else "");
 
-      Default_Name : constant String := "to-do-it.todoit";
-
+      use Setup;
       Paths : constant array (Positive range <>) of Unbounded_String :=
-          (+"./"                & Default_Name,
-           +Home & "/etc/"      & Default_Name,
-           +"/etc/"             & Default_Name,
-           +Home & "/."         & Default_Name);  --  Hidden
+          (+"./"                & Default_Database,
+           +Home & "/etc/"      & Default_Database,
+           +"/etc/"             & Default_Database,
+           +Home & "/."         & Default_Database);  --  Hidden
 
    begin
       for Path of Paths loop
