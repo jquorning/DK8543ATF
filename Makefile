@@ -4,7 +4,10 @@
 ##
 
 all:
-	gprbuild to_do_it.gpr
+	gprbuild -k -p wedo.gpr
 
 clean:
-	gprclean -q to_do_it.gpr
+	gprclean -q wedo.gpr
+
+setup:
+	tools/create-setup-adb.sh

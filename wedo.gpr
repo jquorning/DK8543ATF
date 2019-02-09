@@ -1,0 +1,31 @@
+--
+--  The author disclaims copyright to this source code.  In place of
+--  a legal notice, here is a blessing:
+--
+--    May you do good and not evil.
+--    May you find forgiveness for yourself and forgive others.
+--    May you share freely, not taking more than you give.
+--
+
+with "aws";                    --  web server
+with "components-sqlite.gpr";  --  sqlite3
+
+project WEDO is
+
+   for Languages   use ("Ada");
+   for Source_Dirs use
+     ("source/",
+      "var/",
+      "gnatcoll/");
+   for Object_Dir  use ".object";
+   for Exec_Dir    use "binary";
+   for Main        use ("wedo_program.adb");
+
+   package Builder is
+      for Default_Switches ("Ada")    use
+        ("-gnatwa",
+         "-gnaty");
+      for Executable ("wedo_program.adb") use "wedo";
+   end Builder;
+
+end WEDO;

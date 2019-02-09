@@ -1,0 +1,4 @@
+.gitignore
+.object/
+binary/
+source/setup.adb

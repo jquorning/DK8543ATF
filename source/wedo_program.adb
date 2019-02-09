@@ -15,7 +15,7 @@ with Interactive;
 with Navigate;
 with Files;
 
-procedure To_Do_It is
+procedure WEDO_Program is
    Config : Setup.Configuration;
 begin
    declare
@@ -56,4 +56,4 @@ exception
    when Command_Line.Terminate_Program =>
       null;
 
-end To_Do_It;
+end WEDO_Program;

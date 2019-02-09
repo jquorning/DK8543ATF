@@ -35,12 +35,12 @@ package body Command_Line is
    procedure Put_Usage is
       use Ada.Text_IO;
    begin
-      Put_Line ("The program " & Setup.Program_Name & " manages your " &
+      Put_Line ("The program " & Setup.Get_Program_Name & " manages your " &
                   "projects and activities via web page.");
       New_Line;
-      Put_Line ("$ " & Setup.Program_Name & " [--port=PORT] [--dir=DIR]");
-      Put_Line ("$ " & Setup.Program_Name & " --version");
-      Put_Line ("$ " & Setup.Program_Name & " --help");
+      Put_Line ("$ " & Setup.Get_Program_Name & " [--port=PORT] [--dir=DIR]");
+      Put_Line ("$ " & Setup.Get_Program_Name & " --version");
+      Put_Line ("$ " & Setup.Get_Program_Name & " --help");
       New_Line;
       Put_Line ("--help      - Show this usage text and exit");
       Put_Line ("--version   - Show program version and exit");
@@ -54,7 +54,8 @@ package body Command_Line is
    procedure Put_Version is
       use Setup, Ada.Text_IO;
    begin
-      Put_Line (Program_Name & " (" & Program_Version & ")");
+      Put (Get_Program_Name & " (" & Get_Program_Version & ")");
+      Put ("Build  (" & Get_Build_ISO8601_UTC & ")");
    end Put_Version;
 
 end Command_Line;
