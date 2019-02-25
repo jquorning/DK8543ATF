@@ -1,38 +1,44 @@
-# WEDO
-Collaborative project management tool
+
+# WEDONU - We Do Nu (Now in danish)
+Collaborative activity management tool
 
 ## Status
-Somewhat working - Compiling at least
+All messed up at the moment - Please do not consider this code for the time beeing
 
 ## Technology
-* Aws - Ada Web Server
+* AWS - Ada Web Server
 * SQLite3
 * readline
 
 ## Configuring
-**$** cd source-var
-
-**$** edit PROGRAM_VERSION
-
-**$** ./create-setup-ads.sh
+```sh
+$ ed var/PROGRAM_VERSION
+$ ed var/PROGRAM_VERSION
+$ make setup
+```
 
 ## Building
-**$** make
+```sh
+$ make
+```
 
 or
 
-**$** gprbuild cherry.gpr
+```sh
+$ gprbuild wedonu.gpr
+```
 
 ## Running
-**$** cd var
-**$** ../binary/wedo
-
+```sh
+$ cd var/
+$ ../binary/wedonu
+```
 
 ## Files
-to-do-it.todoit
+to-do-it.wedonu
    Database (backup). Den aktuelle ligger Work/etc/to-do-it.todoit
 
-bin/to-do-it
+bin/wedonu
    Executable
 
 
