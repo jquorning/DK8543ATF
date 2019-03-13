@@ -14,7 +14,6 @@ package body Database.Jobs is
    function Get_Id (S : SQLite.Statement) return Interfaces.Integer_64;
 
    function Get_Id (S : SQLite.Statement) return Interfaces.Integer_64 is
-      use Interfaces;
    begin
       return SQLite.Column (S, 1);
    end Get_Id;

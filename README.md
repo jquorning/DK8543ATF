@@ -3,9 +3,9 @@
 Collaborative activity management tool
 
 ## Status
-All messed up at the moment - Please do not consider this code for the time beeing
+Compileing - Exception in web request
 
-## Technology
+## Dependencys
 * AWS - Ada Web Server
 * SQLite3 - Simple Components by D. Kazakow
 * readline - GNATColl.Readline

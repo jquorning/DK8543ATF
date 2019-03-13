@@ -14,7 +14,7 @@ project WeDoNu is
 
    for Languages   use ("Ada");
    for Source_Dirs use ("source/");
-   for Object_Dir  use ".object";
+   for Object_Dir  use "object";
    for Exec_Dir    use "binary";
    for Main        use ("wedonu_program.adb");
 
@@ -22,9 +22,15 @@ project WeDoNu is
 
    package Builder is
       for Default_Switches ("Ada")    use
-        ("-gnatwa",
-         "-gnaty");
-      for Executable ("wedonu_program.adb") use "wedo";
+        ("-g",
+         "-gnatf",
+        "-gnatwa",
+        "-gnatwj",
+        "-gnatw.x",
+        "-gnat2012",
+        "-gnaty",
+        "-gnatyM99");
+      for Executable ("wedonu_program.adb") use "wedonu";
    end Builder;
 
 end WeDoNu;

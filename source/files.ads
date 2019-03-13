@@ -12,8 +12,7 @@ package Files is
 
    package Collection_Lists is
       new Ada.Containers.Doubly_Linked_Lists
-     (
-      Ada.Strings.Unbounded.Unbounded_String);
+     (Ada.Strings.Unbounded.Unbounded_String);
 
    subtype Collection_List is Collection_Lists.List;
 

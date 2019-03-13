@@ -18,10 +18,7 @@ package Setup is
    function Get_Uname_R return String;
    function Get_Uname_S return String;
 
-   Database_Extension : constant String := "todoit";
-
-   Default_Database   : constant String :=
-     Get_Program_Name & "." & Database_Extension;
+   Database_Extension : constant String := "wedonu";
 
    type Configuration is record
       null;

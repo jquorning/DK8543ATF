@@ -1,4 +1,6 @@
 .gitignore
-.object/
+object/
 binary/
 source/setup.adb
+web/*.log
+web/default.wedonu

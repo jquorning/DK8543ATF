@@ -10,6 +10,9 @@ with Setup;
 
 package body Database is
 
+   Default_Database   : constant String :=
+     Setup.Get_Program_Name & "." & Setup.Database_Extension;
+
    use Ada.Strings.Unbounded;
 
    function "+" (Source : String)
@@ -36,12 +39,13 @@ package body Database is
             Success := False;
       end Try_Open;
 
+
       package Env renames Ada.Environment_Variables;
+
 
       Home  : constant String
         := (if Env.Exists ("HOME") then Env.Value ("HOME") else "");
 
-      use Setup;
       Paths : constant array (Positive range <>) of Unbounded_String :=
           (+"./"                & Default_Database,
            +Home & "/etc/"      & Default_Database,

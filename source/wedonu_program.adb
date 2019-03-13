@@ -23,7 +23,8 @@ begin
    begin
       Files.Append_Collections (List, ".");
       Files.Append_Collections (List, "..");
-      Files.Append_Collections (List, "/Users/jquorning2");
+      Files.Append_Collections (List, "/Users/jquorning/");
+      Files.Append_Collections (List, "/Users/jquorning/var/");
    end;
 
    Command_Line.Parse (Config);

@@ -17,7 +17,6 @@ package body Terminal_IO is
 
    procedure Put_Jobs is
       use Ada.Text_IO;
-      use Database.Jobs;
       use Navigate;
       use Types;
    begin

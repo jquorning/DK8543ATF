@@ -19,13 +19,20 @@ package body Files is
    is
       use Ada.Directories;
 
-      DB_Only : constant String      := "*." & Setup.Database_Extension;
+      DB_Only : constant String := "*." & Setup.Database_Extension;
+
       Filter  : constant Filter_Type :=
         (Ordinary_File => True, others => False);
 
       DB_Search  : Search_Type;
       File_Entry : Directory_Entry_Type;
+
    begin
+
+      if not Exists (Directory) then
+         return;
+      end if;
+
       Start_Search (DB_Search,
                     Directory => Directory,
                     Pattern   => DB_Only,
@@ -33,11 +40,14 @@ package body Files is
       while
         More_Entries (DB_Search)
       loop
+
          Get_Next_Entry (DB_Search, File_Entry);
+
          if Database.Is_Valid (Full_Name (File_Entry)) then
             Collection.Append (To_Unbounded_String (Full_Name (File_Entry)));
             Ada.Text_IO.Put_Line ("Adding => " & Full_Name (File_Entry));
          end if;
+
       end loop;
       End_Search (DB_Search);
 
