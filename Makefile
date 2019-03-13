@@ -1,13 +1,19 @@
-
 ##
-##  Copyright (C) 2019 Jesper Quorning
+##  The author disclaims copyright to this source code.  In place of
+##  a legal notice, here is a blessing:
+##
+##    May you do good and not evil.
+##    May you find forgiveness for yourself and forgive others.
+##    May you share freely, not taking more than you give.
 ##
 
-all:
-	gprbuild -k -p wedo.gpr
+all: setup build
+
+build:
+	gprbuild -k wedonu.gpr
 
 clean:
-	gprclean -q wedo.gpr
+	gprclean -q wedonu.gpr
 
 setup:
 	tools/create-setup-adb.sh

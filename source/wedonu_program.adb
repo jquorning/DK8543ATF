@@ -15,7 +15,7 @@ with Interactive;
 with Navigate;
 with Files;
 
-procedure WEDO_Program is
+procedure WeDoNu_Program is
    Config : Setup.Configuration;
 begin
    declare
@@ -56,4 +56,4 @@ exception
    when Command_Line.Terminate_Program =>
       null;
 
-end WEDO_Program;
+end WeDoNu_Program;

@@ -1,1 +1,1 @@
-gnatcoll-bindings/readline/gnatcoll-readline.adb
+../../gnatcoll-bindings/readline/gnatcoll-readline.adb

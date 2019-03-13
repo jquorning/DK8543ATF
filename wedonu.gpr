@@ -10,22 +10,21 @@
 with "aws";                    --  web server
 with "components-sqlite.gpr";  --  sqlite3
 
-project WEDO is
+project WeDoNu is
 
    for Languages   use ("Ada");
-   for Source_Dirs use
-     ("source/",
-      "var/",
-      "gnatcoll/");
+   for Source_Dirs use ("source/");
    for Object_Dir  use ".object";
    for Exec_Dir    use "binary";
-   for Main        use ("wedo_program.adb");
+   for Main        use ("wedonu_program.adb");
+
+  for Create_Missing_Dirs use "true";
 
    package Builder is
       for Default_Switches ("Ada")    use
         ("-gnatwa",
          "-gnaty");
-      for Executable ("wedo_program.adb") use "wedo";
+      for Executable ("wedonu_program.adb") use "wedo";
    end Builder;
 
-end WEDO;
+end WeDoNu;
