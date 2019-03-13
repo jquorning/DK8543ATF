@@ -1,4 +1,3 @@
-1. Blessing in head of files
 1. Make binary smaller (now 8.7 MB)
 1. VI style commands
 1. 2L moves job two positions to the left
