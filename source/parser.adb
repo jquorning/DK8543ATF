@@ -13,6 +13,7 @@ with Ada.Calendar;
 with Ada.Exceptions;
 with Ada.Text_IO;
 
+with Setup;
 with Database.Jobs;
 with Database.Events;
 with Commands;
@@ -173,7 +174,7 @@ package body Parser is
       elsif First = "event" then
          Event (Rest);
       elsif First = "export" then
-         CSV_IO.Export ("to-do-it.csv");
+         CSV_IO.Export (Setup.Program_Name & ".csv");
       else
          Terminal_IO.Put_Error ("Unknown command: '" & Get_Last_Command & "'");
       end if;

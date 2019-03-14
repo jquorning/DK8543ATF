@@ -36,15 +36,17 @@ package body Command_Line is
    end Parse;
 
 
-   procedure Put_Usage is
+   procedure Put_Usage
+   is
       use Ada.Text_IO;
+      Program_Name : constant String := Setup.Program_Name;
    begin
-      Put_Line ("The program " & Setup.Get_Program_Name & " manages your " &
+      Put_Line ("The program " & Program_Name & " manages your " &
                   "projects and activities via web page.");
       New_Line;
-      Put_Line ("$ " & Setup.Get_Program_Name & " [--port=PORT] [--dir=DIR]");
-      Put_Line ("$ " & Setup.Get_Program_Name & " --version");
-      Put_Line ("$ " & Setup.Get_Program_Name & " --help");
+      Put_Line ("$ " & Program_Name & " [--port=PORT] [--dir=DIR]");
+      Put_Line ("$ " & Program_Name & " --version");
+      Put_Line ("$ " & Program_Name & " --help");
       New_Line;
       Put_Line ("--help      - Show this usage text and exit");
       Put_Line ("--version   - Show program version and exit");
@@ -58,8 +60,8 @@ package body Command_Line is
    procedure Put_Version is
       use Setup, Ada.Text_IO;
    begin
-      Put (Get_Program_Name & " (" & Get_Program_Version & ")");
-      Put ("Build  (" & Get_Build_ISO8601_UTC & ")");
+      Put (Program_Name & " (" & Program_Version & ")");
+      Put ("Build  (" & Build_ISO8601_UTC & ")");
    end Put_Version;
 
 end Command_Line;

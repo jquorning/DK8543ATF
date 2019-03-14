@@ -9,6 +9,7 @@
 
 with Ada.Strings.Unbounded;
 
+with Setup;
 with Types;
 
 package Commands is
@@ -46,7 +47,8 @@ package Commands is
       (-"trans LIST",
        -"Transfer current job to other list"),
       (-"event KIND", -"Add event to current job"),
-      (-"export", -"Export jobs to csv file (to-do-it.csv)"));
+      (-"export", -"Export jobs to csv file ("
+         & Setup.Program_Name & ".csv)"));
 
 
    procedure Create_Job (Job    : in Types.Job_Id;

@@ -7,6 +7,7 @@
 --    May you share freely, not taking more than you give.
 --
 
+with Ada.Text_IO;
 with Ada.Strings.Unbounded;
 with Ada.IO_Exceptions;
 with Ada.Environment_Variables;
@@ -16,7 +17,7 @@ with Setup;
 package body Database is
 
    Default_Database   : constant String :=
-     Setup.Get_Program_Name & "." & Setup.Database_Extension;
+     Setup.Program_Name & "." & Setup.Database_Extension;
 
    use Ada.Strings.Unbounded;
 
@@ -25,7 +26,10 @@ package body Database is
      renames To_Unbounded_String;
 
 
-   procedure Open is
+   procedure Open
+   is
+      use Ada.Text_IO;
+
       Success : Boolean := False;
 
       procedure Try_Open (File_Name :     String;
@@ -34,7 +38,7 @@ package body Database is
       procedure Try_Open (File_Name :     String;
                           Success   : out Boolean)
       is
-         use SQLite, Ada.IO_Exceptions;
+         use SQLite; -- , Ada.IO_Exceptions;
       begin
          Success := True;  --  Optimism - result when no exception
          DB := SQLite.Open (File_Name => File_Name,
@@ -52,17 +56,16 @@ package body Database is
         := (if Env.Exists ("HOME") then Env.Value ("HOME") else "");
 
       Paths : constant array (Positive range <>) of Unbounded_String :=
-          (+"./"                & Default_Database,
-           +Home & "/etc/"      & Default_Database,
-           +"/etc/"             & Default_Database,
-           +Home & "/."         & Default_Database);  --  Hidden
+          (+"./",             --  & Default_Database,
+           +Home & "/etc/",   --      & Default_Database,
+           +"/etc/",          --             & Default_Database,
+           +Home & "/.");     --         & Default_Database);  --  Hidden
 
    begin
       for Path of Paths loop
-
          declare
             Full_Path_Name : constant String
-              := To_String (Path);
+              := To_String (Path) & "default" & "." & Setup.Database_Extension;
          begin
             Try_Open (Full_Path_Name, Success);
             if Success then

@@ -20,7 +20,8 @@ with Interactive;
 with Navigate;
 with Files;
 
-procedure WeDoNu_Program is
+procedure WeDoNu_Program
+is
    Config : Setup.Configuration;
 begin
    declare
@@ -33,7 +34,6 @@ begin
    end;
 
    Command_Line.Parse (Config);
-
    Interactive.Initialize;
    Web_Server.Startup;
    Database.Open;

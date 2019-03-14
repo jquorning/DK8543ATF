@@ -15,52 +15,52 @@
 package body Setup is
 
 
-   function Get_Program_Name return String is
+   function Program_Name return String is
    begin
       return "@_PROGRAM_NAME_@";
-   end Get_Program_Name;
+   end Program_Name;
 
 
-   function Get_Program_Version return String is
+   function Program_Version return String is
    begin
       return "@_PROGRAM_VERSION_@";
-   end Get_Program_Version;
+   end Program_Version;
 
 
-   function Get_Build_ISO8601_UTC return String is
+   function Build_ISO8601_UTC return String is
    begin
       return "@_DATE_TIME_UTC_@";
-   end Get_Build_ISO8601_UTC;
+   end Build_ISO8601_UTC;
 
 
-   function Get_Uname_M return String is
+   function Uname_M return String is
    begin
       return "@_UNAME_OPT_M_@";
-   end Get_Uname_M;
+   end Uname_M;
 
 
-   function Get_Uname_N return String is
+   function Uname_N return String is
    begin
       return "@_UNAME_OPT_N_@";
-   end Get_Uname_N;
+   end Uname_N;
 
 
-   function Get_Uname_P return String is
+   function Uname_P return String is
    begin
       return "@_UNAME_OPT_P_@";
-   end Get_Uname_P;
+   end Uname_P;
 
 
-   function Get_Uname_R return String is
+   function Uname_R return String is
    begin
       return "@_UNAME_OPT_R_@";
-   end Get_Uname_R;
+   end Uname_R;
 
 
-   function Get_Uname_S return String is
+   function Uname_S return String is
    begin
       return "@_UNAME_OPT_S_@";
-   end Get_Uname_S;
+   end Uname_S;
 
 
 end Setup;

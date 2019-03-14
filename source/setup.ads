@@ -9,34 +9,17 @@
 
 package Setup is
 
-   function Get_Program_Name      return String;
-   function Get_Program_Version   return String;
-   function Get_Build_ISO8601_UTC return String;
-   function Get_Uname_M return String;
-   function Get_Uname_N return String;
-   function Get_Uname_P return String;
-   function Get_Uname_R return String;
-   function Get_Uname_S return String;
+   function Program_Name      return String;
+   function Program_Version   return String;
+   function Build_ISO8601_UTC return String;
+   function Uname_M return String;
+   function Uname_N return String;
+   function Uname_P return String;
+   function Uname_R return String;
+   function Uname_S return String;
 
    Database_Extension : constant String := "wedonu";
 
-   type Configuration is record
-      null;
-   end record;
+   type Configuration is null record;
 
 end Setup;
-
-
---
---
---
-
---  package Setup is
-
---     Program_Version    : constant String := "2019-01-14";
---     Program_Name       : constant String := "to-do-it";
-
-
-
-
---  end Setup;
