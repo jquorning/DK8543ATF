@@ -5,3 +5,5 @@ source/setup.adb
 web/*.log
 web/default.wedonu
 web/*.history
+var/wedonu*
+var/default.wedonu
