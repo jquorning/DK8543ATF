@@ -3,7 +3,13 @@
 Collaborative activity management tool
 
 ## Status
-Compileing - Exception in web request
+* Stable
+* Somewhat raw interaction
+* Many errors
+
+## Features
+1. Command line editing
+1. Web editing on port 8080
 
 ## Dependencys
 * AWS - Ada Web Server
