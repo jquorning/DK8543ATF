@@ -7,6 +7,8 @@
 ##    May you share freely, not taking more than you give.
 ##
 
+INSTALL_PREFIX=/Users/jquorning/opt/wedonu
+
 all: setup build
 
 build:
@@ -17,3 +19,9 @@ clean:
 
 setup:
 	tools/create-setup-adb.sh
+
+install:
+	gprinstall -v -p --mode=usage wedonu.gpr --prefix=$(INSTALL_PREFIX)
+
+uninstall:
+	gprinstall -v -p --mode=usage wedonu.gpr --uninstall --prefix=$(INSTALL_PREFIX)

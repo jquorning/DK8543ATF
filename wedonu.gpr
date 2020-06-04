@@ -33,4 +33,17 @@ project WeDoNu is
       for Executable ("wedonu_program.adb") use "wedonu";
    end Builder;
 
+   package Install is
+      for Artifacts ("doc") use
+        ("README.md",
+         "COPYING.md");
+      for Artifacts ("share/web") use
+        ("web/*");
+      for Artifacts ("var") use
+        ("var/default.wedonu",
+         "var/wedonu.history",
+         "var/wedonu.log",
+         "var/wedonu_error.log");
+   end Install;
+
 end WeDoNu;
