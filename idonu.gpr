@@ -7,8 +7,10 @@
 --    May you share freely, not taking more than you give.
 --
 
-with "aws";                    --  web server
-with "components-sqlite.gpr";  --  sqlite3
+with "aws";                    --  Ada Web Server
+with "gnatcoll";               --  GNATColl
+with "gnatcoll_readline";      --  Readline
+with "components-sqlite.gpr";  --  SQLite3
 
 project iDoNu is
 
@@ -30,7 +32,7 @@ project iDoNu is
         "-gnat2012",
         "-gnaty",
         "-gnatyM99");
-      for Executable ("wedonu_program.adb") use "idonu";
+      for Executable ("idonu_program.adb") use "idonu";
    end Builder;
 
 end iDoNu;
