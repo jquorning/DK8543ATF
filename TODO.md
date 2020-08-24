@@ -1,6 +1,6 @@
+1. Add copyright
 1. Proper behaviour when database is missing
 1. Create database
-1. Rename database to database_sqlite
 1. Introduce plans package
 1. Make plans reusable
 1. Make binary smaller (now 8.7 MB)

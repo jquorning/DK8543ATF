@@ -1,3 +1,6 @@
+pragma License (Restricted);
+--
+--  Copyright (C) 2020 Jesper Quorning All Rights Reserved.
 --
 --  The author disclaims copyright to this source code.  In place of
 --  a legal notice, here is a blessing:
@@ -10,6 +13,8 @@
 with Ada.Strings.Unbounded;
 
 with Interfaces;
+
+with SQLite;
 
 package body Database.Jobs is
 

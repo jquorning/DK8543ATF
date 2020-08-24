@@ -1,3 +1,6 @@
+pragma License (Restricted);
+--
+--  Copyright (C) 2020 Jesper Quorning All Rights Reserved.
 --
 --  The author disclaims copyright to this source code.  In place of
 --  a legal notice, here is a blessing:
@@ -13,8 +16,10 @@ with Ada.IO_Exceptions;
 with Ada.Environment_Variables;
 
 with Setup;
+with Database;
+with SQLite;
 
-package body Database is
+package body SQL_Database is
 
 --   Default_Database   : constant String :=
 --     Setup.Program_Name & "." & Setup.Database_Extension;
@@ -40,8 +45,8 @@ package body Database is
       is
          use SQLite; -- , Ada.IO_Exceptions;
       begin
-         Success := True;  --  Optimism - result when no exception
-         DB := SQLite.Open (File_Name => File_Name,
+         Success     := True;  --  Optimism - result when no exception
+         Database.DB := SQLite.Open (File_Name => File_Name,
                             Flags     => READWRITE or FULLMUTEX);
       exception
          when Use_Error =>   --  Could not open database file
@@ -96,4 +101,4 @@ package body Database is
    --  True when File_Name designates valid database.
 
 
-end Database;
+end SQL_Database;

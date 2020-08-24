@@ -1,3 +1,6 @@
+pragma License (Restricted);
+--
+--  Copyright (C) 2020 Jesper Quorning All Rights Reserved.
 --
 --  The author disclaims copyright to this source code.  In place of
 --  a legal notice, here is a blessing:
@@ -12,7 +15,7 @@ with Ada.Text_IO;
 with Setup;
 with Command_Line;
 with Database.Jobs;
-with Database;
+with SQL_Database;
 with Parser;
 with Web_Server;
 with Terminal_IO;
@@ -36,7 +39,7 @@ begin
    Command_Line.Parse (Config);
    Interactive.Initialize;
    Web_Server.Startup;
-   Database.Open;
+   SQL_Database.Open;
 
    Terminal_IO.Put_Banner;
 

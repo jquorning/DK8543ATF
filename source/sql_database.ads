@@ -10,10 +10,14 @@ pragma License (Restricted);
 --    May you share freely, not taking more than you give.
 --
 
-with SQLite;
+package SQL_Database is
 
-package Database is
+   procedure Open;
+   --  Open database.
 
-   DB : SQLite.Data_Base;
+   function Is_Valid
+     (File_Name : in String)
+      return Boolean;
+   --  True when File_Name designates valid database.
 
-end Database;
+end SQL_Database;
