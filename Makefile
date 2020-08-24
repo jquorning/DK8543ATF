@@ -10,10 +10,10 @@
 all: setup build
 
 build:
-	gprbuild -k wedonu.gpr
+	gprbuild -k idonu.gpr
 
 clean:
-	gprclean -q wedonu.gpr
+	gprclean -q idonu.gpr
 
 setup:
 	tools/create-setup-adb.sh

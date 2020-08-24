@@ -20,7 +20,7 @@ with Interactive;
 with Navigate;
 with Files;
 
-procedure WeDoNu_Program
+procedure iDoNu_Program
 is
    Config : Setup.Configuration;
 begin
@@ -62,4 +62,4 @@ exception
    when Command_Line.Terminate_Program =>
       null;
 
-end WeDoNu_Program;
+end iDoNu_Program;

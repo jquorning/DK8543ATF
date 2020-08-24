@@ -16,8 +16,8 @@ with Setup;
 
 package body Database is
 
-   Default_Database   : constant String :=
-     Setup.Program_Name & "." & Setup.Database_Extension;
+--   Default_Database   : constant String :=
+--     Setup.Program_Name & "." & Setup.Database_Extension;
 
    use Ada.Strings.Unbounded;
 
