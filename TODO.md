@@ -1,4 +1,8 @@
 1. Proper behaviour when database is missing
+1. Create database
+1. Rename database to database_sqlite
+1. Introduce plans package
+1. Make plans reusable
 1. Make binary smaller (now 8.7 MB)
 1. VI style commands
 1. 2L moves job two positions to the left
