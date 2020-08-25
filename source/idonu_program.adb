@@ -40,8 +40,8 @@ begin
 
    Command_Line.Parse (Config);
    Interactive.Initialize;
-   Web_Server.Startup;
    SQL_Database.Open;
+   Web_Server.Startup;
 
    Ada.Text_IO.New_Line;
    Ada.Text_IO.Put_Line ("List:");
