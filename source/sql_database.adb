@@ -75,7 +75,9 @@ package body SQL_Database is
       for Path of Paths loop
          declare
             Full_Path_Name : constant String
-              := To_String (Path) & "default" & "." & Setup.Database_Extension;
+              := (To_String (Path)
+                    & Setup.Database_Others & "."
+                    & Setup.Database_Extension);
          begin
             Try_Open (Full_Path_Name, Success);
             if Success then

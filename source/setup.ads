@@ -1,3 +1,6 @@
+pragma License (Restricted);
+--
+--  Copyright (C) 2020 Jesper Quorning All Rights Reserved.
 --
 --  The author disclaims copyright to this source code.  In place of
 --  a legal notice, here is a blessing:
@@ -18,7 +21,8 @@ package Setup is
    function Uname_R return String;
    function Uname_S return String;
 
-   Database_Extension : constant String := "wedonu";
+   Database_Others    : constant String := "others";
+   Database_Extension : constant String := "idonu";
 
    type Configuration is null record;
 
