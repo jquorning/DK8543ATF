@@ -11,6 +11,7 @@ pragma License (Restricted);
 --
 
 with Ada.Text_IO;
+with Ada.Exceptions;
 
 with Setup;
 with Command_Line;
@@ -64,5 +65,18 @@ exception
 
    when Command_Line.Terminate_Program =>
       null;
+
+   when Occurrence : others =>
+      declare
+         use Ada.Exceptions;
+
+         Message : String renames Exception_Message (Occurrence);
+      begin
+         if Message = "" then
+            raise;
+         else
+            Ada.Text_IO.Put_Line (Ada.Text_IO.Standard_Error, Message);
+         end if;
+      end;
 
 end iDoNu_Program;
