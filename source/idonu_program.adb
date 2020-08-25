@@ -18,7 +18,7 @@ with Command_Line;
 with Database.Jobs;
 with SQL_Database;
 with Parser;
-with Web_Server;
+--  with Web_Server;
 with Terminal_IO;
 with Interactive;
 with Navigate;
@@ -42,7 +42,7 @@ begin
    Command_Line.Parse (Config);
    Interactive.Initialize;
    SQL_Database.Open;
-   Web_Server.Startup;
+--   Web_Server.Startup;
 
    Ada.Text_IO.New_Line;
    Ada.Text_IO.Put_Line ("List:");
@@ -56,7 +56,7 @@ begin
       exit when Parser.Exit_Program;
    end loop;
 
-   Web_Server.Shutdown;
+--   Web_Server.Shutdown;
    Interactive.Finalize;
 
    Command_Line.Set_Exit_Status (Command_Line.Success);
