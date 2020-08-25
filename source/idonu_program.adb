@@ -27,6 +27,8 @@ procedure iDoNu_Program
 is
    Config : Setup.Configuration;
 begin
+   Terminal_IO.Put_Banner;
+
    declare
       List : Files.Collection_List;
    begin
@@ -40,8 +42,6 @@ begin
    Interactive.Initialize;
    Web_Server.Startup;
    SQL_Database.Open;
-
-   Terminal_IO.Put_Banner;
 
    Ada.Text_IO.New_Line;
    Ada.Text_IO.Put_Line ("List:");
