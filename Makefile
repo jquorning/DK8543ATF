@@ -10,7 +10,7 @@
 all: setup build
 
 build:
-	gprbuild -k idonu.gpr
+	gprbuild -k -j0 idonu.gpr
 
 clean:
 	gprclean -q idonu.gpr
