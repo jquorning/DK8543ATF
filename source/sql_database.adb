@@ -71,13 +71,14 @@ package body SQL_Database is
            +"/etc/",          --             & Default_Database,
            +Home & "/.");     --         & Default_Database);  --  Hidden
 
+      File_Name : constant String
+        := Setup.Database_Others & "." & Setup.Database_Extension;
+
    begin
       for Path of Paths loop
          declare
             Full_Path_Name : constant String
-              := (To_String (Path)
-                    & Setup.Database_Others & "."
-                    & Setup.Database_Extension);
+              := To_String (Path) & File_Name;
          begin
             Try_Open (Full_Path_Name, Success);
             if Success then
@@ -85,7 +86,10 @@ package body SQL_Database is
             end if;
          end;
       end loop;
-      raise Program_Error with "Could not open database file";
+
+      raise Program_Error
+        with "Could not open database file '" & File_Name & "'";
+
    end Open;
 
    ---------------------------------------------------------------------------
