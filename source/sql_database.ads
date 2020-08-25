@@ -14,6 +14,7 @@ package SQL_Database is
 
    procedure Open;
    --  Open database.
+   --  Raise Program_Error on fail.
 
    function Is_Valid
      (File_Name : in String)

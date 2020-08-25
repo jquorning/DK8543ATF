@@ -30,6 +30,9 @@ package body SQL_Database is
                 return Unbounded_String
      renames To_Unbounded_String;
 
+   ----------
+   -- Open --
+   ----------
 
    procedure Open
    is
@@ -39,15 +42,17 @@ package body SQL_Database is
 
       procedure Try_Open (File_Name :     String;
                           Success   : out Boolean);
+      --  Try to open the SQLite database using File_Name.
 
       procedure Try_Open (File_Name :     String;
                           Success   : out Boolean)
       is
-         use SQLite; -- , Ada.IO_Exceptions;
+         use SQLite;
       begin
-         Success     := True;  --  Optimism - result when no exception
+         Success     := False;  --  Pessimism - result when no exception
          Database.DB := SQLite.Open (File_Name => File_Name,
-                            Flags     => READWRITE or FULLMUTEX);
+                                     Flags     => READWRITE or FULLMUTEX);
+         Success     := True;
       exception
          when Use_Error =>   --  Could not open database file
             Success := False;
