@@ -1,1 +1,0 @@
-../../gnatcoll-bindings/readline/gnatcoll-readline.ads

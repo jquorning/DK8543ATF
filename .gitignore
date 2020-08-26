@@ -2,8 +2,14 @@
 object/
 binary/
 source/setup.adb
+<<<<<<< HEAD
 web/*.log
 web/default.wedonu
 web/*.history
 var/wedonu*
 var/default.wedonu
+=======
+*.log
+*.history
+web/others.idonu
+>>>>>>> master

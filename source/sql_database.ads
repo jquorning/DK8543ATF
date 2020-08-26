@@ -10,17 +10,15 @@ pragma License (Restricted);
 --    May you share freely, not taking more than you give.
 --
 
-with Types;
+package SQL_Database is
 
-package Terminal_IO is
+   procedure Open;
+   --  Open database.
+   --  Raise Program_Error on fail.
 
-   procedure Put_Jobs;
-   --  Put list of jobs from Navigate.List.
+   function Is_Valid
+     (File_Name : in String)
+      return Boolean;
+   --  True when File_Name designates valid database.
 
-   procedure Show_Job (Job : in Types.Job_Id);
-   procedure Put_Help;
-   procedure Put_Error (Text : in String);
-   procedure Put_Banner;
-   procedure Put_Path;
-
-end Terminal_IO;
+end SQL_Database;

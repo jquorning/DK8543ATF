@@ -1,3 +1,6 @@
+pragma License (Restricted);
+--
+--  Copyright (C) 2020 Jesper Quorning All Rights Reserved.
 --
 --  The author disclaims copyright to this source code.  In place of
 --  a legal notice, here is a blessing:
@@ -19,6 +22,7 @@ with Database.Jobs;
 with Navigate;
 with Decoration;
 with Status;
+with Setup;
 
 package body Terminal_IO is
 
@@ -134,10 +138,17 @@ package body Terminal_IO is
 
    procedure Put_Banner is
       use Ada.Text_IO;
+      use Setup;
+
+      Image : constant String :=
+        (Program_Name & " " &
+           Program_Version & " " &
+           Build_ISO8601_UTC);
+      Hline : constant String (Image'Range) := (others => '=');
    begin
-      Put_Line ("TODO List program");
-      Put_Line ("=================");
-      Put_Line ("type help to show help text");
+      Put_Line (Image);
+      Put_Line (Hline);
+      Put_Line ("(type help to show help text)");
    end Put_Banner;
 
 

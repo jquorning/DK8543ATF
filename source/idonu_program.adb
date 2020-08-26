@@ -1,3 +1,6 @@
+pragma License (Restricted);
+--
+--  Copyright (C) 2020 Jesper Quorning All Rights Reserved.
 --
 --  The author disclaims copyright to this source code.  In place of
 --  a legal notice, here is a blessing:
@@ -8,22 +11,25 @@
 --
 
 with Ada.Text_IO;
+with Ada.Exceptions;
 
 with Setup;
 with Command_Line;
 with Database.Jobs;
-with Database;
+with SQL_Database;
 with Parser;
-with Web_Server;
+--  with Web_Server;
 with Terminal_IO;
 with Interactive;
 with Navigate;
 with Files;
 
-procedure WeDoNu_Program
+procedure iDoNu_Program
 is
    Config : Setup.Configuration;
 begin
+   Terminal_IO.Put_Banner;
+
    declare
       List : Files.Collection_List;
    begin
@@ -35,10 +41,8 @@ begin
 
    Command_Line.Parse (Config);
    Interactive.Initialize;
-   Web_Server.Startup;
-   Database.Open;
-
-   Terminal_IO.Put_Banner;
+   SQL_Database.Open;
+--   Web_Server.Startup;
 
    Ada.Text_IO.New_Line;
    Ada.Text_IO.Put_Line ("List:");
@@ -52,7 +56,7 @@ begin
       exit when Parser.Exit_Program;
    end loop;
 
-   Web_Server.Shutdown;
+--   Web_Server.Shutdown;
    Interactive.Finalize;
 
    Command_Line.Set_Exit_Status (Command_Line.Success);
@@ -62,4 +66,17 @@ exception
    when Command_Line.Terminate_Program =>
       null;
 
-end WeDoNu_Program;
+   when Occurrence : others =>
+      declare
+         use Ada.Exceptions;
+
+         Message : String renames Exception_Message (Occurrence);
+      begin
+         if Message = "" then
+            raise;
+         else
+            Ada.Text_IO.Put_Line (Ada.Text_IO.Standard_Error, Message);
+         end if;
+      end;
+
+end iDoNu_Program;

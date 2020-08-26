@@ -1,10 +1,12 @@
-1. use gprinstall
-1. Proper behaviour when database is missing
-1. Make binary smaller (now 8.1 MB)
-1. Unique id for everything (collection/list/job)
-1. Archive/Double/Move/Rename pattern like Pages and STEP7
-1. From simple_components to GNATColl.SQL.SQLite
-1. Optionally several databases (collections) concurrently
+1. Add copyright
+1. Introduce Texts package
+1. Rename iNow from iDoNu
+1. Create database
+1. Introduce plans package
+1. Make plans reusable
+1. Make binary smaller (now 8.7 MB)
+1. VI style commands
+1. 2L moves job two positions to the left
 1. Angle marker for sub-job
 1. Heading as job without markings
 1. Templare plans

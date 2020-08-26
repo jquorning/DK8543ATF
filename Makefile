@@ -12,10 +12,10 @@ INSTALL_PREFIX=/Users/jquorning/opt/wedonu
 all: setup build
 
 build:
-	gprbuild -k wedonu.gpr
+	gprbuild -k -j0 idonu.gpr
 
 clean:
-	gprclean -q wedonu.gpr
+	gprclean -q idonu.gpr
 
 setup:
 	tools/create-setup-adb.sh

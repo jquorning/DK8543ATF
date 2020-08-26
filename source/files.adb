@@ -1,3 +1,6 @@
+pragma License (Restricted);
+--
+--  Copyright (C) 2020 Jesper Quorning All Rights Reserved.
 --
 --  The author disclaims copyright to this source code.  In place of
 --  a legal notice, here is a blessing:
@@ -11,7 +14,7 @@ with Ada.Directories;
 with Ada.Text_IO;
 
 with Setup;
-with Database;
+with SQL_Database;
 
 package body Files is
 
@@ -47,7 +50,7 @@ package body Files is
 
          Get_Next_Entry (DB_Search, File_Entry);
 
-         if Database.Is_Valid (Full_Name (File_Entry)) then
+         if SQL_Database.Is_Valid (Full_Name (File_Entry)) then
             Collection.Append (To_Unbounded_String (Full_Name (File_Entry)));
             Ada.Text_IO.Put_Line ("Adding => " & Full_Name (File_Entry));
          end if;

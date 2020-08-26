@@ -1,3 +1,6 @@
+pragma License (Restricted);
+--
+--  Copyright (C) 2020 Jesper Quorning All Rights Reserved.
 --
 --  The author disclaims copyright to this source code.  In place of
 --  a legal notice, here is a blessing:
@@ -13,11 +16,13 @@ with Ada.IO_Exceptions;
 with Ada.Environment_Variables;
 
 with Setup;
+with Database;
+with SQLite;
 
-package body Database is
+package body SQL_Database is
 
-   Default_Database   : constant String :=
-     Setup.Program_Name & "." & Setup.Database_Extension;
+--   Default_Database   : constant String :=
+--     Setup.Program_Name & "." & Setup.Database_Extension;
 
    use Ada.Strings.Unbounded;
 
@@ -25,6 +30,9 @@ package body Database is
                 return Unbounded_String
      renames To_Unbounded_String;
 
+   ----------
+   -- Open --
+   ----------
 
    procedure Open
    is
@@ -34,15 +42,17 @@ package body Database is
 
       procedure Try_Open (File_Name :     String;
                           Success   : out Boolean);
+      --  Try to open the SQLite database using File_Name.
 
       procedure Try_Open (File_Name :     String;
                           Success   : out Boolean)
       is
-         use SQLite; -- , Ada.IO_Exceptions;
+         use SQLite;
       begin
-         Success := True;  --  Optimism - result when no exception
-         DB := SQLite.Open (File_Name => File_Name,
-                            Flags     => READWRITE or FULLMUTEX);
+         Success     := False;  --  Pessimism - result when no exception
+         Database.DB := SQLite.Open (File_Name => File_Name,
+                                     Flags     => READWRITE or FULLMUTEX);
+         Success     := True;
       exception
          when Use_Error =>   --  Could not open database file
             Success := False;
@@ -61,11 +71,14 @@ package body Database is
            +"/etc/",          --             & Default_Database,
            +Home & "/.");     --         & Default_Database);  --  Hidden
 
+      File_Name : constant String
+        := Setup.Database_Others & "." & Setup.Database_Extension;
+
    begin
       for Path of Paths loop
          declare
             Full_Path_Name : constant String
-              := To_String (Path) & "default" & "." & Setup.Database_Extension;
+              := To_String (Path) & File_Name;
          begin
             Try_Open (Full_Path_Name, Success);
             if Success then
@@ -73,7 +86,10 @@ package body Database is
             end if;
          end;
       end loop;
-      raise Program_Error with "Could not open database file";
+
+      raise Program_Error
+        with "Could not open database file '" & File_Name & "'";
+
    end Open;
 
    ---------------------------------------------------------------------------
@@ -96,4 +112,4 @@ package body Database is
    --  True when File_Name designates valid database.
 
 
-end Database;
+end SQL_Database;
